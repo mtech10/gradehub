@@ -10,7 +10,7 @@ import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
 
 // Student Pages
-// import Dashboard from "./pages/student/Dashboard";
+import Dashboard from "./pages/student/Dashboard";
 
 // Admin Pages
 // import AdminDashboard from "./pages/admin/Dashboard";
@@ -28,7 +28,7 @@ function App() {
       <Route path="/reset-password" element={<ResetPassword />} />
 
       {/* Student Portal */}
-      {/* <Route path="/dashboard" element={<Dashboard />} /> */}
+      <Route path="/dashboard" element={<Dashboard />} />
 
       {/* Admin Portal */}
       {/* <Route path="/admin/dashboard" element={<AdminDashboard />} /> */}

@@ -147,6 +147,25 @@ export const THEME = {
     },
   },
 
+  linkButton: {
+    base: `
+    text-sm
+    font-semibold
+    transition-colors
+    duration-200
+  `,
+
+    primary: `
+    text-blue-600
+    hover:text-blue-700
+  `,
+
+    secondary: `
+    text-slate-600
+    hover:text-slate-900
+  `,
+  },
+
   /* ==========================================
      INPUT
   ========================================== */
