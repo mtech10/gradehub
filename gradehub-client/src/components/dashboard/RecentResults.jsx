@@ -1,6 +1,9 @@
 import { recentResults } from "../../constants/recentResults";
 import { CARD_HEIGHT, SCROLLBAR } from "../../constants/layout";
 import Card from "../ui/Card";
+import { THEME } from "../../constants/theme";
+import { getResultStatus } from "../../utils/resultUtils";
+import Badge from "../ui/Badge";
 
 function RecentResults() {
   return (
@@ -8,9 +11,12 @@ function RecentResults() {
       title="Recent Results"
       subtitle="Latest published course results"
       padding="none"
-      action={
-        <button className="rounded-lg bg-blue-50 px-4 py-2 text-sm font-medium text-blue-600 hover:bg-blue-100">
-          View All
+      headerAction={
+        <button
+          type="button"
+          className={`${THEME.linkButton.base} ${THEME.linkButton.primary}`}
+        >
+          View All Results
         </button>
       }
     >
@@ -43,38 +49,40 @@ function RecentResults() {
             </thead>
 
             <tbody>
-              {recentResults.map((result) => (
-                <tr
-                  key={result.code}
-                  className="border-t border-slate-100 hover:bg-slate-50"
-                >
-                  <td className="px-6 py-5">
-                    <div>
-                      <p className="font-semibold text-slate-900">
-                        {result.code}
-                      </p>
+              {recentResults.map((result) => {
+                const status = getResultStatus(result.score);
 
-                      <p className="text-sm text-slate-500">{result.course}</p>
-                    </div>
-                  </td>
+                return (
+                  <tr
+                    key={result.code}
+                    className="border-t border-slate-100 hover:bg-slate-50"
+                  >
+                    <td className="px-6 py-5">
+                      <div>
+                        <p className="font-semibold text-slate-900">
+                          {result.code}
+                        </p>
 
-                  <td>{result.unit}</td>
+                        <p className="text-sm text-slate-500">
+                          {result.course}
+                        </p>
+                      </div>
+                    </td>
 
-                  <td>{result.score}%</td>
+                    <td>{result.unit}</td>
 
-                  <td>
-                    <span className="font-semibold text-blue-600">
-                      {result.grade}
-                    </span>
-                  </td>
+                    <td>{result.score}%</td>
 
-                  <td>
-                    <span className="rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-700">
-                      {result.status}
-                    </span>
-                  </td>
-                </tr>
-              ))}
+                    <td>
+                      <Badge variant={status.variant}>{status.grade}</Badge>
+                    </td>
+
+                    <td>
+                      <Badge variant={status.variant}>{status.remark}</Badge>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

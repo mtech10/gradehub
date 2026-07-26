@@ -2,6 +2,7 @@ import { CalendarDays } from "lucide-react";
 import { upcomingActivities } from "../../constants/upcomingActivities";
 import { CARD_HEIGHT, SCROLLBAR } from "../../constants/layout";
 import Card from "../ui/Card";
+import { THEME } from "../../constants/theme";
 
 function UpcomingActivities() {
   return (
@@ -9,6 +10,14 @@ function UpcomingActivities() {
       title="Upcoming Activities"
       subtitle="Don't miss these events"
       padding="none"
+      bodyClassName="max-h-[420px] overflow-y-auto"
+      headerAction={
+        <button
+          className={`${THEME.linkButton.base} ${THEME.linkButton.primary}`}
+        >
+          View All Activities
+        </button>
+      }
     >
       <div className={`h-[420px] overflow-y-auto p-6 space-y-5 ${SCROLLBAR}`}>
         {" "}

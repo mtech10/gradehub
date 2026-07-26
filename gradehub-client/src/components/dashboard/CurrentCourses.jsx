@@ -2,6 +2,8 @@ import Card from "../ui/Card";
 import { currentCourses } from "../../constants/currentCourses";
 import { SCROLLBAR } from "../../constants/layout";
 import { THEME } from "../../constants/theme";
+import Badge from "../ui/Badge";
+import { getCourseProgress } from "../../utils/courseUtils";
 
 function CurrentCourses() {
   return (
@@ -34,11 +36,14 @@ function CurrentCourses() {
               <th className="px-6 py-4">Lecturer</th>
 
               <th className="px-6 py-4">Progress</th>
+              <th className="px-6 py-4">Status</th>
             </tr>
           </thead>
 
           <tbody>
             {currentCourses.map((course) => {
+              const progress = getCourseProgress(course.progress);
+
               return (
                 <tr
                   key={course.code}
@@ -54,21 +59,48 @@ function CurrentCourses() {
 
                   {/* Progress */}
 
+                  {/* <td className="px-6 py-5">
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium text-slate-700">
+                          {course.progress}%
+                        </span>
+
+                        <Badge variant={progress.variant} size="sm">
+                          {progress.status}
+                        </Badge>
+                      </div>
+
+                      <div className="h-2.5 w-full rounded-full bg-slate-200">
+                        <div
+                          className={`h-full rounded-full transition-all duration-500 ${progress.color}`}
+                          style={{
+                            width: `${course.progress}%`,
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </td> */}
+
                   <td className="px-6 py-5">
                     <div className="flex items-center gap-3">
-                      <div className="h-3 w-36 rounded-full bg-slate-200">
+                      <div className="h-2.5 w-32 rounded-full bg-slate-200">
                         <div
-                          className={`h-full rounded-full ${course.color}`}
+                          className={`h-full rounded-full transition-all duration-500 ${progress.color}`}
                           style={{
                             width: `${course.progress}%`,
                           }}
                         />
                       </div>
 
-                      <span className="min-w-[45px] text-sm font-semibold text-slate-600">
+                      <span className="min-w-[42px] text-sm font-semibold text-slate-700">
                         {course.progress}%
                       </span>
                     </div>
+                  </td>
+
+                  <td className="px-6 py-5">
+                    <Badge variant={progress.variant}>{progress.status}</Badge>
                   </td>
                 </tr>
               );
