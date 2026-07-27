@@ -4,6 +4,7 @@ function NavItem({ title, icon: Icon, path, badge }) {
   return (
     <NavLink
       to={path}
+      end
       className={({ isActive }) =>
         `
         flex items-center justify-between

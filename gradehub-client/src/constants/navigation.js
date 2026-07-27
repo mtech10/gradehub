@@ -14,43 +14,43 @@ export const studentNavigation = [
   {
     title: "Dashboard",
     icon: LayoutDashboard,
-    path: "/dashboard",
+    path: "/student",
   },
   {
     title: "My Results",
     icon: FileText,
-    path: "/results",
+    path: "/student/results",
   },
   {
     title: "Transcript",
     icon: ScrollText,
-    path: "/transcript",
+    path: "/student/transcript",
   },
   {
     title: "GPA Calculator",
     icon: Calculator,
-    path: "/gpa-calculator",
+    path: "/student/gpa-calculator",
   },
   {
     title: "Courses",
     icon: BookOpen,
-    path: "/courses",
+    path: "/student/courses",
   },
   {
     title: "Notifications",
     icon: Bell,
-    path: "/notifications",
+    path: "/student/notifications",
     badge: 3,
   },
   {
     title: "Profile",
     icon: User,
-    path: "/profile",
+    path: "/student/profile",
   },
   {
     title: "Settings",
     icon: Settings,
-    path: "/settings",
+    path: "/student/settings",
   },
 ];
 

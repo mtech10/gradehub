@@ -231,4 +231,28 @@ export const THEME = {
       purple: "bg-violet-100 text-violet-700",
     },
   },
+
+  // StatCard
+
+  statCard: {
+    blue: {
+      bg: "bg-blue-100",
+      icon: "text-blue-600",
+    },
+
+    green: {
+      bg: "bg-green-100",
+      icon: "text-green-600",
+    },
+
+    orange: {
+      bg: "bg-orange-100",
+      icon: "text-orange-600",
+    },
+
+    purple: {
+      bg: "bg-violet-100",
+      icon: "text-violet-600",
+    },
+  },
 };

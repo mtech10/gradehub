@@ -5,22 +5,28 @@ import { THEME } from "../../constants/theme";
 import { getResultStatus } from "../../utils/resultUtils";
 import Badge from "../ui/Badge";
 
-function RecentResults() {
+function ResultsTable({
+  title = "Results",
+  subtitle = "Published course results",
+  showHeaderAction = false,
+}) {
   return (
     <Card
       title="Recent Results"
       subtitle="Latest published course results"
       padding="none"
       headerAction={
-        <button
-          type="button"
-          className={`${THEME.linkButton.base} ${THEME.linkButton.primary}`}
-        >
-          View All Results
-        </button>
+        showHeaderAction ? (
+          <button
+            type="button"
+            className={`${THEME.linkButton.base} ${THEME.linkButton.primary}`}
+          >
+            View All Results
+          </button>
+        ) : null
       }
     >
-      <div className="max-h-[500px] overflow-auto">
+      <div className="max-h-[560px] overflow-auto">
         <div className={`${CARD_HEIGHT.lg} ${SCROLLBAR}`}>
           {" "}
           <table className="w-full">
@@ -91,4 +97,4 @@ function RecentResults() {
   );
 }
 
-export default RecentResults;
+export default ResultsTable;

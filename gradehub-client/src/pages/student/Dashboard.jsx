@@ -1,17 +1,16 @@
 import StudentLayout from "../../layouts/StudentLayout";
 import DashboardHeader from "../../components/dashboard/DashboardHeader";
 import StatCard from "../../components/dashboard/StatCard";
-
+import ResultsTable from "../../components/results/ResultsTable";
 import { dashboardStats } from "../../constants/dashboard";
 import CGPAChart from "../../components/dashboard/CGPAChart";
-import RecentResults from "../../components/dashboard/RecentResults";
 
 import CurrentCourses from "../../components/dashboard/CurrentCourses";
 import UpcomingActivities from "../../components/dashboard/UpcomingActivities";
 
 function Dashboard() {
   return (
-    <StudentLayout>
+    <>
       <DashboardHeader />
 
       <section className="grid gap-6 xl:grid-cols-5">
@@ -23,7 +22,11 @@ function Dashboard() {
       <section className="mt-8">
         <CGPAChart />
         <div className="mt-8">
-          <RecentResults />
+          <ResultsTable
+            title="Recent Results"
+            subtitle="Latest published course results"
+            showHeaderAction
+          />
         </div>
       </section>
 
@@ -32,7 +35,7 @@ function Dashboard() {
 
         <UpcomingActivities />
       </section>
-    </StudentLayout>
+    </>
   );
 }
 

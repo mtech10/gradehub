@@ -11,6 +11,9 @@ import ResetPassword from "./pages/auth/ResetPassword";
 
 // Student Pages
 import Dashboard from "./pages/student/Dashboard";
+import Results from "./pages/student/Results";
+import StudentLayout from "./layouts/StudentLayout";
+import Transcript from "./pages/student/Transcript";
 
 // Admin Pages
 // import AdminDashboard from "./pages/admin/Dashboard";
@@ -28,8 +31,13 @@ function App() {
       <Route path="/reset-password" element={<ResetPassword />} />
 
       {/* Student Portal */}
-      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/student" element={<StudentLayout />}>
+        <Route index element={<Dashboard />} />
 
+        <Route path="results" element={<Results />} />
+
+        <Route path="transcript" element={<Transcript />} />
+      </Route>
       {/* Admin Portal */}
       {/* <Route path="/admin/dashboard" element={<AdminDashboard />} /> */}
 
