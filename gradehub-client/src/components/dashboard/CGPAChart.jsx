@@ -14,7 +14,7 @@ import Card from "../ui/Card";
 function CGPAChart() {
   return (
     <Card
-      title="CGPA Trend"
+      title="CGPA Progress"
       subtitle="Academic performance over time"
       padding="none"
     >

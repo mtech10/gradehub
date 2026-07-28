@@ -235,19 +235,29 @@ export const THEME = {
   // StatCard
 
   statCard: {
-    blue: {
+    primary: {
       bg: "bg-blue-100",
       icon: "text-blue-600",
     },
 
-    green: {
+    success: {
       bg: "bg-green-100",
       icon: "text-green-600",
     },
 
-    orange: {
-      bg: "bg-orange-100",
-      icon: "text-orange-600",
+    warning: {
+      bg: "bg-yellow-100",
+      icon: "text-yellow-600",
+    },
+
+    danger: {
+      bg: "bg-red-100",
+      icon: "text-red-600",
+    },
+
+    info: {
+      bg: "bg-sky-100",
+      icon: "text-sky-600",
     },
 
     purple: {

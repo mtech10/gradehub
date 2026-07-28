@@ -8,11 +8,11 @@ function AuthLeftPanel({ badge, title, description, features = [] }) {
     <section className="hidden lg:grid grid-cols-[44%_56%] bg-white overflow-hidden">
       {/* LEFT CONTENT */}
       {/* INCREASED Z-INDEX: Set to z-30 so the overflowing text stays above the SVG and image */}
-      <div className="relative z-30 flex flex-col px-12 py-12 bg-white">
+      <div className="relative z-30 flex flex-col px-12 py-12 bg-white w-[110%]">
         <Logo />
 
         {/* OVERFLOW WRAPPER: w-[115%] forces this block to extend 15% past the left column's edge */}
-        <div className="w-[115%]">
+        <div className="w-[125%]">
           <p className="mt-12 text-sm uppercase tracking-[0.25em] font-semibold text-slate-500">
             {badge}
           </p>

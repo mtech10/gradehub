@@ -30,10 +30,14 @@ function Dashboard() {
         </div>
       </section>
 
-      <section className="mt-8 grid gap-8 xl:grid-cols-[1.4fr_1fr]">
-        <CurrentCourses />
+      <section className="mt-8 grid grid-cols-6 gap-6">
+        <div className="col-span-4">
+          <CurrentCourses />
+        </div>
 
-        <UpcomingActivities />
+        <div className="col-span-2">
+          <UpcomingActivities />
+        </div>
       </section>
     </>
   );

@@ -14,6 +14,7 @@ function ResultsSummary() {
           subtitle={item.subtitle}
           footer={item.footer}
           color={item.color}
+          valueSize="text-3xl"
         />
       ))}
     </section>

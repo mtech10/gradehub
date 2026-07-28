@@ -2,52 +2,52 @@ export function getResultStatus(score) {
   if (score >= 70) {
     return {
       grade: "A",
+      gradePoint: 5.0,
       remark: "Excellent",
       variant: "success",
-      color: "green",
     };
   }
 
   if (score >= 60) {
     return {
       grade: "B",
+      gradePoint: 4.0,
       remark: "Very Good",
       variant: "info",
-      color: "blue",
     };
   }
 
   if (score >= 50) {
     return {
       grade: "C",
+      gradePoint: 3.0,
       remark: "Good",
       variant: "warning",
-      color: "yellow",
     };
   }
 
   if (score >= 45) {
     return {
       grade: "D",
+      gradePoint: 2.0,
       remark: "Pass",
-      variant: "secondary",
-      color: "orange",
+      variant: "warning",
     };
   }
 
   if (score >= 40) {
     return {
       grade: "E",
-      remark: "Marginal Pass",
-      variant: "secondary",
-      color: "amber",
+      gradePoint: 1.0,
+      remark: "Pass",
+      variant: "danger",
     };
   }
 
   return {
     grade: "F",
+    gradePoint: 0.0,
     remark: "Fail",
     variant: "danger",
-    color: "red",
   };
 }

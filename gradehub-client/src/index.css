@@ -36,3 +36,13 @@ img {
   max-width: 100%;
   display: block;
 }
+
+/* DPR-aware scaling — reversible tweak for HiDPI displays */
+@media (max-resolution: 192dpi),
+  (max-resolution: 1dppx),
+  (-webkit-max-device-pixel-ratio: 1) {
+  html {
+    /* Reduce root font-size slightly to compensate for DPR=2 */
+    font-size: 12px; /* try 14px; change to 15px if 14 feels too small */
+  }
+}

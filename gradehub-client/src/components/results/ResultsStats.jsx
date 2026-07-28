@@ -14,6 +14,7 @@ function ResultsStats() {
           subtitle={stat.subtitle}
           footer={stat.footer}
           color={stat.color}
+          valueSize="text-3xl"
         />
       ))}
     </section>

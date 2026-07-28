@@ -14,7 +14,7 @@ export const resultStats = [
     subtitle: "Excellent",
     footer: "Overall cumulative performance",
     icon: GraduationCap,
-    color: "blue",
+    color: "primary",
   },
 
   {
@@ -23,7 +23,7 @@ export const resultStats = [
     subtitle: "Completed",
     footer: "Across all semesters",
     icon: BookOpen,
-    color: "green",
+    color: "success",
   },
 
   {
@@ -32,7 +32,7 @@ export const resultStats = [
     subtitle: "Earned",
     footer: "Successfully completed",
     icon: Target,
-    color: "orange",
+    color: "warning",
   },
 
   {
@@ -50,6 +50,6 @@ export const resultStats = [
     subtitle: "Excellent",
     footer: "Across all completed courses",
     icon: TrendingUp,
-    color: "green",
+    color: "success",
   },
 ];
