@@ -13,7 +13,7 @@ function StudentLayout() {
         <TopNavbar />
 
         <main className="flex-1 overflow-y-auto">
-          <div className="mx-auto max-w-400 px-8 py-6">
+          <div className="mx-auto max-w-420 px-8 py-6">
             <Outlet />
           </div>
         </main>

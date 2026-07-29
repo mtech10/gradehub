@@ -1,22 +1,14 @@
 import Accordion from "../ui/Accordion";
 import SemesterAccordion from "./SemesterAccordion";
+import { getSessionSummary } from "../../utils/transcriptUtils";
 
 function SessionAccordion({ session }) {
-  const totalSemesters = session.semesters.length;
-
-  const totalUnits = session.semesters.reduce(
-    (sum, semester) => sum + semester.units,
-    0,
-  );
-
-  const averageGpa =
-    session.semesters.reduce((sum, semester) => sum + semester.gpa, 0) /
-    totalSemesters;
+  const summary = getSessionSummary(session);
 
   return (
     <Accordion
       title={`${session.session} Academic Session`}
-      subtitle={`${totalUnits} Credit Units • Average GPA ${averageGpa.toFixed(2)}`}
+      subtitle={`${summary.totalUnits} Credit Units • Average GPA ${summary.averageGpa.toFixed(2)}`}
       defaultOpen={session.session === "2023/2024"}
     >
       <div className="space-y-5">

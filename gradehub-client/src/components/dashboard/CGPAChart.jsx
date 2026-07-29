@@ -8,36 +8,46 @@ import {
   CartesianGrid,
 } from "recharts";
 
-import { cgpaTrend } from "../../constants/chartData";
 import Card from "../ui/Card";
 
-function CGPAChart() {
+function CGPAChart({
+  title = "CGPA Trend",
+  subtitle = "Academic performance over time",
+  data = [],
+  xKey = "semester",
+  yKey = "cgpa",
+  yDomain = [3.5, 5],
+}) {
   return (
-    <Card
-      title="CGPA Progress"
-      subtitle="Academic performance over time"
-      padding="none"
-    >
+    <Card title={title} subtitle={subtitle} padding="none">
       <div className="h-[420px] p-6">
         <ResponsiveContainer width="100%" height={320}>
-          <LineChart data={cgpaTrend}>
-            <CartesianGrid strokeDasharray="4 4" />
+          <LineChart data={data}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
 
-            <XAxis dataKey="semester" />
+            <XAxis
+              dataKey={xKey}
+              tick={{ fontSize: 12 }}
+              tickLine={false}
+              axisLine={false}
+            />
 
-            <YAxis domain={[3.5, 5]} />
+            <YAxis
+              domain={yDomain}
+              tick={{ fontSize: 12 }}
+              tickLine={false}
+              axisLine={false}
+            />
 
-            <Tooltip />
+            <Tooltip cursor={{ stroke: "#CBD5E1" }} />
 
             <Line
               type="monotone"
-              dataKey="cgpa"
+              dataKey={yKey}
               stroke="#2563EB"
-              strokeWidth={4}
-              dot={{
-                r: 6,
-                fill: "#2563EB",
-              }}
+              strokeWidth={3}
+              dot={{ r: 5 }}
+              activeDot={{ r: 7 }}
             />
           </LineChart>
         </ResponsiveContainer>

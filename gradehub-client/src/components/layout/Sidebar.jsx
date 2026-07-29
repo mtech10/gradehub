@@ -12,7 +12,7 @@ function Sidebar() {
         top-0
         flex
         h-screen
-        w-65
+        w-75
         flex-col
         border-r
         border-slate-200

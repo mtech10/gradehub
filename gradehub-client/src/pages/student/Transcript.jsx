@@ -1,10 +1,9 @@
 import TranscriptHeader from "../../components/transcript/TranscriptHeader";
 import StudentInformation from "../../components/transcript/StudentInformation";
 import TranscriptRecord from "../../components/transcript/TranscriptRecord";
-import CGPAChart from "../../components/dashboard/CGPAChart";
-// import OverallSummary from "../../components/transcript/OverallSummary";
-// import CgpaProgress from "../../components/transcript/CgpaProgress";
-// import TranscriptNotice from "../../components/transcript/TranscriptNotice";
+import OverallSummary from "../../components/transcript/OverallSummary";
+import CgpaProgress from "../../components/transcript/CgpaProgress";
+import TranscriptNotice from "../../components/transcript/TranscriptNotice";
 
 function Transcript() {
   return (
@@ -15,11 +14,11 @@ function Transcript() {
 
       <TranscriptRecord />
 
-      {/* <OverallSummary /> */}
+      <OverallSummary />
 
-      <CGPAChart />
+      <CgpaProgress />
 
-      {/* <TranscriptNotice /> */}
+      <TranscriptNotice />
     </div>
   );
 }

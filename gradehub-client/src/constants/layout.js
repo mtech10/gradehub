@@ -1,5 +1,5 @@
 export const LAYOUT = {
-  SIDEBAR_WIDTH: "w-[280px]",
+  SIDEBAR_WIDTH: "w-[320px]",
   NAVBAR_HEIGHT: "h-20",
 };
 

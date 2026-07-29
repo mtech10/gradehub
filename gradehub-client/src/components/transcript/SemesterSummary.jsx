@@ -1,13 +1,11 @@
 import { GraduationCap, BookOpen, Trophy, Percent } from "lucide-react";
 
 import StatCard from "../dashboard/StatCard";
+import { getSemesterSummary } from "../../utils/transcriptUtils";
 
 function SemesterSummary({ semester }) {
-  const averageScore =
-    semester.results.length > 0
-      ? semester.results.reduce((sum, item) => sum + item.score, 0) /
-        semester.results.length
-      : 0;
+  const summary = getSemesterSummary(semester);
+
   return (
     <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-6">
       <div className="mb-6">
@@ -25,7 +23,7 @@ function SemesterSummary({ semester }) {
           compact
           layout="center"
           title="Semester GPA"
-          value={semester.gpa.toFixed(2)}
+          value={summary.gpa.toFixed(2)}
           icon={GraduationCap}
           color="primary"
         />
@@ -34,7 +32,7 @@ function SemesterSummary({ semester }) {
           compact
           layout="center"
           title="Credit Units"
-          value={semester.units}
+          value={summary.units}
           icon={BookOpen}
           color="success"
         />
@@ -43,7 +41,7 @@ function SemesterSummary({ semester }) {
           compact
           layout="center"
           title="Courses"
-          value={semester.results.length}
+          value={summary.totalCourses}
           icon={Trophy}
           color="purple"
         />
@@ -52,7 +50,7 @@ function SemesterSummary({ semester }) {
           compact
           layout="center"
           title="Average Score"
-          value={`${averageScore.toFixed(1)}%`}
+          value={`${summary.averageScore.toFixed(1)}%`}
           icon={Percent}
           color="warning"
         />

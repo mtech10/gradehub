@@ -7,6 +7,7 @@ import CGPAChart from "../../components/dashboard/CGPAChart";
 
 import CurrentCourses from "../../components/dashboard/CurrentCourses";
 import UpcomingActivities from "../../components/dashboard/UpcomingActivities";
+import { cgpaTrend } from "../../constants/chartData";
 
 function Dashboard() {
   return (
@@ -20,7 +21,11 @@ function Dashboard() {
       </section>
 
       <section className="mt-8">
-        <CGPAChart />
+        <CGPAChart
+          title="CGPA Trend"
+          subtitle="Academic performance over time"
+          data={cgpaTrend}
+        />
         <div className="mt-8">
           <ResultsTable
             title="Recent Results"
