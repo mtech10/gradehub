@@ -36,3 +36,39 @@ export function getCourseProgress(progress) {
     color: "bg-red-500",
   };
 }
+
+export function getSemesterBadge(semester) {
+  switch (semester) {
+    case 1:
+      return {
+        label: "1st Semester",
+        variant: "primary",
+      };
+    case 2:
+      return {
+        label: "2nd Semester",
+        variant: "success",
+      };
+    default:
+      return {
+        label: "-",
+        variant: "secondary",
+      };
+  }
+}
+
+export function getCourseStatusBadge(status) {
+  const normalizedStatus = status?.toLowerCase();
+
+  if (normalizedStatus === "completed") {
+    return "success";
+  }
+  if (normalizedStatus === "in progress" || normalizedStatus === "registered") {
+    return "info";
+  }
+  if (normalizedStatus === "dropped") {
+    return "danger";
+  }
+
+  return "secondary";
+}

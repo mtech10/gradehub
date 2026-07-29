@@ -35,18 +35,6 @@ function GPAHeader({ activeTab, onTabChange, onClear, onCalculate }) {
             </button>
           ))}
         </div>
-
-        <div className="flex gap-3 pb-3 sm:pb-0">
-          <Button variant="outline" size="sm" onClick={onClear}>
-            <RotateCcw size={16} />
-            Clear All
-          </Button>
-
-          <Button size="sm" onClick={onCalculate}>
-            <Calculator size={16} />
-            Calculate GPA
-          </Button>
-        </div>
       </div>
     </div>
   );

@@ -43,12 +43,7 @@ function GPACalculator() {
 
   return (
     <div className="space-y-8">
-      <GPAHeader
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-        onClear={handleClearAll}
-        onCalculate={handleCalculate}
-      />
+      <GPAHeader activeTab={activeTab} onTabChange={setActiveTab} />
 
       {activeTab === "semester" ? (
         <div className="grid gap-8 xl:grid-cols-3">
@@ -59,6 +54,8 @@ function GPACalculator() {
               onAdd={handleAddCourse}
               onRemove={handleRemoveCourse}
               totalUnits={totalUnits}
+              onClear={handleClearAll}
+              onCalculate={handleCalculate}
             />
 
             <GPAResultsSummary

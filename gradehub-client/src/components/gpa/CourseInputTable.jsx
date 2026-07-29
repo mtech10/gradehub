@@ -1,11 +1,19 @@
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, Calculator, RotateCcw } from "lucide-react";
 
 import Card from "../ui/Card";
 import Button from "../ui/Button";
 import { GRADE_OPTIONS, UNIT_OPTIONS } from "../../constants/gpaCalculator";
 import { GRADE_POINTS } from "../../utils/gpaUtils";
 
-function CourseInputTable({ courses, onChange, onAdd, onRemove, totalUnits }) {
+function CourseInputTable({
+  courses,
+  onChange,
+  onAdd,
+  onRemove,
+  totalUnits,
+  onClear,
+  onCalculate,
+}) {
   const updateCourse = (id, field, value) => {
     onChange(
       courses.map((course) =>
@@ -114,7 +122,7 @@ function CourseInputTable({ courses, onChange, onAdd, onRemove, totalUnits }) {
         </table>
       </div>
 
-      <div className="mt-4 flex items-center justify-between">
+      <div className="mt-4 flex items-center justify-between gap-3 pb-3 sm:pb-0">
         <Button
           variant="outline"
           size="sm"
@@ -123,6 +131,16 @@ function CourseInputTable({ courses, onChange, onAdd, onRemove, totalUnits }) {
         >
           <Plus size={16} />
           Add Course
+        </Button>
+
+        <Button variant="outline" size="sm" onClick={onClear}>
+          <RotateCcw size={16} />
+          Clear All
+        </Button>
+
+        <Button size="sm" onClick={onCalculate}>
+          <Calculator size={16} />
+          Calculate GPA
         </Button>
 
         <p className="text-sm font-semibold text-slate-700">
