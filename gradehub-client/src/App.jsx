@@ -17,7 +17,9 @@ import Transcript from "./pages/student/Transcript";
 import GPACalculator from "./pages/student/GPACalculator";
 import Courses from "./pages/student/Courses";
 import CourseRegistration from "./pages/student/CourseRegistration";
-
+import Notifications from "./pages/student/Notifications";
+import Profile from "./pages/student/Profile";
+import Settings from "./pages/student/Settings";
 // Admin Pages
 // import AdminDashboard from "./pages/admin/Dashboard";
 
@@ -41,6 +43,9 @@ function App() {
         <Route path="gpa-calculator" element={<GPACalculator />} />
         <Route path="courses" element={<Courses />} />
         <Route path="course-registration" element={<CourseRegistration />} />
+        <Route path="notifications" element={<Notifications />} />
+        <Route path="profile" element={<Profile />} />
+        <Route path="settings" element={<Settings />} />
       </Route>
       {/* Admin Portal */}
       {/* <Route path="/admin/dashboard" element={<AdminDashboard />} /> */}

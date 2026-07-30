@@ -6,6 +6,7 @@ import {
   initialRegistrationCourses,
   registrationRules,
 } from "../../constants/courseRegistration/registrationData";
+import { getRegistrationSummary } from "../../utils/registrationHelpers";
 
 function CourseRegistration() {
   const [courses, setCourses] = useState(initialRegistrationCourses);
@@ -40,15 +41,43 @@ function CourseRegistration() {
       if (!isEditing) return;
 
       // Toggle it in the dropped cart
-      setDroppedCodes((prev) =>
-        prev.includes(code) ? prev.filter((c) => c !== code) : [...prev, code],
-      );
+      setDroppedCodes((prev) => {
+        const next = prev.includes(code)
+          ? prev.filter((c) => c !== code)
+          : [...prev, code];
+
+        return next;
+      });
     } else {
       // If it's available, toggle it in the selected cart
-      setSelectedCodes((prev) =>
-        prev.includes(code) ? prev.filter((c) => c !== code) : [...prev, code],
-      );
+      setSelectedCodes((prev) => {
+        const next = prev.includes(code)
+          ? prev.filter((c) => c !== code)
+          : [...prev, code];
+
+        return next;
+      });
     }
+  };
+
+  const handleSelectAll = () => {
+    const availableCodes = filteredCourses
+      .filter((course) => course.status === "Available")
+      .map((course) => course.code);
+
+    setSelectedCodes((prev) => [...new Set([...prev, ...availableCodes])]);
+  };
+
+  const handleClearSelection = () => {
+    setSelectedCodes([]);
+  };
+
+  const handleRowClick = (course) => {
+    if (course.status === "Registered" && !isEditing) {
+      return;
+    }
+
+    handleToggleSelection(course.code);
   };
 
   const handleSubmitRegistration = () => {
@@ -75,6 +104,13 @@ function CourseRegistration() {
     setDroppedCodes([]); // Revert any drops they made
   };
 
+  const summary = getRegistrationSummary({
+    courses,
+    selectedCodes,
+    droppedCodes,
+    rules: registrationRules,
+  });
+
   return (
     <div className="space-y-8">
       <PageHeader
@@ -85,7 +121,9 @@ function CourseRegistration() {
       <div className="grid gap-8 xl:grid-cols-12">
         <div className="xl:col-span-8">
           <CourseRegistrationTable
-            courses={filteredCourses}
+            courses={courses}
+            filteredCourses={filteredCourses}
+            summary={summary}
             selectedCodes={selectedCodes}
             droppedCodes={droppedCodes}
             isEditing={isEditing}
@@ -94,16 +132,17 @@ function CourseRegistration() {
             activeTab={activeTab}
             setActiveTab={setActiveTab}
             onToggleCourse={handleToggleSelection}
+            onSelectAll={handleSelectAll}
+            onClearSelection={handleClearSelection}
+            handleRowClick={handleRowClick}
           />
         </div>
 
         <div className="xl:col-span-4">
           <div className="sticky top-24">
             <RegistrationSummary
+              summary={summary}
               rules={registrationRules}
-              courses={courses}
-              selectedCodes={selectedCodes}
-              droppedCodes={droppedCodes}
               isEditing={isEditing}
               onEdit={() => setIsEditing(true)}
               onCancelEdit={handleCancelEdit}

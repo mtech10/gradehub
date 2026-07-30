@@ -1,10 +1,11 @@
 function DataTable({
-  columns,
-  data,
+  columns = [],
+  data = [],
   renderCell,
   emptyMessage = "No data available.",
   className = "",
   rowClassName = "",
+  getRowClassName,
   onRowClick,
 }) {
   return (
@@ -52,15 +53,25 @@ function DataTable({
             data.map((row, rowIndex) => (
               <tr
                 key={row.id ?? row.code ?? rowIndex}
-                onClick={() => onRowClick?.(row)}
+                onClick={(e) => {
+                  if (
+                    e.target.closest("input") ||
+                    e.target.closest("button") ||
+                    e.target.closest("a")
+                  ) {
+                    return;
+                  }
+
+                  onRowClick?.(row);
+                }}
                 className={`
-                  border-b
-                  border-slate-100
-                  transition-colors
-                  hover:bg-slate-50
-                  ${onRowClick ? "cursor-pointer" : ""}
-                  ${rowClassName}
-                `}
+    border-b
+    border-slate-100
+    transition-all
+    duration-200
+    ${onRowClick ? "cursor-pointer" : ""}
+    ${typeof rowClassName === "function" ? rowClassName(row) : rowClassName}
+  `}
               >
                 {columns.map((column) => (
                   <td
