@@ -1,25 +1,34 @@
-import { Outlet } from "react-router-dom";
+import DashboardLayout from "./DashboardLayout";
 
-import Sidebar from "../components/layout/Sidebar";
-import TopNavbar from "../components/layout/TopNavbar";
-import AuthFooter from "../components/auth/AuthFooter";
+import { studentNavigation } from "../constants/navigation";
+import { student } from "../constants/studentInformation";
 
 function StudentLayout() {
+  const studentRoutes = {
+    dashboard: "/student",
+    results: "/student/results",
+    transcript: "/student/transcript",
+    courses: "/student/courses",
+    notifications: "/student/notifications",
+    profile: "/student/profile",
+    settings: "/student/settings",
+  };
+
+  const handleLogout = () => {};
+
   return (
-    <div className="flex min-h-screen bg-slate-50">
-      <Sidebar />
-
-      <div className="flex flex-1 flex-col overflow-hidden">
-        <TopNavbar />
-
-        <main className="flex-1 overflow-y-auto">
-          <div className="mx-auto max-w-420 px-8 py-6">
-            <Outlet />
-          </div>
-        </main>
-        <AuthFooter />
-      </div>
-    </div>
+    <DashboardLayout
+      navigation={studentNavigation}
+      user={{
+        name: student.fullName,
+        email: "ademola@ui.edu.ng",
+        department: student.department,
+        level: student.level,
+        avatar: "https://i.pravatar.cc/150?img=8",
+      }}
+      routes={studentRoutes}
+      onLogout={handleLogout}
+    />
   );
 }
 

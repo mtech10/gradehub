@@ -1,6 +1,6 @@
 import { GraduationCap } from "lucide-react";
 
-function Logo({ size = "md" }) {
+function Logo({ size = "md", variant = "light" }) {
   const sizes = {
     sm: {
       icon: 22,
@@ -28,11 +28,23 @@ function Logo({ size = "md" }) {
       </div>
 
       <div>
-        <h1 className={`font-bold text-slate-900 ${current.title}`}>
+        <h1
+          className={`
+    font-bold
+    ${current.title}
+    ${variant === "dark" ? "text-white" : "text-slate-900"}
+  `}
+        >
           GradeHub
         </h1>
 
-        <p className={`text-slate-500 ${current.subtitle}`}>
+        <p
+          className={`
+    ${current.subtitle}
+    ${variant === "dark" ? "text-slate-400" : "text-slate-500"}
+  `}
+        >
+          {" "}
           Academic Management System
         </p>
       </div>

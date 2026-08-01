@@ -1,6 +1,6 @@
 import { GraduationCap, BookOpen, Trophy, Percent } from "lucide-react";
 
-import StatCard from "../dashboard/StatCard";
+import StatCard from "../dashboard/DashboardStats";
 import { getSemesterSummary } from "../../utils/transcriptUtils";
 
 function SemesterSummary({ semester }) {

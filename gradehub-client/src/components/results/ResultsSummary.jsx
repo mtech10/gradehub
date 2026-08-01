@@ -1,4 +1,4 @@
-import StatCard from "../dashboard/StatCard";
+import StatCard from "../dashboard/DashboardStats";
 import { resultSummary } from "../../constants/resultSummary";
 
 function ResultsSummary() {

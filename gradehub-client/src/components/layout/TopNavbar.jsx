@@ -14,7 +14,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { notificationsList } from "../../constants/notifications/notificationData";
 
-function TopNavbar({ onToggleSidebar }) {
+function TopNavbar({ onToggleSidebar, user, routes, onLogout }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -64,14 +64,9 @@ function TopNavbar({ onToggleSidebar }) {
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      navigate(`/student/courses?search=${encodeURIComponent(searchQuery)}`);
+      navigate(`${routes.courses}?search=${encodeURIComponent(searchQuery)}`);
       setIsSearchOpen(false);
     }
-  };
-
-  const handleLogout = () => {
-    // Add auth cleanup logic here if needed
-    navigate("/login");
   };
 
   return (
@@ -124,14 +119,14 @@ function TopNavbar({ onToggleSidebar }) {
               </div>
               <div className="space-y-2">
                 <Link
-                  to="/student/results"
+                  to={routes.results}
                   onClick={() => setIsSearchOpen(false)}
                   className="block p-2 rounded-lg hover:bg-slate-50 text-sm font-medium text-slate-800 transition-colors"
                 >
                   View results matching "{searchQuery}"
                 </Link>
                 <Link
-                  to="/student/courses"
+                  to={routes.courses}
                   onClick={() => setIsSearchOpen(false)}
                   className="block p-2 rounded-lg hover:bg-slate-50 text-sm font-medium text-slate-800 transition-colors"
                 >
@@ -201,7 +196,7 @@ function TopNavbar({ onToggleSidebar }) {
               </div>
               <div className="border-t border-slate-100 p-2 bg-slate-50">
                 <Link
-                  to="/student/notifications"
+                  to={routes.notifications}
                   onClick={() => setIsDropdownOpen(false)}
                   className="block w-full rounded-lg py-2 text-center text-sm font-semibold text-slate-700 hover:bg-slate-200 transition-colors"
                 >
@@ -227,13 +222,13 @@ function TopNavbar({ onToggleSidebar }) {
             className="flex items-center gap-3 transition-opacity hover:opacity-80 focus:outline-none"
           >
             <img
-              src="https://i.pravatar.cc/80"
+              src={user.avatar}
               alt="Profile"
               className="h-11 w-11 rounded-full object-cover shadow-sm"
             />
             <div className="text-left hidden sm:block">
-              <p className="font-semibold text-slate-900">Ademola Oyelusi</p>
-              <p className="text-sm text-slate-500">400 Level</p>
+              <p className="font-semibold text-slate-900">{user.name}</p>
+              <p className="text-sm text-slate-500">{user.level}</p>
             </div>
             <ChevronDown
               size={18}
@@ -246,19 +241,17 @@ function TopNavbar({ onToggleSidebar }) {
             <div className="absolute right-0 mt-3 w-64 rounded-2xl border border-slate-200 bg-white shadow-xl z-50 overflow-hidden">
               {/* Header Info */}
               <div className="border-b border-slate-100 p-4 bg-slate-50">
-                <p className="font-semibold text-slate-900">Ademola Oyelusi</p>
-                <p className="text-xs text-slate-500 truncate">
-                  adeyelusi20@stu.ui.edu.ng
-                </p>
+                <p className="font-semibold text-slate-900">{user.name}</p>
+                <p className="text-xs text-slate-500 truncate">{user.email}</p>
                 <div className="mt-2 inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-[11px] font-semibold text-blue-700">
-                  Agricultural Engineering
+                  {user.department}
                 </div>
               </div>
 
               {/* Menu Links */}
               <div className="p-2 space-y-1">
                 <Link
-                  to="/student/profile"
+                  to={routes.profile}
                   onClick={() => setIsUserDropdownOpen(false)}
                   className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 transition-colors"
                 >
@@ -266,7 +259,7 @@ function TopNavbar({ onToggleSidebar }) {
                   My Profile
                 </Link>
                 <Link
-                  to="/student/settings"
+                  to={routes.settings}
                   onClick={() => setIsUserDropdownOpen(false)}
                   className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 transition-colors"
                 >
@@ -278,7 +271,7 @@ function TopNavbar({ onToggleSidebar }) {
               {/* Logout Action */}
               <div className="border-t border-slate-100 p-2 bg-slate-50/50">
                 <button
-                  onClick={handleLogout}
+                  onClick={onLogout}
                   className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold text-red-600 hover:bg-red-50 transition-colors"
                 >
                   <LogOut size={16} />

@@ -1,6 +1,6 @@
 import { THEME } from "../../constants/theme";
 
-function StatCard({
+function DashboardStats({
   icon: Icon,
   title,
   value,
@@ -124,4 +124,4 @@ function StatCard({
   );
 }
 
-export default StatCard;
+export default DashboardStats;

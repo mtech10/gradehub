@@ -4,7 +4,6 @@ import PageHeader from "../../components/common/PageHeader";
 import Button from "../../components/ui/Button";
 import Card from "../../components/ui/Card";
 import NotificationList from "../../components/notifications/NotificationList";
-import NotificationSettings from "../../components/notifications/NotificationSettings";
 import NotificationSummary from "../../components/notifications/NotificationSummary";
 
 import {
@@ -63,11 +62,6 @@ function Notifications() {
 
         {/* Right Column: Sidebar */}
         <div className="space-y-6 xl:col-span-4">
-          <NotificationSettings
-            settings={settings}
-            onToggle={handleToggleSetting}
-          />
-
           <NotificationSummary notifications={notifications} />
 
           {/* Help Card */}

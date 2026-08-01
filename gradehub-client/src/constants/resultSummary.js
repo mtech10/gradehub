@@ -28,8 +28,8 @@ export const resultSummary = [
   {
     title: "Lowest Score",
     value: "58%",
-    subtitle: "Needs Improvement",
-    footer: "AGE 416 • Project Research",
+    subtitle: "AGE 416",
+    footer: "Project Research",
     icon: TrendingDown,
     color: "orange",
   },

@@ -1,7 +1,7 @@
 import { Calculator, GraduationCap, Star, BarChart3 } from "lucide-react";
 
 import Card from "../ui/Card";
-import StatCard from "../dashboard/StatCard";
+import StatCard from "../dashboard/DashboardStats";
 import { getGPARemark } from "../../utils/gpaUtils";
 
 function GPAResultsSummary({

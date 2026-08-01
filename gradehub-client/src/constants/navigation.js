@@ -8,6 +8,11 @@ import {
   User,
   Settings,
   LogOut,
+  Users,
+  GraduationCap,
+  Building2,
+  BarChart3,
+  Upload,
 } from "lucide-react";
 
 export const studentNavigation = [
@@ -58,3 +63,47 @@ export const logoutItem = {
   title: "Logout",
   icon: LogOut,
 };
+
+export const adminNavigation = [
+  {
+    title: "Dashboard",
+    icon: LayoutDashboard,
+    path: "/admin",
+  },
+  {
+    title: "Students",
+    icon: Users,
+    path: "/admin/students",
+  },
+  {
+    title: "Departments",
+    icon: Building2,
+    path: "/admin/departments",
+  },
+  {
+    title: "Courses",
+    icon: BookOpen,
+    path: "/admin/courses",
+  },
+  {
+    title: "Results",
+    icon: FileText,
+    path: "/admin/results",
+  },
+
+  {
+    title: "Analytics",
+    icon: BarChart3,
+    path: "/admin/analytics",
+  },
+  {
+    title: "Profile",
+    icon: User,
+    path: "/admin/profile",
+  },
+  {
+    title: "Settings",
+    icon: Settings,
+    path: "/admin/settings",
+  },
+];

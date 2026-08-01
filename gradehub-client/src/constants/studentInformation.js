@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 
 export const student = {
-  fullName: "Ademola Oyelusi",
+  name: "Ademola Oyelusi",
   matricNumber: "20/ENG/0400",
   department: "Agricultural Engineering",
   programme: "B.Eng Agricultural Engineering",
@@ -18,6 +18,8 @@ export const student = {
   level: "400 Level",
   session: "2023/2024",
   transcriptDate: "15 May 2024",
+  email: "adeyelusi20@stu.ui.edu.ng",
+  avatar: "https://i.pravatar.cc/80",
 };
 
 export const studentInformation = [

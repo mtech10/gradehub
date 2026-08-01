@@ -1,6 +1,6 @@
 import StudentLayout from "../../layouts/StudentLayout";
 import DashboardHeader from "../../components/dashboard/DashboardHeader";
-import StatCard from "../../components/dashboard/StatCard";
+import StatCard from "../../components/dashboard/DashboardStats";
 import ResultsTable from "../../components/results/ResultsTable";
 import { dashboardStats } from "../../constants/dashboard";
 import CGPAChart from "../../components/dashboard/CGPAChart";

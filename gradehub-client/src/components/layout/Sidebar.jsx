@@ -1,15 +1,16 @@
 import Logo from "../ui/Logo";
 import NavItem from "../navigation/NavItem";
-import { studentNavigation, logoutItem } from "../../constants/navigation";
-import { useNavigate } from "react-router-dom";
+import { logoutItem } from "../../constants/navigation";
 
-function Sidebar({ isOpen }) {
+function Sidebar({
+  navigation,
+  user,
+  onLogout,
+  isOpen = true,
+  variant = "light",
+}) {
   const LogoutIcon = logoutItem.icon;
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    navigate("/login");
-  };
+  const isDark = variant === "dark";
 
   return (
     <aside
@@ -19,10 +20,10 @@ function Sidebar({ isOpen }) {
         flex
         h-screen
         w-75
+        overflow-hidden
         flex-col
         border-r
-        border-slate-200
-        bg-white
+       ${isDark ? "bg-slate-800 border-slate-800" : "bg-white  border-slate-200"}
         transition-all
         duration-300
         z-40
@@ -30,35 +31,52 @@ function Sidebar({ isOpen }) {
       `}
     >
       {/* Logo */}
-      <div className="px-8 py-8">
-        <Logo />
+      <div className={`px-8 py-8 ${isDark ? "border-b border-slate-800" : ""}`}>
+        <Logo variant={variant} />
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 space-y-2 px-4 overflow-y-auto">
-        {studentNavigation.map((item) => (
-          <NavItem key={item.title} {...item} />
+      <nav className="flex-1 space-y-2 px-4">
+        {navigation.map((item) => (
+          <NavItem key={item.title} {...item} variant={variant} />
         ))}
       </nav>
 
       {/* Student Card */}
-      <div className="border-t border-slate-200 p-6">
+      <div
+        className={`border-t p-6 ${
+          isDark ? "border-slate-800" : "border-slate-200"
+        }`}
+      >
+        {" "}
         <div className="flex items-center gap-3">
           <img
-            src="https://i.pravatar.cc/80"
-            alt="Student"
+            src={user?.avatar}
+            alt={user?.name}
             className="h-12 w-12 rounded-full"
           />
+
           <div>
-            <p className="font-semibold text-slate-900">Ademola Oyelusi</p>
-            <p className="text-sm text-slate-500">Agricultural Engineering</p>
-            <p className="text-sm text-slate-500">400 Level</p>
+            <p
+              className={`font-semibold ${
+                isDark ? "text-white" : "text-slate-900"
+              }`}
+            >
+              {user?.name}
+            </p>
+
+            <p className={isDark ? "text-slate-400" : "text-slate-500"}>
+              {user?.department}
+            </p>
+
+            <p className={isDark ? "text-slate-400" : "text-slate-500"}>
+              {user?.level}
+            </p>
           </div>
         </div>
-
         <button
-          onClick={handleLogout}
-          className="
+          onClick={onLogout}
+          className={`
             mt-6
             flex
             w-full
@@ -68,10 +86,10 @@ function Sidebar({ isOpen }) {
             px-4
             py-3
             text-red-600
-            hover:bg-red-50
+            ${isDark ? "hover:bg-slate-800" : "hover:bg-red-50"}
             transition-colors
             font-semibold
-          "
+          `}
         >
           <LogoutIcon size={20} />
           {logoutItem.title}

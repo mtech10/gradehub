@@ -6,7 +6,7 @@ import {
   CalendarDays,
 } from "lucide-react";
 
-import StatCard from "../dashboard/StatCard";
+import StatCard from "../dashboard/DashboardStats";
 
 import { transcript } from "../../constants/transcript";
 import { getTranscriptSummary } from "../../utils/transcriptUtils";
