@@ -23,6 +23,7 @@ import Settings from "./pages/student/Settings";
 // Admin Pages
 import AdminDashboard from "./pages/admin/Dashboard";
 import AdminLayout from "./layouts/AdminLayout";
+import Students from "./pages/admin/Students";
 
 function App() {
   return (
@@ -52,6 +53,7 @@ function App() {
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<AdminDashboard />} />
         <Route path="dashboard" element={<AdminDashboard />} />
+        <Route path="students" element={<Students />} />
       </Route>
       {/* 404 */}
       <Route path="*" element={<NotFound />} />
