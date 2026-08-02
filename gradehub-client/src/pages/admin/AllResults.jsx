@@ -1,42 +1,74 @@
+import { useEffect, useState } from "react";
+
 import PageHeader from "../../components/common/PageHeader";
-import StudentStats from "../../components/admin/students/StudentStats";
-import { useState, useEffect } from "react";
-import StudentToolbar from "../../components/admin/students/StudentToolbar";
-import StudentsTable from "../../components/admin/students/StudentsTable";
-import { students } from "../../constants/admin/students";
+
+import ResultStats from "../../components/admin/results/ResultStats";
+import ResultToolbar from "../../components/admin/results/ResultToolbar";
+import ResultsTable from "../../components/admin/results/ResultsTable";
+
 import BulkActionBar from "../../components/admin/common/BulkActionBar";
 
-function Students() {
+import { results } from "../../constants/admin/results";
+import { students } from "../../constants/admin/students";
+import { courses } from "../../constants/admin/courses";
+
+function AllResults() {
   const [search, setSearch] = useState("");
-  const [department, setDepartment] = useState("");
+
+  const [session, setSession] = useState("");
+  const [semester, setSemester] = useState("");
   const [level, setLevel] = useState("");
-  const [status, setStatus] = useState("");
+
   const [currentPage, setCurrentPage] = useState(1);
+
   const [sortKey, setSortKey] = useState("");
   const [sortDirection, setSortDirection] = useState("asc");
+
   const [selectedRows, setSelectedRows] = useState([]);
 
   const pageSize = 8;
 
-  const filteredStudents = students.filter((student) => {
-    const matchesSearch =
-      student.fullName.toLowerCase().includes(search.toLowerCase()) ||
-      student.email.toLowerCase().includes(search.toLowerCase()) ||
-      student.matricNumber.toLowerCase().includes(search.toLowerCase());
+  const resultsWithDetails = results.map((result) => {
+    const student = students.find((s) => s.id === result.studentId);
 
-    const matchesDepartment = !department || student.department === department;
+    const course = courses.find((course) => course.code === result.courseCode);
 
-    const matchesLevel = !level || student.level === level;
+    return {
+      ...result,
 
-    const matchesStatus = !status || student.status === status;
+      studentName: student?.fullName,
 
-    return matchesSearch && matchesDepartment && matchesLevel && matchesStatus;
+      matricNumber: student?.matricNumber,
+
+      department: student?.department,
+
+      level: student?.level,
+
+      courseTitle: course?.title,
+
+      unit: course?.unit,
+    };
   });
 
-  const sortedStudents = [...filteredStudents];
+  const filteredResults = resultsWithDetails.filter((result) => {
+    const matchesSearch =
+      result.studentName?.toLowerCase().includes(search.toLowerCase()) ||
+      result.matricNumber?.toLowerCase().includes(search.toLowerCase()) ||
+      result.courseCode?.toLowerCase().includes(search.toLowerCase()) ||
+      result.courseTitle?.toLowerCase().includes(search.toLowerCase());
+
+    const matchesSession = !session || result.session === session;
+
+    const matchesSemester = !semester || result.semester === semester;
+
+    const matchesLevel = !level || result.level === level;
+    return matchesSearch && matchesSession && matchesSemester && matchesLevel;
+  });
+
+  const sortedResults = [...filteredResults];
 
   if (sortKey) {
-    sortedStudents.sort((a, b) => {
+    sortedResults.sort((a, b) => {
       const first = String(a[sortKey]).toLowerCase();
       const second = String(b[sortKey]).toLowerCase();
 
@@ -80,41 +112,41 @@ function Students() {
   useEffect(() => {
     setCurrentPage(1);
     setSelectedRows([]);
-  }, [search, department, level, status]);
+  }, [search, session, semester, level]);
 
   return (
     <div className="space-y-8">
       <PageHeader
-        title="Students"
-        subtitle="Manage student records and academic information."
+        title="Results"
+        subtitle="Manage and review students' academic results."
       />
 
-      <StudentStats />
+      <ResultStats />
 
-      <StudentToolbar
+      <ResultToolbar
         search={search}
         setSearch={setSearch}
-        department={department}
-        setDepartment={setDepartment}
+        session={session}
+        setSession={setSession}
+        semester={semester}
+        setSemester={setSemester}
         level={level}
         setLevel={setLevel}
-        status={status}
-        setStatus={setStatus}
       />
 
       {selectedRows.length > 0 && (
         <BulkActionBar
           count={selectedRows.length}
-          itemLabel="students"
+          itemLabel="results"
           onClearSelection={clearSelection}
           onExport={() => console.log("Export")}
-          onSuspend={() => console.log("Suspend")}
+          onSuspend={() => console.log("Approve")}
           onDelete={() => console.log("Delete")}
         />
       )}
 
-      <StudentsTable
-        students={sortedStudents}
+      <ResultsTable
+        results={sortedResults}
         currentPage={currentPage}
         onPageChange={setCurrentPage}
         pageSize={pageSize}
@@ -130,4 +162,4 @@ function Students() {
   );
 }
 
-export default Students;
+export default AllResults;

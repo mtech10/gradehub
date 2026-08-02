@@ -32,7 +32,6 @@ function DashboardStats({
     >
       {isCentered ? (
         <>
-          {/* Center Layout */}
           <div className="flex flex-col items-center text-center">
             <div
               className={`
@@ -51,13 +50,7 @@ function DashboardStats({
             <p className="text-sm text-slate-500">{title}</p>
 
             <div className="mt-2 flex items-end gap-1">
-              <h2
-                className={`
-                  font-bold
-                  text-slate-900
-                  ${valueTextSize}
-                `}
-              >
+              <h2 className={`font-bold text-slate-900 ${valueTextSize}`}>
                 {value}
               </h2>
 
@@ -73,17 +66,9 @@ function DashboardStats({
         </>
       ) : (
         <>
-          {/* Horizontal Layout */}
           <div className="flex items-start justify-between">
             <div
-              className={`
-                flex
-                items-center
-                justify-center
-                rounded-full
-                ${compact ? "h-12 w-12" : "h-16 w-16"}
-                ${colors.bg}
-              `}
+              className={`flex items-center justify-center rounded-full ${compact ? "h-12 w-12" : "h-16 w-16"} ${colors.bg}`}
             >
               <Icon size={compact ? 22 : 30} className={colors.icon} />
             </div>
@@ -92,13 +77,7 @@ function DashboardStats({
               <p className="text-sm text-slate-500">{title}</p>
 
               <div className="mt-2 flex items-end justify-end gap-1">
-                <h2
-                  className={`
-                    font-bold
-                    text-slate-900
-                    ${valueTextSize}
-                  `}
-                >
+                <h2 className={`font-bold text-slate-900 ${valueTextSize}`}>
                   {value}
                 </h2>
 

@@ -13,8 +13,12 @@ function Select({
 }) {
   return (
     <div className={className}>
-      {label && <label className={THEME.input.label}>{label}</label>}
-
+      {label && (
+        <label className={THEME.input.label}>
+          {label}
+          {props.required && <span className="ml-1 text-red-500">*</span>}
+        </label>
+      )}
       <div className="relative">
         <select
           className={clsx(

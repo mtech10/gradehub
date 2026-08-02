@@ -12,11 +12,9 @@ import {
 } from "../../constants/notifications/notificationData";
 
 function Notifications() {
-  // Initialize state with our mock data
   const [notifications, setNotifications] = useState(notificationsList);
   const [settings, setSettings] = useState(notificationSettings);
 
-  // Handlers
   const handleMarkAllAsRead = () => {
     setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
   };
@@ -35,7 +33,6 @@ function Notifications() {
 
   return (
     <div className="space-y-8">
-      {/* Header */}
       <div className="flex flex-col gap-4 border-b border-slate-200 pb-6 sm:flex-row sm:items-end sm:justify-between">
         <PageHeader
           title="Notifications"
@@ -52,7 +49,6 @@ function Notifications() {
       </div>
 
       <div className="grid gap-8 xl:grid-cols-12">
-        {/* Left Column: Notification List */}
         <div className="xl:col-span-8">
           <NotificationList
             notifications={notifications}
@@ -60,11 +56,9 @@ function Notifications() {
           />
         </div>
 
-        {/* Right Column: Sidebar */}
         <div className="space-y-6 xl:col-span-4">
           <NotificationSummary notifications={notifications} />
 
-          {/* Help Card */}
           <Card padding="lg">
             <h3 className="mb-2 text-lg font-semibold text-slate-900">
               Need Help?

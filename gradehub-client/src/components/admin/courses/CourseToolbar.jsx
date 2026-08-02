@@ -2,10 +2,10 @@ import { Upload, Download, Plus } from "lucide-react";
 
 import Button from "../../ui/Button";
 import AdminToolbar from "../common/AdminToolbar";
-import { useNavigate } from "react-router-dom";
-import { studentFilters } from "../../../constants/admin/students";
 
-function StudentToolbar({
+import { courseFilters } from "../../../constants/admin/courses";
+
+function CourseToolbar({
   search,
   setSearch,
   department,
@@ -15,32 +15,31 @@ function StudentToolbar({
   status,
   setStatus,
 }) {
-  const navigate = useNavigate();
   return (
     <AdminToolbar
       search={search}
       setSearch={setSearch}
-      searchPlaceholder="Search student..."
+      searchPlaceholder="Search course..."
       filters={[
         {
           name: "department",
           value: department,
           onChange: setDepartment,
-          options: studentFilters.departments,
+          options: courseFilters.departments,
           width: "w-60",
         },
         {
           name: "level",
           value: level,
           onChange: setLevel,
-          options: studentFilters.levels,
+          options: courseFilters.levels,
           width: "w-40",
         },
         {
           name: "status",
           value: status,
           onChange: setStatus,
-          options: studentFilters.statuses,
+          options: courseFilters.statuses,
           width: "w-44",
         },
       ]}
@@ -56,9 +55,9 @@ function StudentToolbar({
             Export
           </Button>
 
-          <Button onClick={() => navigate("/admin/students/new")}>
+          <Button>
             <Plus size={18} />
-            Add Student
+            Add Course
           </Button>
         </>
       }
@@ -66,4 +65,4 @@ function StudentToolbar({
   );
 }
 
-export default StudentToolbar;
+export default CourseToolbar;

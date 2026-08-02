@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 
 function Input({
+  id,
   label,
   type = "text",
   placeholder,
@@ -22,9 +23,12 @@ function Input({
   return (
     <div className="space-y-2">
       {label && (
-        <label className="block text-sm font-semibold text-slate-700">
+        <label
+          htmlFor={id}
+          className="block text-sm font-semibold text-slate-700"
+        >
+          {" "}
           {label}
-
           {required && <span className="ml-1 text-red-500">*</span>}
         </label>
       )}
@@ -38,6 +42,7 @@ function Input({
         )}
 
         <input
+          id={id}
           type={isPassword ? (showPassword ? "text" : "password") : type}
           value={value}
           onChange={onChange}

@@ -1,22 +1,32 @@
-function Checkbox({ checked, onChange, disabled = false, className = "" }) {
+import { Check, Minus } from "lucide-react";
+
+function Checkbox({
+  checked = false,
+  indeterminate = false,
+  onChange,
+  className = "",
+}) {
   return (
-    <input
-      type="checkbox"
-      checked={checked}
-      onChange={onChange}
-      disabled={disabled}
+    <button
+      type="button"
+      onClick={onChange}
       className={`
-        h-4
-        w-4
-        cursor-pointer
-        rounded
-        border-slate-300
-        text-blue-600
-        focus:ring-2
-        focus:ring-blue-500
+        flex h-5 w-5 items-center justify-center
+        rounded border-2 transition-all duration-200
+
+        ${
+          checked || indeterminate
+            ? "border-blue-600 bg-blue-600 text-white"
+            : "border-slate-400 bg-white hover:border-blue-500"
+        }
+
         ${className}
       `}
-    />
+    >
+      {checked && <Check size={13} strokeWidth={3} />}
+
+      {!checked && indeterminate && <Minus size={13} strokeWidth={3} />}
+    </button>
   );
 }
 

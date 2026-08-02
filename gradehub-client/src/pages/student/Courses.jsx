@@ -25,12 +25,10 @@ function Courses() {
       <CourseStats />
 
       <section className="grid gap-8 xl:grid-cols-12">
-        {/* Left */}
         <div className="xl:col-span-8">
           <RegisteredCourses activeTab={activeTab} searchQuery={searchQuery} />
         </div>
 
-        {/* Right */}
         <div className="space-y-6 xl:col-span-4">
           <QuickLinks />
           <CourseStatistics />

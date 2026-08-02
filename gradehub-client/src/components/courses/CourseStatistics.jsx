@@ -9,7 +9,6 @@ import {
 import Card from "../ui/Card";
 import { THEME } from "../../constants/theme";
 
-// Mock Data Sets
 const statsData = {
   "this-session": {
     total: 32,
@@ -59,7 +58,6 @@ function CourseStatistics() {
         </select>
       }
     >
-      {/* Chart Section */}
       <div className="mb-8 flex items-center gap-6">
         <div className="relative flex h-[100px] w-[100px] shrink-0 items-center justify-center">
           <PieChart width={100} height={100}>
@@ -90,7 +88,6 @@ function CourseStatistics() {
           </div>
         </div>
 
-        {/* Legend */}
         <div className="flex-1 space-y-2">
           {currentData.chart.map((item) => (
             <div
@@ -117,7 +114,6 @@ function CourseStatistics() {
         </div>
       </div>
 
-      {/* List Section */}
       <div className="space-y-4">
         {currentData.list.map((stat) => {
           const Icon = stat.icon;

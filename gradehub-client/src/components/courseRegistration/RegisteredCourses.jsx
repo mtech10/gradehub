@@ -4,16 +4,13 @@ import CourseAccordion from "../courses/CourseAccordion";
 function RegisteredCourses({ activeTab, searchQuery }) {
   const filteredSemesters = registeredSemesters
     .map((semester) => {
-      // 1. Standardized the parameter to 'course' (singular)
       const filteredCourses = semester.courses.filter((course) => {
-        // Safe Search Match
         const query = searchQuery?.toLowerCase().trim() || "";
         const matchesSearch =
           query === "" ||
           course.title.toLowerCase().includes(query) ||
           course.code.toLowerCase().includes(query);
 
-        // Safe Tab Match
         const tab = activeTab?.toLowerCase() || "all";
         const status = course.status?.toLowerCase() || "";
 

@@ -2,6 +2,7 @@ import Pagination from "./Pagination";
 import EmptyState from "./EmptyState";
 import TableSkeleton from "./TableSkeleton";
 import { ArrowUpDown, ArrowUp, ArrowDown, Check } from "lucide-react";
+import Checkbox from "./Checkbox";
 
 function DataTable({
   columns = [],
@@ -34,22 +35,28 @@ function DataTable({
 
   const paginatedData = pagination ? data.slice(startIndex, endIndex) : data;
 
+  const currentPageIds = paginatedData.map((row) => row.id);
+
+  const allCurrentPageSelected =
+    currentPageIds.length > 0 &&
+    currentPageIds.every((id) => selectedRows.includes(id));
+
+  const someCurrentPageSelected =
+    currentPageIds.some((id) => selectedRows.includes(id)) &&
+    !allCurrentPageSelected;
+
   return (
     <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
       <div className="overflow-x-auto">
         <table className="w-full">
-          {/* Header */}
           <thead className="sticky top-0 z-10 border-b border-slate-200 bg-white">
             <tr>
               {selectable && (
-                <th className="w-16 px-6 py-4">
-                  <input
-                    type="checkbox"
-                    checked={
-                      data.length > 0 && selectedRows.length === data.length
-                    }
-                    onChange={onSelectAll}
-                    className="h-4 w-4 rounded border-slate-300"
+                <th className="w-14 px-4 py-4 text-center">
+                  <Checkbox
+                    checked={allCurrentPageSelected}
+                    indeterminate={someCurrentPageSelected}
+                    onChange={() => onSelectAll(currentPageIds)}
                   />
                 </th>
               )}
@@ -60,16 +67,7 @@ function DataTable({
                     width: column.width,
                     minWidth: column.minWidth,
                   }}
-                  className={`
-                  px-6 py-4
-                  text-sm
-                  font-semibold
-                  text-slate-600
-                  whitespace-nowrap
-                  ${column.align === "center" ? "text-center" : ""}
-                  ${column.align === "right" ? "text-right" : "text-left"}
-                  ${column.className ?? ""}
-                `}
+                  className={` px-6 py-4  text-sm font-semibold text-slate-600 whitespace-nowrap ${column.align === "center" ? "text-center" : ""} ${column.align === "right" ? "text-right" : "text-left"} ${column.className ?? ""}`}
                 >
                   <div
                     className={`flex items-center gap-2 ${
@@ -93,7 +91,6 @@ function DataTable({
             </tr>
           </thead>
 
-          {/* Body */}
           {loading ? (
             <TableSkeleton rows={pageSize} columns={columns.length} />
           ) : (
@@ -112,33 +109,22 @@ function DataTable({
                   <tr
                     key={row.id ?? row.code ?? rowIndex}
                     onClick={(e) => {
-                      if (
-                        e.target.closest("input") ||
-                        e.target.closest("button") ||
-                        e.target.closest("a")
-                      ) {
+                      if (e.target.closest("button") || e.target.closest("a")) {
                         return;
                       }
 
                       onRowClick?.(row);
                     }}
-                    className={`
-    border-b
-    border-slate-100
-    transition-all
-    duration-200
-    ${onRowClick ? "cursor-pointer" : ""}
-    ${typeof rowClassName === "function" ? rowClassName(row) : rowClassName}
-  `}
+                    className={`border-bborder-slate-100 transition-all duration-200 ${selectable && selectedRows.includes(row.id) ? "bg-blue-50" : "hover:bg-slate-50"}
+                    ${onRowClick ? "cursor-pointer" : ""}
+                    ${typeof rowClassName === "function" ? rowClassName(row) : rowClassName}`}
                   >
                     {selectable && (
-                      <td className="px-6">
-                        <input
-                          type="checkbox"
+                      <td className="px-4 text-center">
+                        <Checkbox
                           checked={selectedRows.includes(row.id)}
                           onChange={() => onRowSelect?.(row.id)}
-                          onClick={(e) => e.stopPropagation()}
-                          className="h-4 w-4 rounded border-slate-300"
+                          className="mx-auto"
                         />
                       </td>
                     )}
@@ -149,13 +135,10 @@ function DataTable({
                           width: column.width,
                           minWidth: column.minWidth,
                         }}
-                        className={`
-                      px-6 py-5
-                      whitespace-nowrap
-                      ${column.align === "center" ? "text-center" : ""}
-                      ${column.align === "right" ? "text-right" : ""}
-                      ${column.cellClassName ?? ""}
-                    `}
+                        className={`px-6 py-5 whitespace-nowrap
+                          ${column.align === "center" ? "text-center" : ""}
+                          ${column.align === "right" ? "text-right" : ""}
+                          ${column.cellClassName ?? ""}`}
                       >
                         {renderCell ? renderCell(row, column) : row[column.key]}
                       </td>
