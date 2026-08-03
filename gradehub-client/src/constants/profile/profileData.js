@@ -4,23 +4,26 @@ import {
   MapPin,
   IdCard,
   Building2,
+  Briefcase,
   GraduationCap,
   CalendarDays,
   BarChart,
   Cake,
   User,
+  Hash,
   Heart,
   Flag,
   ShieldCheck,
   Users,
   Globe,
+  Clock3,
 } from "lucide-react";
 
 // 1. The raw database-style object (Ready for API integration)
 export const initialStudentData = {
   firstName: "Ademola",
   lastName: "Oyelusi",
-  email: "adeyelusi20@stu.ui.edu.ng",
+  email: "adeyelusi20@stu.gradehub.edu.ng",
   phone: "+234 801 234 5678",
   avatar: "https://i.pravatar.cc/150?u=ade",
   dob: "12 January 2002",
@@ -110,3 +113,136 @@ export const generateProfileUI = (data) => ({
     { label: "Class of Degree", value: data.academic.classOfDegree },
   ],
 });
+
+export const initialAdminData = {
+  fullName: "Dr. John Adewale",
+  role: "System Administrator",
+  employeeId: "ADM001",
+  department: "ICT Directorate",
+
+  email: "john.adewale@gradehub.edu",
+  phone: "+2348012345678",
+
+  office: "Administrative Building",
+  address: "University of Ibadan",
+
+  avatar: "",
+};
+
+export function generateAdminProfile(admin) {
+  return {
+    personal: {
+      avatar:
+        admin.avatar ||
+        "https://ui-avatars.com/api/?name=" +
+          encodeURIComponent(admin.fullName),
+
+      name: admin.fullName,
+
+      levelBadge: admin.role,
+
+      contact: [
+        {
+          icon: Mail,
+          value: admin.email,
+        },
+        {
+          icon: Phone,
+          value: admin.phone,
+        },
+      ],
+    },
+
+    details: [
+      {
+        icon: Hash,
+        label: "Employee ID",
+        value: admin.employeeId,
+      },
+
+      {
+        icon: Briefcase,
+        label: "Role",
+        value: admin.role,
+      },
+
+      {
+        icon: Building2,
+        label: "Department",
+        value: admin.department,
+      },
+
+      {
+        icon: MapPin,
+        label: "Office",
+        value: admin.office,
+      },
+
+      {
+        icon: ShieldCheck,
+        label: "Account Status",
+        value: "Active",
+        isBadge: true,
+      },
+
+      {
+        icon: Clock3,
+        label: "Last Login",
+        value: "Today • 08:42 AM",
+      },
+    ],
+
+    personalInfo: [
+      {
+        label: "Full Name",
+        value: admin.fullName,
+      },
+      {
+        label: "Email Address",
+        value: admin.email,
+      },
+      {
+        label: "Phone Number",
+        value: admin.phone,
+      },
+      {
+        label: "Address",
+        value: admin.address,
+      },
+    ],
+
+    employmentInfo: [
+      {
+        label: "Employee ID",
+        value: admin.employeeId,
+      },
+      {
+        label: "Role",
+        value: admin.role,
+      },
+      {
+        label: "Department",
+        value: admin.department,
+      },
+      {
+        label: "Office",
+        value: admin.office,
+      },
+    ],
+
+    accountInfo: [
+      {
+        label: "Account Status",
+        value: "Active",
+      },
+      {
+        label: "Permissions",
+        value: "Administrator",
+      },
+      {
+        label: "Last Login",
+        value: "Today • 08:42 AM",
+      },
+    ],
+  };
+}

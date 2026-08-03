@@ -16,7 +16,7 @@ function CGPAChart({
   data = [],
   xKey = "semester",
   yKey = "cgpa",
-  yDomain = [3.5, 5],
+  yDomain = [0, 5],
 }) {
   return (
     <Card title={title} subtitle={subtitle} padding="none">

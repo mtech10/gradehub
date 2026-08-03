@@ -10,24 +10,24 @@ import {
 } from "../../components/profile/ProfileCards";
 import EditProfileModal from "../../components/profile/EditProfileModal";
 import {
-  initialStudentData,
-  generateProfileUI,
+  initialAdminData,
+  generateAdminProfile,
 } from "../../constants/profile/profileData";
 
 function Profile() {
   // Store the raw, API-ready data in state
-  const [student, setStudent] = useState(initialStudentData);
+  const [admin, setAdmin] = useState(initialAdminData);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Generate the formatted UI data on the fly
-  const Data = generateProfileUI(student);
+  const Data = generateAdminProfile(admin);
 
   const handleSaveProfile = (updatedFields) => {
-    // In a real app, this is where you'd fire your API PUT/PATCH request
-    setStudent((prev) => ({
+    setAdmin((prev) => ({
       ...prev,
       ...updatedFields,
     }));
+
     setIsModalOpen(false);
   };
 
@@ -53,24 +53,24 @@ function Profile() {
       <ProfileMainCard data={Data} />
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        <ContactInfoCard title="Contact Information" items={Data.contactInfo} />
-
         <ContactInfoCard
-          title="Emergency Contact"
-          items={Data.emergencyContact}
+          title="Personal Information"
+          items={Data.personalInfo}
         />
 
-        <InfoCard title="Academic Information" items={Data.academicInfo} />
+        <InfoCard title="Employment Information" items={Data.employmentInfo} />
+
+        <InfoCard title="Account Information" items={Data.accountInfo} />
       </div>
 
       <ProfileNotice />
 
       {/* The Edit Modal */}
       <EditProfileModal
-        type="student"
+        type="admin"
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        currentData={student}
+        currentData={admin}
         onSave={handleSaveProfile}
       />
     </div>

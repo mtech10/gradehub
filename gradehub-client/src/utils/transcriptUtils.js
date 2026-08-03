@@ -1,78 +1,84 @@
-export function getAverageScore(results = []) {
-  if (!results.length) return 0;
+export function getAverageScore(courses = []) {
+  if (!Array.isArray(courses) || courses.length === 0) return 0;
 
-  const total = results.reduce((sum, course) => sum + course.score, 0);
+  const total = courses.reduce((sum, course) => sum + (course.score || 0), 0);
 
-  return total / results.length;
+  return Number((total / courses.length).toFixed(1));
 }
 
-export function getHighestScore(results = []) {
-  if (!results.length) return null;
+export function getHighestScore(courses = []) {
+  if (!Array.isArray(courses) || courses.length === 0) return null;
 
-  return results.reduce((highest, current) =>
+  return courses.reduce((highest, current) =>
     current.score > highest.score ? current : highest,
   );
 }
 
-export function getLowestScore(results = []) {
-  if (!results.length) return null;
+export function getLowestScore(courses = []) {
+  if (!Array.isArray(courses) || courses.length === 0) return null;
 
-  return results.reduce((lowest, current) =>
+  return courses.reduce((lowest, current) =>
     current.score < lowest.score ? current : lowest,
   );
 }
 
-export function getSemesterSummary(semester) {
+export function getSemesterSummary(semester = {}) {
+  const courses = semester.courses || [];
+
   return {
-    gpa: semester.gpa,
-    units: semester.units,
-    totalCourses: semester.results.length,
-    averageScore: getAverageScore(semester.results),
-    highestScore: getHighestScore(semester.results),
-    lowestScore: getLowestScore(semester.results),
+    gpa: semester.gpa || 0,
+    units: semester.totalUnits || 0,
+    totalCourses: courses.length,
+    averageScore: getAverageScore(courses),
+    highestScore: getHighestScore(courses),
+    lowestScore: getLowestScore(courses),
   };
 }
 
-export function getSessionSummary(session) {
-  const totalUnits = session.semesters.reduce(
-    (sum, semester) => sum + semester.units,
+export function getSessionSummary(session = {}) {
+  const semesters = session.semesters || [];
+
+  const totalUnits = semesters.reduce(
+    (sum, semester) => sum + (semester.totalUnits || 0),
     0,
   );
 
-  const totalCourses = session.semesters.reduce(
-    (sum, semester) => sum + semester.results.length,
+  const totalCourses = semesters.reduce(
+    (sum, semester) => sum + (semester.courses || []).length,
     0,
   );
 
   const averageGpa =
-    session.semesters.reduce((sum, semester) => sum + semester.gpa, 0) /
-    session.semesters.length;
+    semesters.length > 0
+      ? semesters.reduce((sum, semester) => sum + (semester.gpa || 0), 0) /
+        semesters.length
+      : 0;
 
   return {
     totalUnits,
     totalCourses,
-    averageGpa,
+    averageGpa: Number(averageGpa.toFixed(2)),
   };
 }
 
-export function getTranscriptSummary(transcript) {
-  let totalSessions = transcript.length;
+export function getTranscriptSummary(sessions = []) {
   let totalCourses = 0;
   let totalUnits = 0;
   let totalGpa = 0;
   let semesterCount = 0;
 
-  transcript.forEach((session) => {
-    session.semesters.forEach((semester) => {
+  sessions.forEach((session) => {
+    (session.semesters || []).forEach((semester) => {
       semesterCount++;
 
-      totalUnits += semester.units;
-      totalCourses += semester.results.length;
-      totalGpa += semester.gpa;
+      totalUnits += semester.totalUnits || 0;
+      totalCourses += (semester.courses || []).length;
+      totalGpa += semester.gpa || 0;
     });
   });
 
-  const cgpa = semesterCount > 0 ? totalGpa / semesterCount : 0;
+  const cgpa =
+    semesterCount > 0 ? Number((totalGpa / semesterCount).toFixed(2)) : 0;
 
   let degreeClass = "Pass";
 
@@ -82,23 +88,27 @@ export function getTranscriptSummary(transcript) {
   else if (cgpa >= 1.5) degreeClass = "Third Class";
 
   return {
-    cgpa: cgpa.toFixed(2),
+    cgpa,
     totalCourses,
     totalUnits,
-    totalSessions,
+    totalSessions: sessions.length,
     degreeClass,
   };
 }
 
-export function getCgpaProgress(transcript) {
-  return transcript.map((session) => {
-    const averageGpa =
-      session.semesters.reduce((sum, semester) => sum + semester.gpa, 0) /
-      session.semesters.length;
+export function getCgpaProgress(sessions = []) {
+  return sessions.map((session) => {
+    const semesters = session.semesters || [];
+
+    const average =
+      semesters.length > 0
+        ? semesters.reduce((sum, semester) => sum + (semester.gpa || 0), 0) /
+          semesters.length
+        : 0;
 
     return {
       session: session.session,
-      gpa: Number(averageGpa.toFixed(2)),
+      gpa: Number(average.toFixed(2)),
     };
   });
 }

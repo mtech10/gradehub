@@ -5,15 +5,15 @@ import TranscriptTable from "./TranscriptTable";
 function SemesterAccordion({ semester }) {
   return (
     <Accordion
-      title={semester.semester}
-      subtitle={`GPA ${semester.gpa} • ${semester.units} Units`}
-      defaultOpen={semester.semester === "First Semester"}
+      title={`${semester.semester} Semester`}
+      subtitle={`GPA ${semester.gpa} • ${semester.totalUnits} Units`}
+      defaultOpen={semester.semester === "First"}
     >
       <>
         <SemesterSummary semester={semester} />
 
-        <TranscriptTable results={semester.results} />
-      </>{" "}
+        <TranscriptTable results={semester.courses} />
+      </>
     </Accordion>
   );
 }

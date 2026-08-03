@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 
 export const student = {
+  id: 1,
   name: "Ademola Oyelusi",
   matricNumber: "20/ENG/0400",
   department: "Agricultural Engineering",
@@ -18,13 +19,13 @@ export const student = {
   level: "400 Level",
   session: "2023/2024",
   transcriptDate: "15 May 2024",
-  email: "adeyelusi20@stu.ui.edu.ng",
+  email: "adeyelusi20@stu.gradehub.edu.ng",
   avatar: "https://i.pravatar.cc/80",
 };
 
 export const studentInformation = [
   {
-    key: "fullName",
+    key: "name",
     label: "Student Name",
     icon: User,
   },

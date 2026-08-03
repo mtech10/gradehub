@@ -42,7 +42,7 @@ function PersonalInformation({ formData, handleChange }) {
           required
           value={formData.email}
           onChange={(e) => handleChange("email", e.target.value)}
-          placeholder="student@ui.edu.ng"
+          placeholder="student@gradehub.edu.ng"
         />
 
         <Input

@@ -1,10 +1,13 @@
-import { transcript } from "../../constants/transcript";
 import SessionAccordion from "./SessionAccordion";
 
+import { getCurrentStudentTranscript } from "../../utils/currentStudentTranscript";
+
 function TranscriptRecord() {
+  const student = getCurrentStudentTranscript();
+
   return (
     <div className="space-y-6">
-      {transcript.map((session) => (
+      {student.sessions.map((session) => (
         <SessionAccordion key={session.session} session={session} />
       ))}
     </div>

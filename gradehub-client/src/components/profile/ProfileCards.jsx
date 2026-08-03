@@ -7,16 +7,21 @@ export function ContactInfoCard({ title, items }) {
       <div className="space-y-6">
         {items.map((item) => {
           const Icon = item.icon;
+
           return (
             <div key={item.label} className="flex items-start gap-4">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-50 text-blue-600">
-                <Icon size={18} />
-              </div>
+              {Icon && (
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-50 text-blue-600">
+                  <Icon size={18} />
+                </div>
+              )}
+
               <div>
-                <p className="text-xs font-medium text-slate-500 mb-1">
+                <p className="mb-1 text-xs font-medium text-slate-500">
                   {item.label}
                 </p>
-                <p className="text-sm font-semibold text-slate-900 leading-relaxed">
+
+                <p className="text-sm font-semibold leading-relaxed text-slate-900">
                   {item.value}
                 </p>
               </div>
@@ -28,7 +33,7 @@ export function ContactInfoCard({ title, items }) {
   );
 }
 
-export function AcademicInfoCard({ title, items }) {
+export function InfoCard({ title, items }) {
   return (
     <Card title={title} className="h-full relative overflow-hidden">
       {/* Background Watermark Icon */}

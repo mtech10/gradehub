@@ -8,12 +8,13 @@ import {
 
 import StatCard from "../dashboard/DashboardStats";
 
-import { transcript } from "../../constants/transcript";
+import { getCurrentStudentTranscript } from "../../utils/currentStudentTranscript";
 import { getTranscriptSummary } from "../../utils/transcriptUtils";
 
 function OverallSummary() {
-  const summary = getTranscriptSummary(transcript);
+  const student = getCurrentStudentTranscript();
 
+  const summary = getTranscriptSummary(student.sessions);
   const cards = [
     {
       title: "CGPA",
@@ -23,7 +24,6 @@ function OverallSummary() {
       icon: GraduationCap,
       color: "primary",
     },
-
     {
       title: "Courses Completed",
       value: summary.totalCourses,
@@ -31,7 +31,6 @@ function OverallSummary() {
       icon: BookOpen,
       color: "success",
     },
-
     {
       title: "Credit Units",
       value: summary.totalUnits,
@@ -39,7 +38,6 @@ function OverallSummary() {
       icon: Target,
       color: "warning",
     },
-
     {
       title: "Degree Class",
       value: summary.degreeClass,
@@ -47,7 +45,6 @@ function OverallSummary() {
       icon: Trophy,
       color: "purple",
     },
-
     {
       title: "Academic Sessions",
       value: summary.totalSessions,

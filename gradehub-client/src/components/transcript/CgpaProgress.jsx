@@ -1,10 +1,12 @@
 import CGPAChart from "../dashboard/CGPAChart";
 
-import { transcript } from "../../constants/transcript";
 import { getCgpaProgress } from "../../utils/transcriptUtils";
+import { getCurrentStudentTranscript } from "../../utils/currentStudentTranscript";
 
 function CgpaProgress() {
-  const progress = getCgpaProgress(transcript);
+  const student = getCurrentStudentTranscript();
+
+  const progress = getCgpaProgress(student.sessions);
 
   return (
     <CGPAChart

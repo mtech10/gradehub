@@ -121,9 +121,9 @@ export const studentFilters = {
 export const students = [
   {
     id: 1,
-    matricNumber: "UI/2021/001",
+    matricNumber: "GHU/2021/001",
     fullName: "Adebayo Samuel",
-    email: "adebayo.samuel@ui.edu.ng",
+    email: "adebayo.samuel@gradehub.edu.ng",
     phone: "+2348011111111",
     faculty: "Technology",
     department: "Agricultural Engineering",
@@ -139,9 +139,9 @@ export const students = [
 
   {
     id: 2,
-    matricNumber: "UI/2022/002",
+    matricNumber: "GHU/2022/002",
     fullName: "Grace Okafor",
-    email: "grace.okafor@ui.edu.ng",
+    email: "grace.okafor@gradehub.edu.ng",
     phone: "+2348022222222",
     faculty: "Technology",
     department: "Civil Engineering",
@@ -157,9 +157,9 @@ export const students = [
 
   {
     id: 3,
-    matricNumber: "UI/2021/003",
+    matricNumber: "GHU/2021/003",
     fullName: "David Bello",
-    email: "david.bello@ui.edu.ng",
+    email: "david.bello@gradehub.edu.ng",
     phone: "+2348033333333",
     faculty: "Technology",
     department: "Mechanical Engineering",
@@ -175,9 +175,9 @@ export const students = [
 
   {
     id: 4,
-    matricNumber: "UI/2020/004",
+    matricNumber: "GHU/2020/004",
     fullName: "Esther James",
-    email: "esther.james@ui.edu.ng",
+    email: "esther.james@gradehub.edu.ng",
     phone: "+2348044444444",
     faculty: "Technology",
     department: "Electrical Engineering",
@@ -193,9 +193,9 @@ export const students = [
 
   {
     id: 5,
-    matricNumber: "UI/2023/005",
+    matricNumber: "GHU/2023/005",
     fullName: "John Musa",
-    email: "john.musa@ui.edu.ng",
+    email: "john.musa@gradehub.edu.ng",
     phone: "+2348055555555",
     faculty: "Technology",
     department: "Computer Engineering",
@@ -211,9 +211,9 @@ export const students = [
 
   {
     id: 6,
-    matricNumber: "UI/2020/006",
+    matricNumber: "GHU/2020/006",
     fullName: "Mercy Adeola",
-    email: "mercy.adeola@ui.edu.ng",
+    email: "mercy.adeola@gradehub.edu.ng",
     phone: "+2348066666666",
     faculty: "Technology",
     department: "Agricultural Engineering",
@@ -229,9 +229,9 @@ export const students = [
 
   {
     id: 7,
-    matricNumber: "UI/2021/007",
+    matricNumber: "GHU/2021/007",
     fullName: "Samuel Ibrahim",
-    email: "samuel.ibrahim@ui.edu.ng",
+    email: "samuel.ibrahim@gradehub.edu.ng",
     phone: "+2348077777777",
     faculty: "Technology",
     department: "Civil Engineering",
@@ -247,9 +247,9 @@ export const students = [
 
   {
     id: 8,
-    matricNumber: "UI/2022/008",
+    matricNumber: "GHU/2022/008",
     fullName: "Ruth Emmanuel",
-    email: "ruth.emmanuel@ui.edu.ng",
+    email: "ruth.emmanuel@gradehub.edu.ng",
     phone: "+2348088888888",
     faculty: "Technology",
     department: "Mechanical Engineering",
@@ -265,9 +265,9 @@ export const students = [
 
   {
     id: 9,
-    matricNumber: "UI/2023/009",
+    matricNumber: "GHU/2023/009",
     fullName: "Daniel Ojo",
-    email: "daniel.ojo@ui.edu.ng",
+    email: "daniel.ojo@gradehub.edu.ng",
     phone: "+2348099999999",
     faculty: "Technology",
     department: "Electrical Engineering",
@@ -283,9 +283,9 @@ export const students = [
 
   {
     id: 10,
-    matricNumber: "UI/2024/010",
+    matricNumber: "GHU/2024/010",
     fullName: "Chioma Nwosu",
-    email: "chioma.nwosu@ui.edu.ng",
+    email: "chioma.nwosu@gradehub.edu.ng",
     phone: "+2348010101010",
     faculty: "Technology",
     department: "Computer Engineering",

@@ -37,7 +37,7 @@ function AccountSettings({ data, onChange }) {
           <Input
             label="Email Address"
             type="email"
-            defaultValue="adeyelusi20@stu.ui.edu.ng"
+            defaultValue="adeyelusi20@stu.gradehub.edu.ng"
             disabled
           />
           <Input

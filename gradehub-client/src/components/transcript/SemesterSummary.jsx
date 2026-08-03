@@ -32,7 +32,7 @@ function SemesterSummary({ semester }) {
           compact
           layout="center"
           title="Credit Units"
-          value={summary.units}
+          value={summary.totalUnits}
           icon={BookOpen}
           color="success"
         />

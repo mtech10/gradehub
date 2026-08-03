@@ -21,7 +21,7 @@ function StudentLayout() {
       navigation={studentNavigation}
       user={{
         name: student.fullName,
-        email: "ademola@ui.edu.ng",
+        email: "ademola@gradehub.edu.ng",
         department: student.department,
         level: student.level,
         avatar: "https://i.pravatar.cc/150?img=8",

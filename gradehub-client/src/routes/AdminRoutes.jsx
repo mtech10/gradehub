@@ -12,7 +12,11 @@ import UploadResults from "../pages/admin/UploadResults";
 import CourseDetails from "../pages/admin/CourseDetails";
 import AddCourse from "../pages/admin/AddCourse";
 import EditCourse from "../pages/admin/EditCourse";
-
+import AdminProfile from "../pages/admin/AdminProfile";
+import Departments from "../pages/admin/Departments";
+import DepartmentDetails from "../pages/admin/DepartmentDetails";
+import AddDepartment from "../pages/admin/AddDepartment";
+import EditDepartment from "../pages/admin/EditDepartment";
 function AdminRoutes() {
   return (
     <Routes>
@@ -30,6 +34,11 @@ function AdminRoutes() {
         <Route path="courses/:id" element={<CourseDetails />} />
         <Route path="courses/new" element={<AddCourse />} />
         <Route path="courses/:id/edit" element={<EditCourse />} />
+        <Route path="profile" element={<AdminProfile />} />
+        <Route path="/departments" element={<Departments />} />
+        <Route path="/departments/add" element={<AddDepartment />} />
+        <Route path="/departments/:id" element={<DepartmentDetails />} />
+        <Route path="/departments/:id/edit" element={<EditDepartment />} />
       </Route>
     </Routes>
   );
