@@ -4,6 +4,7 @@ import Button from "../../ui/Button";
 import AdminToolbar from "../common/AdminToolbar";
 
 import { resultFilters } from "../../../constants/admin/results";
+import { useNavigate } from "react-router-dom";
 
 function ResultToolbar({
   search,
@@ -15,6 +16,7 @@ function ResultToolbar({
   level,
   setLevel,
 }) {
+  const navigate = useNavigate();
   return (
     <AdminToolbar
       search={search}
@@ -45,7 +47,10 @@ function ResultToolbar({
       ]}
       rightActions={
         <>
-          <Button variant="secondary">
+          <Button
+            variant="secondary"
+            onClick={() => navigate("/admin/results/upload")}
+          >
             <Upload size={18} />
             Upload Results
           </Button>

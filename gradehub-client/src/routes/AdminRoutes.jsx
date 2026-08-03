@@ -8,6 +8,7 @@ import AddStudent from "../pages/admin/AddStudent";
 import EditStudent from "../pages/admin/EditStudent";
 import AllCourses from "../pages/admin/AllCourses";
 import AllResults from "../pages/admin/AllResults";
+import UploadResults from "../pages/admin/UploadResults";
 import CourseDetails from "../pages/admin/CourseDetails";
 import AddCourse from "../pages/admin/AddCourse";
 import EditCourse from "../pages/admin/EditCourse";
@@ -24,6 +25,7 @@ function AdminRoutes() {
         <Route path="/admin/students/:id/edit" element={<EditStudent />} />
         <Route path="courses" element={<AllCourses />} />
         <Route path="results" element={<AllResults />} />
+        <Route path="results/upload" element={<UploadResults />} />
         <Route path="students/:id/edit" element={<EditStudent />} />
         <Route path="courses/:id" element={<CourseDetails />} />
         <Route path="courses/new" element={<AddCourse />} />
