@@ -27,7 +27,7 @@ function DashboardStats({
         shadow-sm
         transition-all
         hover:shadow-md
-        ${compact ? "p-5" : "p-6"}
+        ${compact ? "p-5" : "p-4"}
       `}
     >
       {isCentered ? (

@@ -72,7 +72,7 @@ function TopNavbar({ onToggleSidebar, user, routes, onLogout }) {
   return (
     <header className="relative flex h-20 items-center justify-between border-b border-slate-200 bg-white px-8">
       {/* Left Side */}
-      <div className="flex items-center gap-6">
+      <div className="flex items-center gap-4">
         <button
           onClick={onToggleSidebar}
           className="rounded-lg p-2 hover:bg-slate-100 transition-colors"
@@ -139,7 +139,7 @@ function TopNavbar({ onToggleSidebar, user, routes, onLogout }) {
       </div>
 
       {/* Right Side */}
-      <div className="flex items-center gap-6">
+      <div className="flex items-center gap-4">
         {/* Notification Dropdown */}
         <div className="relative" ref={dropdownRef}>
           <button

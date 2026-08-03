@@ -6,7 +6,7 @@ import { student } from "../../constants/studentInformation";
 function TranscriptNotice() {
   return (
     <Card padding="lg">
-      <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
         <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-100">
           <ShieldCheck className="text-blue-600" size={28} />
         </div>

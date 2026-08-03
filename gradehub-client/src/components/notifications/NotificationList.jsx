@@ -58,7 +58,7 @@ function NotificationList({ notifications, onMarkAsRead }) {
     <>
       <Card padding="none" className="overflow-hidden">
         {/* Tabs */}
-        <div className="flex items-center gap-6 overflow-x-auto border-b border-slate-200 px-6 pt-4">
+        <div className="flex items-center gap-4 overflow-x-auto border-b border-slate-200 px-6 pt-4">
           {tabs.map((tab) => (
             <button
               key={tab.id}
@@ -104,7 +104,7 @@ function NotificationList({ notifications, onMarkAsRead }) {
                 <div
                   key={notification.id}
                   onClick={() => handleNotificationClick(notification)}
-                  className={`flex cursor-pointer items-start gap-4 border-b border-slate-100 p-6 transition-colors last:border-0 hover:bg-slate-50 ${
+                  className={`flex cursor-pointer items-start gap-4 border-b border-slate-100 p-4 transition-colors last:border-0 hover:bg-slate-50 ${
                     !notification.isRead ? "bg-white" : "bg-slate-50/50"
                   }`}
                 >
@@ -199,7 +199,7 @@ function NotificationList({ notifications, onMarkAsRead }) {
               </button>
             </div>
 
-            <div className="p-6">
+            <div className="p-4">
               <div className="mb-4 flex items-center gap-4">
                 <div
                   className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-${selectedNotification.color}-100 text-${selectedNotification.color}-600`}

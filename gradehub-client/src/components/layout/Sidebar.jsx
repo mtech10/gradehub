@@ -44,7 +44,7 @@ function Sidebar({
 
       {/* Student Card */}
       <div
-        className={`border-t p-6 ${
+        className={`border-t p-4 ${
           isDark ? "border-slate-800" : "border-slate-200"
         }`}
       >

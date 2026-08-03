@@ -52,7 +52,7 @@ function Profile() {
       {/* Pass the dynamically generated uiData to the components */}
       <ProfileMainCard data={uiData} />
 
-      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         <ContactInfoCard
           title="Contact Information"
           items={uiData.contactInfo}

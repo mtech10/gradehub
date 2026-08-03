@@ -1,4 +1,5 @@
 import { Upload, Download, Plus } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 import Button from "../../ui/Button";
 import AdminToolbar from "../common/AdminToolbar";
@@ -15,6 +16,8 @@ function CourseToolbar({
   status,
   setStatus,
 }) {
+  const navigate = useNavigate();
+
   return (
     <AdminToolbar
       search={search}
@@ -55,7 +58,7 @@ function CourseToolbar({
             Export
           </Button>
 
-          <Button>
+          <Button onClick={() => navigate("/admin/courses/new")}>
             <Plus size={18} />
             Add Course
           </Button>

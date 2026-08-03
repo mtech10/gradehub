@@ -58,7 +58,7 @@ function CourseStatistics() {
         </select>
       }
     >
-      <div className="mb-8 flex items-center gap-6">
+      <div className="mb-8 flex items-center gap-4">
         <div className="relative flex h-[100px] w-[100px] shrink-0 items-center justify-center">
           <PieChart width={100} height={100}>
             <Pie

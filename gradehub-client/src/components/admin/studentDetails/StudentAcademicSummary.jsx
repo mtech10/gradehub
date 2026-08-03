@@ -2,7 +2,7 @@ import Card from "../../ui/Card";
 
 function StudentAcademicSummary({ student }) {
   return (
-    <Card className="p-6">
+    <Card className="p-4">
       <h3 className="mb-6 text-lg font-semibold">Academic Summary</h3>
 
       <div className="space-y-6">

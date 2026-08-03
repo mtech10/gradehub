@@ -8,7 +8,7 @@ function CourseAccordion({ data }) {
   const isCurrent = data.status === "Current";
 
   const headerAction = (
-    <div className="flex items-center gap-6">
+    <div className="flex items-center gap-4">
       <span className="text-sm font-medium text-slate-600 hidden sm:block">
         Credit Load: {data.creditLoad}
       </span>

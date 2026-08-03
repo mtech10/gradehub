@@ -123,7 +123,7 @@ function Settings() {
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-col gap-6 border-b border-slate-200 pb-6 lg:flex-row lg:items-end lg:justify-between">
+      <div className="flex flex-col gap-4 border-b border-slate-200 pb-6 lg:flex-row lg:items-end lg:justify-between">
         <PageHeader
           title="Settings"
           subtitle="Manage your account, preferences and security settings."

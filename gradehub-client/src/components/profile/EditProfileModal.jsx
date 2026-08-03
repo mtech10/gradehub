@@ -57,7 +57,7 @@ function EditProfileModal({ isOpen, onClose, currentData, onSave }) {
         </div>
 
         {/* Scrollable Form Body */}
-        <div className="overflow-y-auto p-6">
+        <div className="overflow-y-auto p-4">
           <form
             id="edit-profile-form"
             onSubmit={handleSubmit}

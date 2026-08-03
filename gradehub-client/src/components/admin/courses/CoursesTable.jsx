@@ -28,7 +28,7 @@ function CoursesTable({
       case "code":
         return (
           <button
-            onClick={() => navigate(`/admin/courses/${course.id}`)}
+            onClick={() => navigate(`${course.id}`)}
             className="font-medium text-blue-600 hover:underline"
           >
             {course.code}
@@ -41,7 +41,7 @@ function CoursesTable({
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                navigate(`/admin/courses/${course.id}`);
+                navigate(`${course.id}`);
               }}
               className="font-semibold text-slate-900 transition-colors hover:text-blue-600"
             >

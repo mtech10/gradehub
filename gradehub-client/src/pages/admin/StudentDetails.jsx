@@ -53,10 +53,16 @@ function StudentDetails() {
         subtitle="View academic profile and records."
       />
 
-      <Button variant="secondary" onClick={() => navigate("/admin/students")}>
-        <ArrowLeft size={18} />
-        Back to Students
-      </Button>
+      <div className="flex justify-between">
+        <Button variant="secondary" onClick={() => navigate("/admin/students")}>
+          <ArrowLeft size={18} />
+          Back to Students
+        </Button>
+
+        <Button onClick={() => navigate(`/admin/students/${student.id}/edit`)}>
+          Edit Student
+        </Button>
+      </div>
 
       <StudentProfileCard student={student} />
 
@@ -83,7 +89,7 @@ function StudentDetails() {
       </div>
 
       {activeTab === "overview" && (
-        <div className="grid gap-6 xl:grid-cols-2">
+        <div className="grid gap-4 xl:grid-cols-2">
           <StudentInfoCard student={student} />
 
           <StudentAcademicSummary student={student} />

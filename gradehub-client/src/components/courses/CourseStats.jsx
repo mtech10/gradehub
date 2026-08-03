@@ -3,7 +3,7 @@ import { courseStats } from "../../constants/courses/courseStats";
 
 function CourseStats() {
   return (
-    <section className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+    <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
       {courseStats.map((stat) => (
         <StatCard
           key={stat.title}

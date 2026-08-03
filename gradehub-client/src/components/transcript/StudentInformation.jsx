@@ -7,7 +7,7 @@ import {
 function StudentInformation() {
   return (
     <Card padding="lg">
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {studentInformation.map(({ key, icon: Icon, label }) => (
           <div
             key={label}

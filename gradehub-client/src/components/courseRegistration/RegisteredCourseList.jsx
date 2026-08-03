@@ -35,7 +35,7 @@ function RegisteredCourseList({ courses, onRemove }) {
                 key={course.code}
                 className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 p-4 transition-colors hover:bg-red-50/50 last:border-0"
               >
-                <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-6 flex-1 min-w-0">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 flex-1 min-w-0">
                   <span className="w-20 font-bold text-slate-900 shrink-0">
                     {course.code}
                   </span>
@@ -44,7 +44,7 @@ function RegisteredCourseList({ courses, onRemove }) {
                   </span>
                 </div>
 
-                <div className="flex items-center gap-4 sm:gap-6 shrink-0">
+                <div className="flex items-center gap-4 sm:gap-4 shrink-0">
                   <span className="w-16 text-right text-sm text-slate-500">
                     {course.units} Units
                   </span>

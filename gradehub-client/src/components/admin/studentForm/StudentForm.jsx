@@ -8,7 +8,7 @@ import AcademicInformation from "./AcademicInformation";
 import PortalAccess from "./PortalAccess";
 import StudentFormActions from "./StudentFormActions";
 
-function StudentForm() {
+function StudentForm({ mode = "create", initialValues = {} }) {
   const [formData, setFormData] = useState({
     matricNumber: "",
     firstName: "",
@@ -62,7 +62,7 @@ function StudentForm() {
 
           <PortalAccess formData={formData} handleChange={handleChange} />
 
-          <StudentFormActions formData={formData} />
+          <StudentFormActions formData={formData} mode={mode} />
         </div>
       </div>
     </Card>

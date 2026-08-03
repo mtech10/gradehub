@@ -21,7 +21,7 @@ function AcademicInformation({ formData, handleChange }) {
         <div className="mt-3 border-b border-slate-200" />
       </div>
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         <Select
           label="Department"
           required

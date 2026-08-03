@@ -10,7 +10,7 @@ function AdminStatCard({ title, value, icon: Icon, color = "blue", subtitle }) {
   };
 
   return (
-    <Card className="p-6">
+    <Card className="p-2">
       <div className="flex items-start justify-between">
         <div>
           <p className="text-sm font-medium text-slate-500">{title}</p>

@@ -14,7 +14,7 @@ function Dashboard() {
     <>
       <DashboardHeader />
 
-      <section className="grid gap-6 xl:grid-cols-5">
+      <section className="grid gap-4 xl:grid-cols-5">
         {dashboardStats.map((stat) => (
           <StatCard key={stat.title} {...stat} />
         ))}
@@ -35,7 +35,7 @@ function Dashboard() {
         </div>
       </section>
 
-      <section className="mt-8 grid grid-cols-6 gap-6">
+      <section className="mt-8 grid grid-cols-6 gap-4">
         <div className="col-span-4">
           <CurrentCourses />
         </div>

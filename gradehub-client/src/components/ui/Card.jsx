@@ -28,7 +28,7 @@ function Card({
       {...props}
     >
       {(title || subtitle || headerAction) && (
-        <div className="flex items-start justify-between border-b border-slate-200 p-6">
+        <div className="flex items-start justify-between border-b border-slate-200 p-4">
           <div>
             {title && <h2 className={THEME.typography.h4}>{title}</h2>}
 
@@ -50,7 +50,7 @@ function Card({
         {children}
       </div>
 
-      {footer && <div className="border-t border-slate-200 p-6">{footer}</div>}
+      {footer && <div className="border-t border-slate-200 p-4">{footer}</div>}
     </div>
   );
 }

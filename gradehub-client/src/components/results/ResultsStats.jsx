@@ -3,7 +3,7 @@ import { resultStats } from "../../constants/resultStats";
 
 function ResultsStats() {
   return (
-    <section className="grid gap-6 sm:grid-cols-2 xl:grid-cols-5">
+    <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
       {resultStats.map((stat) => (
         <StatCard
           key={stat.title}

@@ -8,7 +8,7 @@ function RegistrationStatus({ rules, currentUnits }) {
 
   return (
     <Card padding="md" className="border-blue-200 bg-blue-50/50">
-      <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         {/* Status & Deadline */}
         <div className="flex items-center gap-4">
           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-100">
@@ -30,7 +30,7 @@ function RegistrationStatus({ rules, currentUnits }) {
         </div>
 
         {/* Unit Counters - Added w-fit to prevent stretching */}
-        <div className="flex w-fit items-center gap-4 sm:gap-6 rounded-xl border border-slate-200 bg-white px-6 py-3 shadow-sm">
+        <div className="flex w-fit items-center gap-4 sm:gap-4 rounded-xl border border-slate-200 bg-white px-6 py-3 shadow-sm">
           <div className="text-center">
             <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
               Min

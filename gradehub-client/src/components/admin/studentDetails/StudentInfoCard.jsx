@@ -2,10 +2,10 @@ import Card from "../../ui/Card";
 
 function StudentInfoCard({ student }) {
   return (
-    <Card className="p-6">
+    <Card className="p-4">
       <h3 className="mb-6 text-lg font-semibold">Student Information</h3>
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-4 md:grid-cols-2">
         <Info label="Faculty" value={student.faculty} />
         <Info label="Department" value={student.department} />
         <Info label="Level" value={student.level} />

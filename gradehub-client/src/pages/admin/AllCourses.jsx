@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-
 import PageHeader from "../../components/common/PageHeader";
 
 import CourseStats from "../../components/admin/courses/CourseStats";
@@ -9,6 +8,7 @@ import CoursesTable from "../../components/admin/courses/CoursesTable";
 import BulkActionBar from "../../components/admin/common/BulkActionBar";
 
 import { courses } from "../../constants/admin/courses";
+import Button from "../../components/ui/Button";
 
 function AllCourses() {
   const [search, setSearch] = useState("");
@@ -90,10 +90,7 @@ function AllCourses() {
 
   return (
     <div className="space-y-8">
-      <PageHeader
-        title="Courses"
-        subtitle="Manage courses across all departments."
-      />
+      <PageHeader title="Courses" subtitle="Manage courses." />
 
       <CourseStats />
 

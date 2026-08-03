@@ -19,7 +19,7 @@ function UpcomingActivities() {
         </button>
       }
     >
-      <div className={`h-[420px] overflow-y-auto p-6 space-y-5 ${SCROLLBAR}`}>
+      <div className={`h-[420px] overflow-y-auto p-4 space-y-5 ${SCROLLBAR}`}>
         {upcomingActivities.map((activity) => (
           <div
             key={activity.title}

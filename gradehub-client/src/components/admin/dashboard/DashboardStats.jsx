@@ -2,7 +2,7 @@ import AdminStatCard from "./AdminStatCard";
 
 function DashboardStats({ stats }) {
   return (
-    <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
       {stats.map((item) => (
         <AdminStatCard
           key={item.id}

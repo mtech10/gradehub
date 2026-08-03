@@ -44,7 +44,7 @@ function RegistrationToolbar({
     lg:justify-between
   "
         >
-          <div className="flex flex-wrap gap-6 text-sm">
+          <div className="flex flex-wrap gap-4 text-sm">
             <div>
               <span className="text-slate-500">Selected:</span>{" "}
               <span className="font-semibold text-slate-900">

@@ -7,7 +7,7 @@ function SemesterSummary({ semester }) {
   const summary = getSemesterSummary(semester);
 
   return (
-    <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-6">
+    <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-4">
       <div className="mb-6">
         <h3 className="text-lg font-semibold text-slate-900">
           Semester Summary

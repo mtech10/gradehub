@@ -3,8 +3,8 @@ import Badge from "../../ui/Badge";
 
 function StudentProfileCard({ student }) {
   return (
-    <Card className="p-6">
-      <div className="flex flex-col gap-6 lg:flex-row lg:items-center">
+    <Card className="p-4">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
         {/* Avatar */}
         <div className="flex h-24 w-24 items-center justify-center rounded-full bg-blue-100 text-3xl font-bold text-blue-700">
           {student.fullName

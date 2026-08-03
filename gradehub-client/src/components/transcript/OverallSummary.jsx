@@ -69,7 +69,7 @@ function OverallSummary() {
         </p>
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-5">
+      <div className="grid gap-4 xl:grid-cols-5">
         {cards.map((card) => (
           <StatCard key={card.title} compact layout="center" {...card} />
         ))}

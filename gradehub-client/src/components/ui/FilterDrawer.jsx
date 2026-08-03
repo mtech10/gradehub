@@ -30,7 +30,7 @@ function FilterDrawer({ open, onClose, title = "Filter Results" }) {
       <aside className="fixed right-0 top-0 z-50 flex h-screen w-full max-w-md flex-col bg-white shadow-2xl">
         {/* Header */}
 
-        <div className="flex items-center justify-between border-b border-slate-200 p-6">
+        <div className="flex items-center justify-between border-b border-slate-200 p-4">
           <h2 className="text-xl font-semibold">{title}</h2>
 
           <button
@@ -43,7 +43,7 @@ function FilterDrawer({ open, onClose, title = "Filter Results" }) {
 
         {/* Body */}
 
-        <div className="flex-1 space-y-8 overflow-y-auto p-6">
+        <div className="flex-1 space-y-8 overflow-y-auto p-4">
           {/* Semester */}
 
           <div>
@@ -111,7 +111,7 @@ function FilterDrawer({ open, onClose, title = "Filter Results" }) {
 
         {/* Footer */}
 
-        <div className="border-t border-slate-200 p-6">
+        <div className="border-t border-slate-200 p-4">
           <div className="flex gap-3">
             <Button variant="outline" fullWidth>
               Reset

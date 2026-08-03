@@ -2,13 +2,11 @@ import { useNavigate } from "react-router-dom";
 
 import Button from "../../ui/Button";
 
-function StudentFormActions({ formData }) {
+function StudentFormActions({ formData, mode = "create" }) {
   const navigate = useNavigate();
 
   const handleSave = () => {
     console.log(formData);
-
-    // Backend integration comes here later
   };
 
   return (
@@ -16,8 +14,9 @@ function StudentFormActions({ formData }) {
       <Button variant="secondary" onClick={() => navigate("/admin/students")}>
         Cancel
       </Button>
-
-      <Button onClick={handleSave}>Save Student</Button>
+      <Button onClick={handleSave}>
+        {mode === "edit" ? "Update Student" : "Save Student"}
+      </Button>{" "}
     </div>
   );
 }

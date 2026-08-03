@@ -34,7 +34,7 @@ export function AcademicInfoCard({ title, items }) {
       {/* Background Watermark Icon */}
       <GraduationCap
         size={140}
-        className="absolute -right-6 -top-6 text-slate-50 opacity-50 pointer-events-none"
+        className="absolute -right-6 -top-4 text-slate-50 opacity-50 pointer-events-none"
       />
 
       <div className="space-y-4 relative z-10">

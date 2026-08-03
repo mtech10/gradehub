@@ -57,7 +57,7 @@ function CurrentCourses() {
         </button>
       }
     >
-      <div className={`h-[420px] overflow-y-auto p-6 ${SCROLLBAR}`}>
+      <div className={`h-[420px] overflow-y-auto p-4 ${SCROLLBAR}`}>
         <DataTable
           columns={currentCoursesColumns}
           data={currentCourses}

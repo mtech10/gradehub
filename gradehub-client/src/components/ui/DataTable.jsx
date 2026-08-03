@@ -140,7 +140,11 @@ function DataTable({
                           ${column.align === "right" ? "text-right" : ""}
                           ${column.cellClassName ?? ""}`}
                       >
-                        {renderCell ? renderCell(row, column) : row[column.key]}
+                        {column.render
+                          ? column.render(row)
+                          : renderCell
+                            ? renderCell(row, column)
+                            : row[column.key]}{" "}
                       </td>
                     ))}
                   </tr>

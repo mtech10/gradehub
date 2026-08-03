@@ -58,7 +58,7 @@ function Accordion({
         )}
       >
         <div className="overflow-hidden">
-          <div className="border-t border-slate-200 p-6">{children}</div>
+          <div className="border-t border-slate-200 p-4">{children}</div>
         </div>
       </div>
     </div>

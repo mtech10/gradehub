@@ -92,3 +92,8 @@ export const STATES = [
   { value: "Ondo", label: "Ondo" },
   { value: "Ekiti", label: "Ekiti" },
 ];
+
+export const COURSE_STATUS = [
+  { value: "Active", label: "Active" },
+  { value: "Inactive", label: "Inactive" },
+];

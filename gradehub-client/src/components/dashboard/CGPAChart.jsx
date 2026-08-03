@@ -20,7 +20,7 @@ function CGPAChart({
 }) {
   return (
     <Card title={title} subtitle={subtitle} padding="none">
-      <div className="h-[420px] p-6">
+      <div className="h-[420px] p-4">
         <ResponsiveContainer width="100%" height={320}>
           <LineChart data={data}>
             <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />

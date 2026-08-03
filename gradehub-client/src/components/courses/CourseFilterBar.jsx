@@ -19,8 +19,8 @@ function CourseFilterBar({
   ];
 
   return (
-    <div className="flex flex-col gap-6 xl:flex-row xl:items-center xl:justify-between">
-      <div className="flex flex-wrap gap-6 border-b border-slate-200">
+    <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+      <div className="flex flex-wrap gap-4 border-b border-slate-200">
         {tabs.map((tab) => (
           <button
             key={tab.id}

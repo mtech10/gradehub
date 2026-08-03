@@ -4,7 +4,7 @@ function PageHeader({ title, description, actions, className = "" }) {
   return (
     <div
       className={`
-        flex flex-col gap-6
+        flex flex-col gap-4
         lg:flex-row
         lg:items-end
         lg:justify-between
