@@ -22,16 +22,22 @@ export function AuthProvider({ children }) {
 
   const login = async (credentials) => {
     // Temporary mock authentication
+    const isAdmin = credentials.email.includes("admin");
     const mockUser = {
       id: 1,
       firstName: "Ademola",
       lastName: "Oyelusi",
       fullName: "Ademola Oyelusi",
       email: credentials.email,
-      role: credentials.email.includes("admin") ? "admin" : "student",
+
+      role: isAdmin ? "admin" : "student",
+
+      department: isAdmin ? "Academic Affairs" : "Agricultural Engineering",
+
+      level: isAdmin ? "Administrator" : "400 Level",
+
       avatar: "https://i.pravatar.cc/150?img=12",
     };
-
     const mockToken = "mock-jwt-token";
 
     localStorage.setItem("gradehub_user", JSON.stringify(mockUser));

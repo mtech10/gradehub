@@ -3,14 +3,6 @@ import DashboardLayout from "./DashboardLayout";
 import { adminNavigation } from "../constants/navigation";
 
 function AdminLayout() {
-  const adminUser = {
-    name: "System Administrator",
-    email: "admin@gradehub.edu.ng",
-    department: "Academic Affairs",
-    level: "Administrator",
-    avatar: "https://i.pravatar.cc/150?img=12",
-  };
-
   const adminRoutes = {
     dashboard: "/admin",
     students: "/admin/students",
@@ -29,7 +21,6 @@ function AdminLayout() {
   return (
     <DashboardLayout
       navigation={adminNavigation}
-      user={adminUser}
       routes={adminRoutes}
       onLogout={handleLogout}
       sidebarVariant="dark"

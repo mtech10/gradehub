@@ -1,10 +1,9 @@
 import Card from "../../ui/Card";
 import Button from "../../ui/Button";
 
-import { departmentOverview } from "../../../constants/admin/dashboardData";
 import { useNavigate } from "react-router-dom";
 
-function DepartmentOverview() {
+function departments({ departments }) {
   const navigate = useNavigate();
   return (
     <Card padding="lg">
@@ -23,7 +22,7 @@ function DepartmentOverview() {
       </div>
 
       <div className="space-y-5">
-        {departmentOverview.map((department) => (
+        {departments.map((department) => (
           <div
             key={department.id}
             className="rounded-xl border border-slate-100 p-4"
@@ -79,4 +78,4 @@ function DepartmentOverview() {
   );
 }
 
-export default DepartmentOverview;
+export default departments;

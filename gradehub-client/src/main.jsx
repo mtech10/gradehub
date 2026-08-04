@@ -6,13 +6,16 @@ import App from "./App";
 import { AuthProvider } from "./context/AuthContext";
 
 import "./index.css";
+import { LayoutProvider } from "./context/LayoutContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
-    </BrowserRouter>
+    <LayoutProvider>
+      <BrowserRouter>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      </BrowserRouter>
+    </LayoutProvider>
   </React.StrictMode>,
 );

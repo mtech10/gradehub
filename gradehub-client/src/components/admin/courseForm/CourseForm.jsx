@@ -5,6 +5,13 @@ import CourseAcademicInformation from "./CourseAcademicInformation";
 import CourseAssignment from "./CourseAssignment";
 import CourseFormActions from "./CourseFormActions";
 
+import {
+  DEPARTMENTS,
+  LEVELS,
+  SEMESTERS,
+  COURSE_STATUS,
+} from "../../../constants/options";
+
 function CourseForm({ mode = "create", initialValues = {} }) {
   const [formData, setFormData] = useState({
     code: initialValues.code ?? "",
@@ -42,10 +49,16 @@ function CourseForm({ mode = "create", initialValues = {} }) {
       <CourseAcademicInformation
         formData={formData}
         updateField={updateField}
+        departments={DEPARTMENTS}
+        levels={LEVELS}
+        semesters={SEMESTERS}
       />
 
-      <CourseAssignment formData={formData} updateField={updateField} />
-
+      <CourseAssignment
+        formData={formData}
+        updateField={updateField}
+        courseStatuses={COURSE_STATUS}
+      />
       <CourseFormActions mode={mode} />
     </form>
   );

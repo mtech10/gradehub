@@ -4,8 +4,6 @@ import { useNavigate } from "react-router-dom";
 import Button from "../../ui/Button";
 import AdminToolbar from "../common/AdminToolbar";
 
-import { courseFilters } from "../../../constants/admin/courses";
-
 function CourseToolbar({
   search,
   setSearch,
@@ -15,6 +13,7 @@ function CourseToolbar({
   setLevel,
   status,
   setStatus,
+  filters,
 }) {
   const navigate = useNavigate();
 
@@ -28,21 +27,21 @@ function CourseToolbar({
           name: "department",
           value: department,
           onChange: setDepartment,
-          options: courseFilters.departments,
+          options: filters.departments,
           width: "w-60",
         },
         {
           name: "level",
           value: level,
           onChange: setLevel,
-          options: courseFilters.levels,
+          options: filters.levels,
           width: "w-40",
         },
         {
           name: "status",
           value: status,
           onChange: setStatus,
-          options: courseFilters.statuses,
+          options: filters.statuses,
           width: "w-44",
         },
       ]}

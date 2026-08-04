@@ -2,18 +2,17 @@ import Badge from "../../ui/Badge";
 import DataTable from "../../ui/DataTable";
 import DropdownMenu from "../../ui/DropdownMenu";
 
-import { resultColumns } from "../../../constants/tables/resultColumns";
-
 function ResultsTable({
+  columns,
   results,
+  totalItems,
+  totalPages,
   currentPage,
   onPageChange,
   pageSize,
-
   sortKey,
   sortDirection,
   onSort,
-
   selectable,
   selectedRows,
   onRowSelect,
@@ -91,15 +90,15 @@ function ResultsTable({
 
   return (
     <DataTable
-      columns={resultColumns}
+      columns={columns}
       data={results}
       renderCell={renderCell}
       pagination
       currentPage={currentPage}
       onPageChange={onPageChange}
-      totalItems={results.length}
-      totalPages={Math.ceil(results.length / pageSize) || 1}
-      pageSize={pageSize}
+      totalItems={totalItems}
+      totalPages={totalPages}
+      totalPages={totalPages}
       itemLabel="results"
       loading={false}
       sortKey={sortKey}

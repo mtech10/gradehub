@@ -2,9 +2,13 @@ import Card from "../../ui/Card";
 import Input from "../../ui/Input";
 import Select from "../../ui/Select";
 
-import { DEPARTMENTS, LEVELS, SEMESTERS } from "../../../constants/options";
-
-function CourseAcademicInformation({ formData, updateField }) {
+function CourseAcademicInformation({
+  formData,
+  updateField,
+  departments,
+  levels,
+  semesters,
+}) {
   return (
     <Card className="p-4">
       <div className="mb-6">
@@ -21,7 +25,7 @@ function CourseAcademicInformation({ formData, updateField }) {
         <Select
           label="Department"
           placeholder="Select Department"
-          options={DEPARTMENTS}
+          options={departments}
           value={formData.department}
           onChange={(e) => updateField("department", e.target.value)}
         />
@@ -29,7 +33,7 @@ function CourseAcademicInformation({ formData, updateField }) {
         <Select
           label="Level"
           placeholder="Select Level"
-          options={LEVELS}
+          options={levels}
           value={formData.level}
           onChange={(e) => updateField("level", e.target.value)}
         />
@@ -37,7 +41,7 @@ function CourseAcademicInformation({ formData, updateField }) {
         <Select
           label="Semester"
           placeholder="Select Semester"
-          options={SEMESTERS}
+          options={semesters}
           value={formData.semester}
           onChange={(e) => updateField("semester", e.target.value)}
         />

@@ -14,8 +14,9 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { notificationsList } from "../../constants/notifications/notificationData";
 import { useAuth } from "../../context/AuthContext";
+import { useLayout } from "../../context/LayoutContext";
 
-function TopNavbar({ onToggleSidebar, user, routes, onLogout }) {
+function TopNavbar({ user, routes }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -27,6 +28,7 @@ function TopNavbar({ onToggleSidebar, user, routes, onLogout }) {
   const navigate = useNavigate();
 
   const { logout } = useAuth();
+  const { toggleSidebar } = useLayout();
 
   const handleLogout = () => {
     logout();
@@ -68,6 +70,7 @@ function TopNavbar({ onToggleSidebar, user, routes, onLogout }) {
 
   const unreadNotifications = notificationsList.filter((n) => !n.isRead);
   const dropdownNotifications = unreadNotifications.slice(0, 4);
+  const { sidebarOpen } = useLayout();
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -78,11 +81,25 @@ function TopNavbar({ onToggleSidebar, user, routes, onLogout }) {
   };
 
   return (
-    <header className="relative flex h-20 items-center justify-between border-b border-slate-200 bg-white px-8">
+    <header
+      className={`
+    fixed
+    top-0
+    right-0
+    z-30
+    h-20
+    border-b
+    border-slate-200
+    bg-white
+    transition-all
+    duration-300
+    ${sidebarOpen ? "left-[300px]" : "left-0"}
+  `}
+    >
       {/* Left Side */}
       <div className="flex items-center gap-4">
         <button
-          onClick={onToggleSidebar}
+          onClick={toggleSidebar}
           className="rounded-lg p-2 hover:bg-slate-100 transition-colors"
           aria-label="Toggle Sidebar"
         >

@@ -5,9 +5,8 @@ import Badge from "../../ui/Badge";
 import DataTable from "../../ui/DataTable";
 
 import { recentStudentsColumns } from "../../../constants/tables/recentStudentsColumns";
-import { recentStudents } from "../../../constants/admin/dashboardData";
 
-function RecentStudentsTable() {
+function RecentStudentsTable({ students }) {
   const navigate = useNavigate();
 
   const renderCell = (student, column) => {
@@ -77,7 +76,7 @@ function RecentStudentsTable() {
 
       <DataTable
         columns={recentStudentsColumns}
-        data={recentStudents}
+        data={students}
         renderCell={renderCell}
         onRowClick={(student) => navigate(`/admin/students/${student.id}`)}
       />

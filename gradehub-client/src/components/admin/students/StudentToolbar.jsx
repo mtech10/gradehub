@@ -3,7 +3,6 @@ import { Upload, Download, Plus } from "lucide-react";
 import Button from "../../ui/Button";
 import AdminToolbar from "../common/AdminToolbar";
 import { useNavigate } from "react-router-dom";
-import { studentFilters } from "../../../constants/admin/students";
 
 function StudentToolbar({
   search,
@@ -14,6 +13,7 @@ function StudentToolbar({
   setLevel,
   status,
   setStatus,
+  filters,
 }) {
   const navigate = useNavigate();
   return (
@@ -26,21 +26,21 @@ function StudentToolbar({
           name: "department",
           value: department,
           onChange: setDepartment,
-          options: studentFilters.departments,
+          options: filters.departments,
           width: "w-60",
         },
         {
           name: "level",
           value: level,
           onChange: setLevel,
-          options: studentFilters.levels,
+          options: filters.levels,
           width: "w-40",
         },
         {
           name: "status",
           value: status,
           onChange: setStatus,
-          options: studentFilters.statuses,
+          options: filters.statuses,
           width: "w-44",
         },
       ]}

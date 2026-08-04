@@ -1,16 +1,16 @@
 import Input from "../../ui/Input";
 import Select from "../../ui/Select";
 
-import {
-  DEPARTMENTS,
-  LEVELS,
-  PROGRAMMES,
-  ADMISSION_YEARS,
-  SESSIONS,
-  STUDENT_STATUS,
-} from "../../../constants/options";
-
-function AcademicInformation({ formData, handleChange }) {
+function AcademicInformation({
+  formData,
+  handleChange,
+  departments,
+  levels,
+  programmes,
+  admissionYears,
+  sessions,
+  studentStatuses,
+}) {
   return (
     <section className="space-y-6">
       <div>
@@ -27,7 +27,7 @@ function AcademicInformation({ formData, handleChange }) {
           required
           value={formData.department}
           onChange={(e) => handleChange("department", e.target.value)}
-          options={DEPARTMENTS}
+          options={departments}
         />
 
         <Select
@@ -35,7 +35,7 @@ function AcademicInformation({ formData, handleChange }) {
           required
           value={formData.level}
           onChange={(e) => handleChange("level", e.target.value)}
-          options={LEVELS}
+          options={levels}
         />
 
         <Select
@@ -43,7 +43,7 @@ function AcademicInformation({ formData, handleChange }) {
           required
           value={formData.programme}
           onChange={(e) => handleChange("programme", e.target.value)}
-          options={PROGRAMMES}
+          options={programmes}
         />
 
         <Select
@@ -51,7 +51,7 @@ function AcademicInformation({ formData, handleChange }) {
           required
           value={formData.admissionYear}
           onChange={(e) => handleChange("admissionYear", e.target.value)}
-          options={ADMISSION_YEARS}
+          options={admissionYears}
         />
 
         <Select
@@ -59,7 +59,7 @@ function AcademicInformation({ formData, handleChange }) {
           required
           value={formData.session}
           onChange={(e) => handleChange("session", e.target.value)}
-          options={SESSIONS}
+          options={sessions}
         />
 
         <Select
@@ -67,7 +67,7 @@ function AcademicInformation({ formData, handleChange }) {
           required
           value={formData.status}
           onChange={(e) => handleChange("status", e.target.value)}
-          options={STUDENT_STATUS}
+          options={studentStatuses}
         />
       </div>
     </section>

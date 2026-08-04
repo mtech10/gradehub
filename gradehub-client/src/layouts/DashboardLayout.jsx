@@ -3,33 +3,41 @@ import { Outlet } from "react-router-dom";
 import Sidebar from "../components/layout/Sidebar";
 import TopNavbar from "../components/layout/TopNavbar";
 import AuthFooter from "../components/auth/AuthFooter";
+import { LayoutProvider } from "../context/LayoutContext";
+import { useAuth } from "../context/AuthContext";
+import { useLayout } from "../context/LayoutContext";
 
 function DashboardLayout({
   navigation,
-  user,
   routes,
-  logoutItem,
   onLogout,
   sidebarVariant = "light",
 }) {
+  const { user } = useAuth();
+  const { sidebarOpen, toggleSidebar } = useLayout();
   return (
-    <div className="flex min-h-screen bg-slate-50">
-      <Sidebar
-        navigation={navigation}
-        user={user}
-        onLogout={onLogout}
-        variant={sidebarVariant}
-      />
-      <div className="flex flex-1 flex-col overflow-hidden">
-        <TopNavbar user={user} routes={routes} onLogout={onLogout} />
+    <div className="min-h-screen bg-slate-50">
+      <Sidebar navigation={navigation} user={user} variant={sidebarVariant} />
 
-        <main className="flex-1 overflow-y-auto">
+      <div
+        className={`
+      transition-all
+      duration-300
+      ${sidebarOpen ? "ml-[300px]" : "ml-0"}
+    `}
+      >
+        <TopNavbar
+          user={user}
+          routes={routes}
+          onToggleSidebar={toggleSidebar}
+        />
+
+        <main className="pt-20 h-screen overflow-y-auto">
           <div className="mx-auto max-w-[1680px] px-8 py-6">
             <Outlet />
+            <AuthFooter />
           </div>
         </main>
-
-        <AuthFooter />
       </div>
     </div>
   );

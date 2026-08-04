@@ -8,9 +8,17 @@ import ResultsTable from "../../components/admin/results/ResultsTable";
 
 import BulkActionBar from "../../components/admin/common/BulkActionBar";
 
-import { results } from "../../constants/admin/results";
-import { students } from "../../constants/admin/students";
-import { courses } from "../../constants/admin/courses";
+import {
+  enrichResults,
+  filterResults,
+  sortResults,
+} from "../../utils/resultHelpers";
+import {
+  results,
+  resultStatistics,
+  resultFilters,
+} from "../../constants/admin/results";
+import { resultColumns } from "../../constants/tables/resultColumns";
 
 function AllResults() {
   const [search, setSearch] = useState("");
@@ -28,57 +36,16 @@ function AllResults() {
 
   const pageSize = 8;
 
-  const resultsWithDetails = results.map((result) => {
-    const student = students.find((s) => s.id === result.studentId);
+  const resultsWithDetails = enrichResults(results);
 
-    const course = courses.find((course) => course.code === result.courseCode);
-
-    return {
-      ...result,
-
-      studentName: student?.fullName,
-
-      matricNumber: student?.matricNumber,
-
-      department: student?.department,
-
-      level: student?.level,
-
-      courseTitle: course?.title,
-
-      unit: course?.unit,
-    };
+  const filteredResults = filterResults(resultsWithDetails, {
+    search,
+    session,
+    semester,
+    level,
   });
 
-  const filteredResults = resultsWithDetails.filter((result) => {
-    const matchesSearch =
-      result.studentName?.toLowerCase().includes(search.toLowerCase()) ||
-      result.matricNumber?.toLowerCase().includes(search.toLowerCase()) ||
-      result.courseCode?.toLowerCase().includes(search.toLowerCase()) ||
-      result.courseTitle?.toLowerCase().includes(search.toLowerCase());
-
-    const matchesSession = !session || result.session === session;
-
-    const matchesSemester = !semester || result.semester === semester;
-
-    const matchesLevel = !level || result.level === level;
-    return matchesSearch && matchesSession && matchesSemester && matchesLevel;
-  });
-
-  const sortedResults = [...filteredResults];
-
-  if (sortKey) {
-    sortedResults.sort((a, b) => {
-      const first = String(a[sortKey]).toLowerCase();
-      const second = String(b[sortKey]).toLowerCase();
-
-      if (first < second) return sortDirection === "asc" ? -1 : 1;
-
-      if (first > second) return sortDirection === "asc" ? 1 : -1;
-
-      return 0;
-    });
-  }
+  const sortedResults = sortResults(filteredResults, sortKey, sortDirection);
 
   const handleSort = (key) => {
     if (sortKey === key) {
@@ -121,7 +88,7 @@ function AllResults() {
         subtitle="Manage and review students' academic results."
       />
 
-      <ResultStats />
+      <ResultStats stats={resultStatistics} />
 
       <ResultToolbar
         search={search}
@@ -132,6 +99,7 @@ function AllResults() {
         setSemester={setSemester}
         level={level}
         setLevel={setLevel}
+        filters={resultFilters}
       />
 
       {selectedRows.length > 0 && (
@@ -146,7 +114,10 @@ function AllResults() {
       )}
 
       <ResultsTable
+        columns={resultColumns}
         results={sortedResults}
+        totalItems={filteredResults.length}
+        totalPages={Math.ceil(filteredResults.length / pageSize)}
         currentPage={currentPage}
         onPageChange={setCurrentPage}
         pageSize={pageSize}

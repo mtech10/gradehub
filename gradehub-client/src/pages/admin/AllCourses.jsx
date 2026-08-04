@@ -7,8 +7,15 @@ import CoursesTable from "../../components/admin/courses/CoursesTable";
 
 import BulkActionBar from "../../components/admin/common/BulkActionBar";
 
-import { courses } from "../../constants/admin/courses";
-import Button from "../../components/ui/Button";
+import {
+  courses,
+  courseStatistics,
+  courseFilters,
+} from "../../constants/admin/courses";
+
+import { courseColumns } from "../../constants/tables/courseColumns";
+
+import { filterCourses, sortCourses } from "../../utils/courseHelpers";
 
 function AllCourses() {
   const [search, setSearch] = useState("");
@@ -25,34 +32,18 @@ function AllCourses() {
 
   const pageSize = 8;
 
-  const filteredCourses = courses.filter((course) => {
-    const matchesSearch =
-      course.code.toLowerCase().includes(search.toLowerCase()) ||
-      course.title.toLowerCase().includes(search.toLowerCase());
-
-    const matchesDepartment = !department || course.department === department;
-
-    const matchesLevel = !level || course.level === level;
-
-    const matchesStatus = !status || course.status === status;
-
-    return matchesSearch && matchesDepartment && matchesLevel && matchesStatus;
+  const filteredCourses = filterCourses(courses, {
+    search,
+    department,
+    level,
+    status,
   });
 
-  const sortedCourses = [...filteredCourses];
+  const sortedCourses = sortCourses(filteredCourses, sortKey, sortDirection);
 
-  if (sortKey) {
-    sortedCourses.sort((a, b) => {
-      const first = String(a[sortKey]).toLowerCase();
-      const second = String(b[sortKey]).toLowerCase();
+  const totalItems = sortedCourses.length;
 
-      if (first < second) return sortDirection === "asc" ? -1 : 1;
-
-      if (first > second) return sortDirection === "asc" ? 1 : -1;
-
-      return 0;
-    });
-  }
+  const totalPages = Math.ceil(totalItems / pageSize) || 1;
 
   const handleSort = (key) => {
     if (sortKey === key) {
@@ -92,7 +83,7 @@ function AllCourses() {
     <div className="space-y-8">
       <PageHeader title="Courses" subtitle="Manage courses." />
 
-      <CourseStats />
+      <CourseStats stats={courseStatistics} />
 
       <CourseToolbar
         search={search}
@@ -103,6 +94,7 @@ function AllCourses() {
         setLevel={setLevel}
         status={status}
         setStatus={setStatus}
+        filters={courseFilters}
       />
 
       {selectedRows.length > 0 && (
@@ -117,10 +109,13 @@ function AllCourses() {
       )}
 
       <CoursesTable
+        columns={courseColumns}
         courses={sortedCourses}
         currentPage={currentPage}
         onPageChange={setCurrentPage}
         pageSize={pageSize}
+        totalItems={totalItems}
+        totalPages={totalPages}
         sortKey={sortKey}
         sortDirection={sortDirection}
         onSort={handleSort}

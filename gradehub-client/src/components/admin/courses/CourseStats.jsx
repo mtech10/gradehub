@@ -1,10 +1,9 @@
-import { courseStatistics } from "../../../constants/admin/courses";
 import AdminStatCard from "../dashboard/AdminStatCard";
 
-function CourseStats() {
+function CourseStats({ stats }) {
   return (
     <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-      {courseStatistics.map((stat) => (
+      {stats.map((stat) => (
         <AdminStatCard key={stat.title} {...stat} />
       ))}
     </div>

@@ -1,9 +1,8 @@
 import Card from "../../ui/Card";
 import Input from "../../ui/Input";
 import Select from "../../ui/Select";
-import { COURSE_STATUS } from "../../../constants/options";
 
-function CourseAssignment({ formData, updateField }) {
+function CourseAssignment({ formData, updateField, courseStatuses }) {
   return (
     <Card className="p-4">
       <div className="mb-6">
@@ -28,7 +27,7 @@ function CourseAssignment({ formData, updateField }) {
         <Select
           label="Course Status"
           placeholder="Select Status"
-          options={COURSE_STATUS}
+          options={courseStatuses}
           value={formData.status}
           onChange={(e) => updateField("status", e.target.value)}
         />

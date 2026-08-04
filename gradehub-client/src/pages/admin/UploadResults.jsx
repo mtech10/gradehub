@@ -7,6 +7,17 @@ import UploadPreviewCard from "../../components/admin/uploadResults/UploadPrevie
 import UploadSummaryCard from "../../components/admin/uploadResults/UploadSummaryCard";
 import UploadNotesCard from "../../components/admin/uploadResults/UploadNotesCard";
 
+import {
+  SESSIONS,
+  SEMESTERS,
+  DEPARTMENTS,
+  LEVELS,
+} from "../../constants/options";
+
+import { courses } from "../../constants/admin/courses";
+
+import { getCourseOptions } from "../../utils/courseOptions";
+
 function UploadResults() {
   const [formData, setFormData] = useState({
     session: "",
@@ -25,6 +36,8 @@ function UploadResults() {
     }));
   };
 
+  const courseOptions = getCourseOptions(courses);
+
   return (
     <div className="space-y-8">
       <PageHeader
@@ -33,8 +46,15 @@ function UploadResults() {
       />
 
       <div className="grid gap-6 xl:grid-cols-[2fr_1fr]">
-        <UploadResultForm formData={formData} updateField={updateField} />
-
+        <UploadResultForm
+          formData={formData}
+          updateField={updateField}
+          sessions={SESSIONS}
+          semesters={SEMESTERS}
+          departments={DEPARTMENTS}
+          levels={LEVELS}
+          courseOptions={courseOptions}
+        />
         <div className="space-y-6">
           <UploadPreviewCard formData={formData} />
 

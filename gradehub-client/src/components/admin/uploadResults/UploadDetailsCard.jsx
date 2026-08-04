@@ -1,18 +1,15 @@
 import Card from "../../ui/Card";
 import Select from "../../ui/Select";
 
-import {
-  SESSIONS,
-  SEMESTERS,
-  DEPARTMENTS,
-  LEVELS,
-} from "../../../constants/options";
-
-import { courses } from "../../../constants/admin/courses";
-import { getCourseOptions } from "../../../utils/courseOptions";
-
-function UploadDetailsCard({ formData, updateField }) {
-  const courseOptions = getCourseOptions(courses);
+function UploadDetailsCard({
+  formData,
+  updateField,
+  sessions,
+  semesters,
+  departments,
+  levels,
+  courseOptions,
+}) {
   return (
     <Card className="p-4">
       <div className="mb-8">
@@ -29,7 +26,7 @@ function UploadDetailsCard({ formData, updateField }) {
         <Select
           label="Academic Session"
           required
-          options={SESSIONS}
+          options={sessions}
           value={formData.session}
           onChange={(e) => updateField("session", e.target.value)}
         />
@@ -37,7 +34,7 @@ function UploadDetailsCard({ formData, updateField }) {
         <Select
           label="Semester"
           required
-          options={SEMESTERS}
+          options={semesters}
           value={formData.semester}
           onChange={(e) => updateField("semester", e.target.value)}
         />
@@ -45,7 +42,7 @@ function UploadDetailsCard({ formData, updateField }) {
         <Select
           label="Department"
           required
-          options={DEPARTMENTS}
+          options={departments}
           value={formData.department}
           onChange={(e) => updateField("department", e.target.value)}
         />
@@ -61,7 +58,7 @@ function UploadDetailsCard({ formData, updateField }) {
         <Select
           label="Level"
           required
-          options={LEVELS}
+          options={levels}
           value={formData.level}
           onChange={(e) => updateField("level", e.target.value)}
         />

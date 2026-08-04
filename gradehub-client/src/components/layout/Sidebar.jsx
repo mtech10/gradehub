@@ -3,19 +3,16 @@ import NavItem from "../navigation/NavItem";
 import { logoutItem } from "../../constants/navigation";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useLayout } from "../../context/LayoutContext";
 
-function Sidebar({
-  navigation,
-  user,
-  onLogout,
-  isOpen = true,
-  variant = "light",
-}) {
+function Sidebar({ navigation, user, variant = "light" }) {
   const LogoutIcon = logoutItem.icon;
   const isDark = variant === "dark";
 
   const { logout } = useAuth();
   const navigate = useNavigate();
+
+  const { sidebarOpen } = useLayout();
 
   const handleLogout = () => {
     logout();
@@ -25,40 +22,38 @@ function Sidebar({
   return (
     <aside
       className={`
-        sticky
-        top-0
-        flex
-        h-screen
-        w-75
-        overflow-hidden
-        flex-col
-        border-r
-       ${isDark ? "bg-slate-800 border-slate-800" : "bg-white  border-slate-200"}
-        transition-all
-        duration-300
-        z-40
-        ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
-      `}
+    fixed
+    top-0
+    left-0
+    z-40
+    h-screen
+    overflow-hidden
+    flex
+    flex-col
+    shrink-0
+    transition-all
+    duration-300
+    ${sidebarOpen ? "w-[300px]" : "w-0"}
+    ${isDark ? "bg-slate-800" : "bg-white"}
+    ${isDark ? "border-slate-800" : "border-slate-200"}
+    border-r
+  `}
     >
-      {/* Logo */}
       <div className={`px-8 py-8 ${isDark ? "border-b border-slate-800" : ""}`}>
         <Logo variant={variant} />
       </div>
 
-      {/* Navigation */}
       <nav className="flex-1 space-y-2 px-4">
         {navigation.map((item) => (
           <NavItem key={item.title} {...item} variant={variant} />
         ))}
       </nav>
 
-      {/* Student Card */}
       <div
         className={`border-t p-4 ${
           isDark ? "border-slate-800" : "border-slate-200"
         }`}
       >
-        {" "}
         <div className="flex items-center gap-3">
           <img
             src={user?.avatar}
@@ -84,6 +79,7 @@ function Sidebar({
             </p>
           </div>
         </div>
+
         <button
           onClick={handleLogout}
           className={`
@@ -96,9 +92,9 @@ function Sidebar({
             px-4
             py-3
             text-red-600
-            ${isDark ? "hover:bg-slate-800" : "hover:bg-red-50"}
-            transition-colors
             font-semibold
+            transition-colors
+            ${isDark ? "hover:bg-slate-700" : "hover:bg-red-50"}
           `}
         >
           <LogoutIcon size={20} />

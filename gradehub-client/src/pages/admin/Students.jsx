@@ -3,8 +3,14 @@ import StudentStats from "../../components/admin/students/StudentStats";
 import { useState, useEffect } from "react";
 import StudentToolbar from "../../components/admin/students/StudentToolbar";
 import StudentsTable from "../../components/admin/students/StudentsTable";
-import { students } from "../../constants/admin/students";
 import BulkActionBar from "../../components/admin/common/BulkActionBar";
+import {
+  students,
+  studentStatistics,
+  studentFilters,
+} from "../../constants/admin/students";
+import { studentColumns } from "../../constants/tables/studentColumns";
+import { filterStudents, sortStudents } from "../../utils/studentFilters";
 
 function Students() {
   const [search, setSearch] = useState("");
@@ -18,35 +24,14 @@ function Students() {
 
   const pageSize = 8;
 
-  const filteredStudents = students.filter((student) => {
-    const matchesSearch =
-      student.fullName.toLowerCase().includes(search.toLowerCase()) ||
-      student.email.toLowerCase().includes(search.toLowerCase()) ||
-      student.matricNumber.toLowerCase().includes(search.toLowerCase());
-
-    const matchesDepartment = !department || student.department === department;
-
-    const matchesLevel = !level || student.level === level;
-
-    const matchesStatus = !status || student.status === status;
-
-    return matchesSearch && matchesDepartment && matchesLevel && matchesStatus;
+  const filteredStudents = filterStudents(students, {
+    search,
+    department,
+    level,
+    status,
   });
 
-  const sortedStudents = [...filteredStudents];
-
-  if (sortKey) {
-    sortedStudents.sort((a, b) => {
-      const first = String(a[sortKey]).toLowerCase();
-      const second = String(b[sortKey]).toLowerCase();
-
-      if (first < second) return sortDirection === "asc" ? -1 : 1;
-
-      if (first > second) return sortDirection === "asc" ? 1 : -1;
-
-      return 0;
-    });
-  }
+  const sortedStudents = sortStudents(filteredStudents, sortKey, sortDirection);
 
   const handleSort = (key) => {
     if (sortKey === key) {
@@ -89,7 +74,7 @@ function Students() {
         subtitle="Manage student records and academic information."
       />
 
-      <StudentStats />
+      <StudentStats stats={studentStatistics} />
 
       <StudentToolbar
         search={search}
@@ -100,6 +85,7 @@ function Students() {
         setLevel={setLevel}
         status={status}
         setStatus={setStatus}
+        filters={studentFilters}
       />
 
       {selectedRows.length > 0 && (
@@ -114,6 +100,7 @@ function Students() {
       )}
 
       <StudentsTable
+        columns={studentColumns}
         students={sortedStudents}
         currentPage={currentPage}
         onPageChange={setCurrentPage}

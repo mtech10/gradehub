@@ -1,35 +1,44 @@
 import PageHeader from "../../components/common/PageHeader";
 import DashboardStats from "../../components/admin/dashboard/DashboardStats";
-import { dashboardStats } from "../../constants/admin/dashboardData";
+import {
+  dashboardStats,
+  dashboardQuickActions,
+  recentStudents,
+  pendingResults,
+  departmentOverview,
+  upcomingActivities,
+} from "../../constants/admin/dashboardData";
 import DashboardQuickActions from "../../components/admin/dashboard/DashboardQuickActions";
 import RecentStudentsTable from "../../components/admin/dashboard/RecentStudentsTable";
 import PendingResultsTable from "../../components/admin/dashboard/PendingResultsTable";
 import DepartmentOverview from "../../components/admin/dashboard/DepartmentOverview";
 import UpcomingActivities from "../../components/admin/dashboard/UpcomingActivities";
+import { useState } from "react";
 
 function Dashboard() {
+  const [dashboardData, setDashboardData] = useState({
+    stats: [],
+    quickActions: [],
+    recentStudents: [],
+    pendingResults: [],
+    departments: [],
+    activities: [],
+  });
+
   return (
-    <div className="space-y-8">
-      <PageHeader
-        title="Admin Dashboard"
-        subtitle="Overview of students, departments, courses and academic activities."
-      />
+    <>
+      <DashboardStats stats={dashboardData.stats} />
 
-      <DashboardStats stats={dashboardStats} />
-      <DashboardQuickActions />
+      <DashboardQuickActions actions={dashboardData.quickActions} />
 
-      <div className="grid gap-4 xl:grid-cols-3">
-        <div className="space-y-6 xl:col-span-2">
-          <RecentStudentsTable />
-          <PendingResultsTable />
-        </div>
+      <RecentStudentsTable students={dashboardData.recentStudents} />
 
-        <div className="space-y-6">
-          <DepartmentOverview />
-          <UpcomingActivities />
-        </div>
-      </div>
-    </div>
+      <PendingResultsTable results={dashboardData.pendingResults} />
+
+      <DepartmentOverview departments={dashboardData.departments} />
+
+      <UpcomingActivities activities={dashboardData.activities} />
+    </>
   );
 }
 

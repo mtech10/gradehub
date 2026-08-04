@@ -4,8 +4,6 @@ import Badge from "../../ui/Badge";
 import DataTable from "../../ui/DataTable";
 import DropdownMenu from "../../ui/DropdownMenu";
 
-import { studentColumns } from "../../../constants/tables/studentColumns";
-
 function StudentsTable({
   students,
   currentPage,
@@ -20,6 +18,7 @@ function StudentsTable({
   selectedRows,
   onRowSelect,
   onSelectAll,
+  columns,
 }) {
   const navigate = useNavigate();
 
@@ -100,7 +99,7 @@ function StudentsTable({
 
   return (
     <DataTable
-      columns={studentColumns}
+      columns={columns}
       data={students}
       renderCell={renderCell}
       pagination

@@ -1,7 +1,6 @@
-import { dashboardQuickActions } from "../../../constants/admin/dashboardData";
 import QuickActionCard from "./QuickActionCard";
 
-function DashboardQuickActions() {
+function DashboardQuickActions({ actions }) {
   return (
     <section className="space-y-4">
       <div>
@@ -13,7 +12,7 @@ function DashboardQuickActions() {
       </div>
 
       <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-        {dashboardQuickActions.map((action) => (
+        {actions.map((action) => (
           <QuickActionCard key={action.title} action={action} />
         ))}
       </div>

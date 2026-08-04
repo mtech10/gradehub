@@ -13,7 +13,7 @@ const colors = {
   purple: "bg-purple-100 text-purple-600",
 };
 
-function UpcomingActivities() {
+function UpcomingActivities({ activities }) {
   const navigate = useNavigate();
 
   return (
@@ -33,7 +33,7 @@ function UpcomingActivities() {
       </div>
 
       <div className="space-y-4">
-        {upcomingActivities.map((activity) => {
+        {activities.map((activity) => {
           const Icon = activity.icon;
 
           return (

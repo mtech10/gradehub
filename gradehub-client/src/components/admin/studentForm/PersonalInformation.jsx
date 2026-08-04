@@ -1,8 +1,7 @@
 import Input from "../../ui/Input";
 import Select from "../../ui/Select";
-import { GENDERS, STATES } from "../../../constants/options";
 
-function PersonalInformation({ formData, handleChange }) {
+function PersonalInformation({ formData, handleChange, genders, states }) {
   return (
     <section className="space-y-6">
       <div>
@@ -63,14 +62,14 @@ function PersonalInformation({ formData, handleChange }) {
           required
           value={formData.gender}
           onChange={(e) => handleChange("gender", e.target.value)}
-          options={GENDERS}
+          options={genders}
         />
         <Select
           label="State of Origin"
           required
           value={formData.state}
           onChange={(e) => handleChange("state", e.target.value)}
-          options={STATES}
+          options={states}
         />
         <Input
           label="Local Government"

@@ -7,35 +7,57 @@ import PersonalInformation from "./PersonalInformation";
 import AcademicInformation from "./AcademicInformation";
 import PortalAccess from "./PortalAccess";
 import StudentFormActions from "./StudentFormActions";
+import {
+  GENDERS,
+  STATES,
+  DEPARTMENTS,
+  LEVELS,
+  PROGRAMMES,
+  ADMISSION_YEARS,
+  SESSIONS,
+  STUDENT_STATUS,
+} from "../../../constants/options";
 
 function StudentForm({ mode = "create", initialValues = {} }) {
   const [formData, setFormData] = useState({
-    matricNumber: "",
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    dateOfBirth: "",
-    gender: "",
-    state: "",
-    lga: "",
+    matricNumber: initialValues.matricNumber ?? "",
+    firstName: initialValues.firstName ?? "",
+    lastName: initialValues.lastName ?? "",
+    email: initialValues.email ?? "",
+    phone: initialValues.phone ?? "",
+    dateOfBirth: initialValues.dateOfBirth ?? "",
+    gender: initialValues.gender ?? "",
+    state: initialValues.state ?? "",
+    lga: initialValues.lga ?? "",
 
-    department: "",
-    level: "",
-    programme: "",
-    admissionYear: "",
-    session: "",
-    status: "",
+    department: initialValues.department ?? "",
+    level: initialValues.level ?? "",
+    programme: initialValues.programme ?? "",
+    admissionYear: initialValues.admissionYear ?? "",
+    session: initialValues.session ?? "",
+    status: initialValues.status ?? "",
 
-    username: "",
+    username: initialValues.username ?? "",
     password: "",
     confirmPassword: "",
-    portalStatus: "Active",
-    recoveryEmail: "",
-    recoveryPhone: "",
+    portalStatus: initialValues.portalStatus ?? "Active",
+    recoveryEmail: initialValues.recoveryEmail ?? "",
+    recoveryPhone: initialValues.recoveryPhone ?? "",
 
-    photo: null,
+    photo: initialValues.photo ?? null,
   });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (mode === "create") {
+      console.log("Creating student...", formData);
+    } else {
+      console.log("Updating student...", formData);
+    }
+
+    // API integration comes later
+  };
 
   const handleChange = (field, value) => {
     setFormData((prev) => ({
@@ -53,11 +75,19 @@ function StudentForm({ mode = "create", initialValues = {} }) {
           <PersonalInformation
             formData={formData}
             handleChange={handleChange}
+            genders={GENDERS}
+            states={STATES}
           />
 
           <AcademicInformation
             formData={formData}
             handleChange={handleChange}
+            departments={DEPARTMENTS}
+            levels={LEVELS}
+            programmes={PROGRAMMES}
+            admissionYears={ADMISSION_YEARS}
+            sessions={SESSIONS}
+            studentStatuses={STUDENT_STATUS}
           />
 
           <PortalAccess formData={formData} handleChange={handleChange} />

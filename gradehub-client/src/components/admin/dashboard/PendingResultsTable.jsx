@@ -7,7 +7,7 @@ import DataTable from "../../ui/DataTable";
 import { pendingResultsColumns } from "../../../constants/tables/pendingResultsColumns";
 import { pendingResults } from "../../../constants/admin/dashboardData";
 
-function PendingResultsTable() {
+function PendingResultsTable({ results }) {
   const navigate = useNavigate();
 
   const renderCell = (result, column) => {
@@ -63,7 +63,7 @@ function PendingResultsTable() {
 
       <DataTable
         columns={pendingResultsColumns}
-        data={pendingResults}
+        data={results}
         renderCell={renderCell}
         onRowClick={(result) => navigate(`/admin/results/${result.id}`)}
       />

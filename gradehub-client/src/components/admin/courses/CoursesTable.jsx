@@ -4,13 +4,16 @@ import Badge from "../../ui/Badge";
 import DataTable from "../../ui/DataTable";
 import DropdownMenu from "../../ui/DropdownMenu";
 
-import { courseColumns } from "../../../constants/tables/courseColumns";
-
 function CoursesTable({
   courses,
+  columns,
+
   currentPage,
   onPageChange,
   pageSize,
+
+  totalItems,
+  totalPages,
 
   sortKey,
   sortDirection,
@@ -90,14 +93,14 @@ function CoursesTable({
 
   return (
     <DataTable
-      columns={courseColumns}
+      columns={columns}
       data={courses}
       renderCell={renderCell}
       pagination
       currentPage={currentPage}
       onPageChange={onPageChange}
-      totalItems={courses.length}
-      totalPages={Math.ceil(courses.length / pageSize) || 1}
+      totalItems={totalItems}
+      totalItems={totalItems}
       pageSize={pageSize}
       itemLabel="courses"
       loading={false}

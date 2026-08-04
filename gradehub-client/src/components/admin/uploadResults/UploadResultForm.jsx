@@ -2,7 +2,15 @@ import UploadDetailsCard from "./UploadDetailsCard";
 import UploadDropzone from "./UploadDropzone";
 import UploadActions from "./UploadActions";
 
-function UploadResultForm({ formData, updateField }) {
+function UploadResultForm({
+  formData,
+  updateField,
+  sessions,
+  semesters,
+  departments,
+  levels,
+  courseOptions,
+}) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -29,7 +37,15 @@ function UploadResultForm({ formData, updateField }) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <UploadDetailsCard formData={formData} updateField={updateField} />
+      <UploadDetailsCard
+        formData={formData}
+        updateField={updateField}
+        sessions={sessions}
+        semesters={semesters}
+        departments={departments}
+        levels={levels}
+        courseOptions={courseOptions}
+      />
       <UploadDropzone formData={formData} updateField={updateField} />
       <UploadActions formData={formData} onReset={handleReset} />{" "}
     </form>
