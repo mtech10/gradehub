@@ -1,6 +1,8 @@
 import Logo from "../ui/Logo";
 import NavItem from "../navigation/NavItem";
 import { logoutItem } from "../../constants/navigation";
+import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 function Sidebar({
   navigation,
@@ -11,6 +13,14 @@ function Sidebar({
 }) {
   const LogoutIcon = logoutItem.icon;
   const isDark = variant === "dark";
+
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login", { replace: true });
+  };
 
   return (
     <aside
@@ -75,7 +85,7 @@ function Sidebar({
           </div>
         </div>
         <button
-          onClick={onLogout}
+          onClick={handleLogout}
           className={`
             mt-6
             flex

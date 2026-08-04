@@ -7,6 +7,11 @@ import QuickLinks from "../../components/courses/QuickLinks";
 import CourseStatistics from "../../components/courses/CourseStatistics";
 import HelpCard from "../../components/courses/HelpCard";
 
+import { courseStats } from "../../constants/courses/courseStats";
+import { registeredSemesters } from "../../constants/courses/courseData";
+import { quickLinks } from "../../constants/courses/quickLinks";
+import { courseStatistics } from "../../constants/courses/courseStatistics";
+
 function Courses() {
   const [activeTab, setActiveTab] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
@@ -22,16 +27,20 @@ function Courses() {
         setSearchQuery={setSearchQuery}
       />
 
-      <CourseStats />
+      <CourseStats stats={courseStats} />
 
       <section className="grid gap-8 xl:grid-cols-12">
         <div className="xl:col-span-8">
-          <RegisteredCourses activeTab={activeTab} searchQuery={searchQuery} />
+          <RegisteredCourses
+            semesters={registeredSemesters}
+            activeTab={activeTab}
+            searchQuery={searchQuery}
+          />
         </div>
 
         <div className="space-y-6 xl:col-span-4">
-          <QuickLinks />
-          <CourseStatistics />
+          <QuickLinks links={quickLinks} />
+          <CourseStatistics statistics={courseStatistics} />
           <HelpCard />
         </div>
       </section>

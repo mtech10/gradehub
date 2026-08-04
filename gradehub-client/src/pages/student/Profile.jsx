@@ -1,44 +1,54 @@
 import { useState } from "react";
 import { Edit3 } from "lucide-react";
+
 import PageHeader from "../../components/common/PageHeader";
 import Button from "../../components/ui/Button";
+
 import ProfileMainCard from "../../components/profile/ProfileMainCard";
 import {
   ContactInfoCard,
   InfoCard,
   ProfileNotice,
 } from "../../components/profile/ProfileCards";
+
 import EditProfileModal from "../../components/profile/EditProfileModal";
+
 import {
   initialStudentData,
   generateProfileUI,
 } from "../../constants/profile/profileData";
 
 function Profile() {
-  // Store the raw, API-ready data in state
+  // Backend-ready student model
   const [student, setStudent] = useState(initialStudentData);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Generate the formatted UI data on the fly
-  const Data = generateProfileUI(student);
+  // Presentation model
+  const profileData = generateProfileUI(student);
 
-  const handleSaveProfile = (updatedFields) => {
-    // In a real app, this is where you'd fire your API PUT/PATCH request
+  const handleProfileUpdate = (updatedFields) => {
+    // Later:
+    // await profileService.updateProfile(updatedFields);
+
     setStudent((prev) => ({
       ...prev,
       ...updatedFields,
     }));
+
     setIsModalOpen(false);
   };
 
   return (
     <div className="space-y-8">
       {/* Header */}
+
       <div className="flex flex-col gap-4 border-b border-slate-200 pb-6 sm:flex-row sm:items-end sm:justify-between">
         <PageHeader
           title="My Profile"
           subtitle="View and manage your personal information."
         />
+
         <Button
           variant="outline"
           className="shrink-0 bg-white"
@@ -49,29 +59,35 @@ function Profile() {
         </Button>
       </div>
 
-      {/* Pass the dynamically generated  Data to the components */}
-      <ProfileMainCard data={Data} />
+      {/* Profile */}
+
+      <ProfileMainCard data={profileData} />
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        <ContactInfoCard title="Contact Information" items={Data.contactInfo} />
+        <ContactInfoCard
+          title="Contact Information"
+          items={profileData.contactInfo}
+        />
 
         <ContactInfoCard
           title="Emergency Contact"
-          items={Data.emergencyContact}
+          items={profileData.emergencyContact}
         />
 
-        <InfoCard title="Academic Information" items={Data.academicInfo} />
+        <InfoCard
+          title="Academic Information"
+          items={profileData.academicInfo}
+        />
       </div>
 
       <ProfileNotice />
 
-      {/* The Edit Modal */}
       <EditProfileModal
         type="student"
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         currentData={student}
-        onSave={handleSaveProfile}
+        onSave={handleProfileUpdate}
       />
     </div>
   );

@@ -1,9 +1,8 @@
 import { Lightbulb, CheckCircle2 } from "lucide-react";
 
 import Card from "../ui/Card";
-import { gpaTips } from "../../constants/gpaCalculator";
 
-function GPATipsCard() {
+function GPATipsCard({ tips }) {
   return (
     <Card padding="lg">
       <div className="mb-4 flex items-center gap-3">
@@ -15,7 +14,7 @@ function GPATipsCard() {
       </div>
 
       <ul className="space-y-3">
-        {gpaTips.map((tip) => (
+        {tips.map((tip) => (
           <li key={tip} className="flex items-start gap-3">
             <CheckCircle2
               size={18}

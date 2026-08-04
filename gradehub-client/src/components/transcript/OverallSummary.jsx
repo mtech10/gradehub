@@ -8,13 +8,7 @@ import {
 
 import StatCard from "../dashboard/DashboardStats";
 
-import { getCurrentStudentTranscript } from "../../utils/currentStudentTranscript";
-import { getTranscriptSummary } from "../../utils/transcriptUtils";
-
-function OverallSummary() {
-  const student = getCurrentStudentTranscript();
-
-  const summary = getTranscriptSummary(student.sessions);
+function OverallSummary({ summary }) {
   const cards = [
     {
       title: "CGPA",

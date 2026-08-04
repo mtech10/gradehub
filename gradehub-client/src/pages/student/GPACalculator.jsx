@@ -5,9 +5,16 @@ import GPAResultsSummary from "../../components/gpa/GPAResultsSummary";
 import GPATipsCard from "../../components/gpa/GPATipsCard";
 import GradingScaleCard from "../../components/gpa/GradingScaleCard";
 import GPANote from "../../components/gpa/GPANote";
-import { initialCourses } from "../../constants/gpaCalculator";
 import { calculateGPA, createEmptyCourse } from "../../utils/gpaUtils";
 import PageHeader from "../../components/ui/PageHeader";
+
+import {
+  initialCourses,
+  GRADE_OPTIONS,
+  UNIT_OPTIONS,
+  gradingScale,
+  gpaTips,
+} from "../../constants/gpaCalculator";
 
 function GPACalculator() {
   const [courses, setCourses] = useState(initialCourses);
@@ -55,6 +62,8 @@ function GPACalculator() {
             totalUnits={totalUnits}
             onClear={handleClearAll}
             onCalculate={handleCalculate}
+            gradeOptions={GRADE_OPTIONS}
+            unitOptions={UNIT_OPTIONS}
           />
 
           <GPAResultsSummary
@@ -69,8 +78,8 @@ function GPACalculator() {
         </div>
 
         <div className="space-y-8">
-          <GPATipsCard />
-          <GradingScaleCard />
+          <GPATipsCard tips={gpaTips} />
+          <GradingScaleCard gradingScale={gradingScale} />
         </div>
       </div>
     </div>

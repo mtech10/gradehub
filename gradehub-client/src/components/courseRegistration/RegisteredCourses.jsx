@@ -1,11 +1,11 @@
-import { registeredSemesters } from "../../constants/courses/courseData";
 import CourseAccordion from "../courses/CourseAccordion";
 
-function RegisteredCourses({ activeTab, searchQuery }) {
-  const filteredSemesters = registeredSemesters
+function RegisteredCourses({ semesters = [], activeTab, searchQuery }) {
+  const filteredSemesters = semesters
     .map((semester) => {
       const filteredCourses = semester.courses.filter((course) => {
         const query = searchQuery?.toLowerCase().trim() || "";
+
         const matchesSearch =
           query === "" ||
           course.title.toLowerCase().includes(query) ||
@@ -25,7 +25,10 @@ function RegisteredCourses({ activeTab, searchQuery }) {
         return matchesSearch && matchesTab;
       });
 
-      return { ...semester, courses: filteredCourses };
+      return {
+        ...semester,
+        courses: filteredCourses,
+      };
     })
     .filter((semester) => {
       const tab = activeTab?.toLowerCase() || "all";

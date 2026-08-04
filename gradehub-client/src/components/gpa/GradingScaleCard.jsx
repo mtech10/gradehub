@@ -2,9 +2,8 @@ import { Info } from "lucide-react";
 
 import Card from "../ui/Card";
 import Badge from "../ui/Badge";
-import { gradingScale } from "../../constants/gpaCalculator";
 
-function GradingScaleCard() {
+function GradingScaleCard({ gradingScale }) {
   return (
     <Card title="Grading Scale" padding="lg">
       <table className="w-full text-sm">

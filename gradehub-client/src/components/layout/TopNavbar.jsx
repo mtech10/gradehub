@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { notificationsList } from "../../constants/notifications/notificationData";
+import { useAuth } from "../../context/AuthContext";
 
 function TopNavbar({ onToggleSidebar, user, routes, onLogout }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -24,6 +25,13 @@ function TopNavbar({ onToggleSidebar, user, routes, onLogout }) {
   const userDropdownRef = useRef(null);
   const searchInputRef = useRef(null);
   const navigate = useNavigate();
+
+  const { logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login", { replace: true });
+  };
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -271,7 +279,7 @@ function TopNavbar({ onToggleSidebar, user, routes, onLogout }) {
               {/* Logout Action */}
               <div className="border-t border-slate-100 p-2 bg-slate-50/50">
                 <button
-                  onClick={onLogout}
+                  onClick={handleLogout}
                   className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold text-red-600 hover:bg-red-50 transition-colors"
                 >
                   <LogOut size={16} />

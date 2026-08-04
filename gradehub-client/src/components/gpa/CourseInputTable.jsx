@@ -2,7 +2,6 @@ import { Plus, Trash2, Calculator, RotateCcw } from "lucide-react";
 
 import Card from "../ui/Card";
 import Button from "../ui/Button";
-import { GRADE_OPTIONS, UNIT_OPTIONS } from "../../constants/gpaCalculator";
 import { GRADE_POINTS } from "../../utils/gpaUtils";
 
 function CourseInputTable({
@@ -13,6 +12,8 @@ function CourseInputTable({
   totalUnits,
   onClear,
   onCalculate,
+  gradeOptions,
+  unitOptions,
 }) {
   const updateCourse = (id, field, value) => {
     onChange(
@@ -76,7 +77,7 @@ function CourseInputTable({
                     }
                     className="h-11 w-full cursor-pointer appearance-none rounded-lg border border-slate-300 px-3 text-sm outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
                   >
-                    {UNIT_OPTIONS.map((option) => (
+                    {unitOptions.map((option) => (
                       <option key={option.value} value={option.value}>
                         {option.label}
                       </option>
@@ -92,7 +93,7 @@ function CourseInputTable({
                     }
                     className="h-11 w-full cursor-pointer appearance-none rounded-lg border border-slate-300 px-3 text-sm outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
                   >
-                    {GRADE_OPTIONS.map((option) => (
+                    {gradeOptions.map((option) => (
                       <option key={option.value} value={option.value}>
                         {option.value}
                       </option>

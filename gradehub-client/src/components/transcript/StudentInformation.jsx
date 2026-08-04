@@ -1,10 +1,7 @@
 import Card from "../ui/Card";
 import { studentInformation } from "../../constants/studentInformation";
-import { getCurrentStudentProfile } from "../../utils/transcriptHelpers";
 
-function StudentInformation() {
-  const profile = getCurrentStudentProfile();
-
+function StudentInformation({ profile }) {
   const transcript = profile?.transcript;
 
   const student = {

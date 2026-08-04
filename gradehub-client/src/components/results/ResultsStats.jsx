@@ -1,21 +1,10 @@
 import StatCard from "../dashboard/DashboardStats";
-import { resultStats } from "../../constants/resultStats";
 
-function ResultsStats() {
+function ResultsStats({ stats = [] }) {
   return (
     <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
-      {resultStats.map((stat) => (
-        <StatCard
-          key={stat.title}
-          icon={stat.icon}
-          title={stat.title}
-          value={stat.value}
-          suffix={stat.suffix}
-          subtitle={stat.subtitle}
-          footer={stat.footer}
-          color={stat.color}
-          valueSize="text-3xl"
-        />
+      {stats.map((stat) => (
+        <StatCard key={stat.title} {...stat} valueSize="text-3xl" />
       ))}
     </section>
   );

@@ -2,42 +2,47 @@ import { transcript } from "../constants/transcript";
 import { getCurrentStudent, getStudentById } from "./studentHelpers";
 
 /**
- * Gets the transcript belonging to the current student.
+ * Returns the transcript for a student.
+ */
+export function getTranscriptByStudentId(studentId) {
+  return (
+    transcript.find((record) => record.studentId === studentId) ?? {
+      studentId,
+      sessions: [],
+      cgpa: 0,
+      totalCredits: 0,
+      academicStanding: "",
+    }
+  );
+}
+
+/**
+ * Returns the current student's transcript.
  */
 export function getCurrentStudentTranscript() {
   const student = getCurrentStudent();
 
   if (!student) return null;
 
-  return transcript.find((record) => record.studentId === student.id) || null;
+  return getTranscriptByStudentId(student.id);
 }
 
 /**
- * Returns the complete student profile
- * merged with transcript information.
+ * Returns the current student's complete profile.
  */
 export function getCurrentStudentProfile() {
   const student = getCurrentStudent();
 
   if (!student) return null;
 
-  const record = getCurrentStudentTranscript();
-
   return {
     ...student,
-    transcript: record,
+    transcript: getTranscriptByStudentId(student.id),
   };
 }
 
 /**
- * Gets transcript by student ID.
- */
-export function getTranscriptByStudentId(studentId) {
-  return transcript.find((record) => record.studentId === studentId) || null;
-}
-
-/**
- * Gets student + transcript together.
+ * Returns any student's complete profile.
  */
 export function getStudentProfileById(studentId) {
   const student = getStudentById(studentId);
