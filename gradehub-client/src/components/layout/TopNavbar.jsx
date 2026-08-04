@@ -88,12 +88,16 @@ function TopNavbar({ user, routes }) {
     right-0
     z-30
     h-20
+    flex
+    items-center
+    justify-between
     border-b
     border-slate-200
     bg-white
+    px-8
     transition-all
     duration-300
-    ${sidebarOpen ? "left-[300px]" : "left-0"}
+    ${sidebarOpen ? "left-75" : "left-0"}
   `}
     >
       {/* Left Side */}

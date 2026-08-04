@@ -33,7 +33,7 @@ function Sidebar({ navigation, user, variant = "light" }) {
     shrink-0
     transition-all
     duration-300
-    ${sidebarOpen ? "w-[300px]" : "w-0"}
+    ${sidebarOpen ? "w-75" : "w-0"}
     ${isDark ? "bg-slate-800" : "bg-white"}
     ${isDark ? "border-slate-800" : "border-slate-200"}
     border-r

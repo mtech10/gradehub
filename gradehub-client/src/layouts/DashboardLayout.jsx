@@ -23,7 +23,7 @@ function DashboardLayout({
         className={`
       transition-all
       duration-300
-      ${sidebarOpen ? "ml-[300px]" : "ml-0"}
+      ${sidebarOpen ? "ml-80" : "ml-0"}
     `}
       >
         <TopNavbar
