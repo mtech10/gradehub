@@ -8,6 +8,9 @@ import CGPAChart from "../../components/dashboard/CGPAChart";
 import CurrentCourses from "../../components/dashboard/CurrentCourses";
 import UpcomingActivities from "../../components/dashboard/UpcomingActivities";
 import { cgpaTrend } from "../../constants/chartData";
+import { recentResults } from "../../constants/recentResults";
+import { currentCourses } from "../../constants/currentCourses";
+import { upcomingActivities } from "../../constants/upcomingActivities";
 
 function Dashboard() {
   return (
@@ -31,17 +34,18 @@ function Dashboard() {
             title="Recent Results"
             subtitle="Latest published course results"
             showHeaderAction
+            results={recentResults}
           />
         </div>
       </section>
 
       <section className="mt-8 grid grid-cols-6 gap-4">
         <div className="col-span-4">
-          <CurrentCourses />
+          <CurrentCourses courses={currentCourses} />
         </div>
 
         <div className="col-span-2">
-          <UpcomingActivities />
+          <UpcomingActivities activities={upcomingActivities} />
         </div>
       </section>
     </>

@@ -2,7 +2,6 @@ import Card from "../ui/Card";
 import Badge from "../ui/Badge";
 import DataTable from "../ui/DataTable";
 
-import { currentCourses } from "../../constants/currentCourses";
 import { currentCoursesColumns } from "../../constants/tables/currentCoursesColumns";
 
 import { SCROLLBAR } from "../../constants/layout";
@@ -10,7 +9,7 @@ import { THEME } from "../../constants/theme";
 
 import { getProgressStatus } from "../../utils/progressUtils";
 
-function CurrentCourses() {
+function CurrentCourses({ courses = [] }) {
   const renderCell = (course, column) => {
     switch (column.key) {
       case "code":
@@ -60,7 +59,7 @@ function CurrentCourses() {
       <div className={`h-[420px] overflow-y-auto p-4 ${SCROLLBAR}`}>
         <DataTable
           columns={currentCoursesColumns}
-          data={currentCourses}
+          data={courses}
           renderCell={renderCell}
         />
       </div>

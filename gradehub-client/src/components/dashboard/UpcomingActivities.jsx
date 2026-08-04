@@ -1,46 +1,53 @@
-import { CalendarDays } from "lucide-react";
-import { upcomingActivities } from "../../constants/upcomingActivities";
-import { CARD_HEIGHT, SCROLLBAR } from "../../constants/layout";
 import Card from "../ui/Card";
+import Badge from "../ui/Badge";
+
 import { THEME } from "../../constants/theme";
 
-function UpcomingActivities() {
+function UpcomingActivities({
+  activities = [],
+  title = "Upcoming Activities",
+  subtitle = "Academic calendar and deadlines",
+}) {
   return (
     <Card
-      title="Upcoming Activities"
-      subtitle="Don't miss these events"
-      padding="none"
-      bodyClassName="max-h-[420px] overflow-y-auto"
+      title={title}
+      subtitle={subtitle}
       headerAction={
         <button
+          type="button"
           className={`${THEME.linkButton.base} ${THEME.linkButton.primary}`}
         >
-          View All Activities
+          View Calendar
         </button>
       }
     >
-      <div className={`h-[420px] overflow-y-auto p-4 space-y-5 ${SCROLLBAR}`}>
-        {upcomingActivities.map((activity) => (
+      <div className="space-y-4">
+        {activities.map((activity) => (
           <div
-            key={activity.title}
-            className="flex gap-4 rounded-2xl border border-slate-100 p-4"
+            key={activity.id}
+            className="rounded-xl border border-slate-200 p-4"
           >
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-100">
-              <CalendarDays size={22} className="text-blue-600" />
+            <div className="flex items-start justify-between">
+              <div>
+                <h3 className="font-semibold text-slate-900">
+                  {activity.title}
+                </h3>
+
+                <p className="mt-1 text-sm text-slate-500">{activity.date}</p>
+              </div>
+
+              <Badge variant={activity.variant}>{activity.type}</Badge>
             </div>
 
-            <div className="flex-1">
-              <h3 className="font-semibold">{activity.title}</h3>
-
-              <p className="text-sm text-slate-500">{activity.type}</p>
-            </div>
-
-            <span className="text-sm text-slate-500">{activity.date}</span>
+            {activity.description && (
+              <p className="mt-3 text-sm text-slate-600">
+                {activity.description}
+              </p>
+            )}
           </div>
         ))}
       </div>
     </Card>
   );
 }
-
 export default UpcomingActivities;

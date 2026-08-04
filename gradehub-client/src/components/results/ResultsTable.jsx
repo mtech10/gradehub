@@ -1,4 +1,3 @@
-import { recentResults } from "../../constants/recentResults";
 import { CARD_HEIGHT, SCROLLBAR } from "../../constants/layout";
 import Card from "../ui/Card";
 import { THEME } from "../../constants/theme";
@@ -11,6 +10,7 @@ function ResultsTable({
   title = "Results",
   subtitle = "Published course results",
   showHeaderAction = false,
+  results = [],
 }) {
   const renderCell = (row, column) => {
     const status = getResultStatus(row.score);
@@ -58,7 +58,7 @@ function ResultsTable({
         <div className={`${CARD_HEIGHT.lg} ${SCROLLBAR}`}>
           <DataTable
             columns={resultsColumns}
-            data={recentResults}
+            data={results}
             renderCell={renderCell}
           />
         </div>

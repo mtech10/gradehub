@@ -17,6 +17,7 @@ import Departments from "../pages/admin/Departments";
 import DepartmentDetails from "../pages/admin/DepartmentDetails";
 import AddDepartment from "../pages/admin/AddDepartment";
 import EditDepartment from "../pages/admin/EditDepartment";
+import Settings from "../pages/admin/Settings";
 function AdminRoutes() {
   return (
     <Routes>
@@ -39,6 +40,7 @@ function AdminRoutes() {
         <Route path="/departments/add" element={<AddDepartment />} />
         <Route path="/departments/:id" element={<DepartmentDetails />} />
         <Route path="/departments/:id/edit" element={<EditDepartment />} />
+        <Route path="settings" element={<Settings />} />
       </Route>
     </Routes>
   );
