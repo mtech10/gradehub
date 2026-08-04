@@ -28,7 +28,6 @@ function TopNavbar({ user, routes }) {
   const navigate = useNavigate();
 
   const { logout } = useAuth();
-  const { toggleSidebar } = useLayout();
 
   const handleLogout = () => {
     logout();
@@ -70,7 +69,7 @@ function TopNavbar({ user, routes }) {
 
   const unreadNotifications = notificationsList.filter((n) => !n.isRead);
   const dropdownNotifications = unreadNotifications.slice(0, 4);
-  const { sidebarOpen } = useLayout();
+  const { sidebarOpen, toggleSidebar } = useLayout();
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -97,7 +96,7 @@ function TopNavbar({ user, routes }) {
     px-8
     transition-all
     duration-300
-    ${sidebarOpen ? "left-75" : "left-0"}
+    ${sidebarOpen ? "left-80" : "left-30"}
   `}
     >
       {/* Left Side */}
@@ -109,62 +108,6 @@ function TopNavbar({ user, routes }) {
         >
           <Menu size={22} className="text-slate-600" />
         </button>
-
-        {/* Global Search Bar */}
-        <div className="relative hidden lg:block">
-          <Search
-            size={18}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
-          />
-          <form onSubmit={handleSearchSubmit}>
-            <input
-              ref={searchInputRef}
-              type="text"
-              value={searchQuery}
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-                setIsSearchOpen(e.target.value.length > 0);
-              }}
-              placeholder="Search for courses, results, CGPA..."
-              className="h-12 w-[430px] rounded-xl border border-slate-200 bg-slate-50 pl-12 pr-14 outline-none transition focus:border-blue-500 focus:bg-white"
-            />
-          </form>
-          <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-slate-400 pointer-events-none">
-            ⌘ K
-          </span>
-
-          {isSearchOpen && searchQuery && (
-            <div className="absolute left-0 right-0 top-14 mt-2 rounded-2xl border border-slate-200 bg-white shadow-xl z-50 p-4">
-              <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-100">
-                <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                  Quick Search Results
-                </span>
-                <button
-                  onClick={() => setIsSearchOpen(false)}
-                  className="text-slate-400 hover:text-slate-600"
-                >
-                  <X size={16} />
-                </button>
-              </div>
-              <div className="space-y-2">
-                <Link
-                  to={routes.results}
-                  onClick={() => setIsSearchOpen(false)}
-                  className="block p-2 rounded-lg hover:bg-slate-50 text-sm font-medium text-slate-800 transition-colors"
-                >
-                  View results matching "{searchQuery}"
-                </Link>
-                <Link
-                  to={routes.courses}
-                  onClick={() => setIsSearchOpen(false)}
-                  className="block p-2 rounded-lg hover:bg-slate-50 text-sm font-medium text-slate-800 transition-colors"
-                >
-                  Search courses for "{searchQuery}"
-                </Link>
-              </div>
-            </div>
-          )}
-        </div>
       </div>
 
       {/* Right Side */}

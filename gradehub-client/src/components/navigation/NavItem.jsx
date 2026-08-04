@@ -1,6 +1,8 @@
 import { NavLink } from "react-router-dom";
+import { useLayout } from "../../context/LayoutContext";
 
 function NavItem({ title, icon: Icon, path, badge, variant = "light" }) {
+  const { sidebarOpen } = useLayout();
   return (
     <NavLink
       to={path}
@@ -14,6 +16,7 @@ function NavItem({ title, icon: Icon, path, badge, variant = "light" }) {
         py-3
         transition-all
         duration-200
+${sidebarOpen ? "justify-start gap-3 px-4" : "justify-center px-0"}
         ${
           isActive
             ? "bg-blue-600 text-white shadow-md"
@@ -25,7 +28,7 @@ function NavItem({ title, icon: Icon, path, badge, variant = "light" }) {
     >
       {({ isActive }) => (
         <>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center justify-center gap-3">
             <Icon
               size={20}
               className={`
@@ -33,14 +36,19 @@ function NavItem({ title, icon: Icon, path, badge, variant = "light" }) {
                 transition-colors duration-200
               `}
             />
-            <span
-              className={`
+            {sidebarOpen && (
+              <span
+                className={`  whitespace-nowrap
+    transition-all
+    duration-200
+    overflow-hidden
                 ${isActive ? "text-white" : variant === "dark" ? "text-white" : "text-slate-800"}
                 font-medium
               `}
-            >
-              {title}
-            </span>
+              >
+                {title}
+              </span>
+            )}
           </div>
 
           {badge && (

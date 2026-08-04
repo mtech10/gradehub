@@ -27,20 +27,18 @@ function Sidebar({ navigation, user, variant = "light" }) {
     left-0
     z-40
     h-screen
-    overflow-hidden
     flex
     flex-col
-    shrink-0
+    overflow-hidden
     transition-all
     duration-300
-    ${sidebarOpen ? "w-75" : "w-0"}
-    ${isDark ? "bg-slate-800" : "bg-white"}
-    ${isDark ? "border-slate-800" : "border-slate-200"}
     border-r
+    ${sidebarOpen ? "w-80" : "w-30"}
+    ${isDark ? "bg-slate-800 border-slate-800" : "bg-white border-slate-200"}
   `}
     >
-      <div className={`px-8 py-8 ${isDark ? "border-b border-slate-800" : ""}`}>
-        <Logo variant={variant} />
+      <div className={`p-8 ${isDark ? "border-b border-slate-800" : ""}`}>
+        <Logo variant={variant} compact={!sidebarOpen} />
       </div>
 
       <nav className="flex-1 space-y-2 px-4">
@@ -54,51 +52,54 @@ function Sidebar({ navigation, user, variant = "light" }) {
           isDark ? "border-slate-800" : "border-slate-200"
         }`}
       >
-        <div className="flex items-center gap-3">
+        <div
+          className={`flex items-center ${
+            sidebarOpen ? "gap-3" : "justify-center"
+          }`}
+        >
           <img
             src={user?.avatar}
             alt={user?.name}
             className="h-12 w-12 rounded-full"
           />
+          {sidebarOpen && (
+            <div>
+              <p
+                className={`font-semibold ${
+                  isDark ? "text-white" : "text-slate-900"
+                }`}
+              >
+                {user?.name}
+              </p>
 
-          <div>
-            <p
-              className={`font-semibold ${
-                isDark ? "text-white" : "text-slate-900"
-              }`}
-            >
-              {user?.name}
-            </p>
+              <p className={isDark ? "text-slate-400" : "text-slate-500"}>
+                {user?.department}
+              </p>
 
-            <p className={isDark ? "text-slate-400" : "text-slate-500"}>
-              {user?.department}
-            </p>
-
-            <p className={isDark ? "text-slate-400" : "text-slate-500"}>
-              {user?.level}
-            </p>
-          </div>
+              <p className={isDark ? "text-slate-400" : "text-slate-500"}>
+                {user?.level}
+              </p>
+            </div>
+          )}
         </div>
 
         <button
           onClick={handleLogout}
           className={`
-            mt-6
-            flex
-            w-full
-            items-center
-            gap-3
-            rounded-xl
-            px-4
-            py-3
-            text-red-600
-            font-semibold
-            transition-colors
-            ${isDark ? "hover:bg-slate-700" : "hover:bg-red-50"}
-          `}
+mt-6
+flex
+items-center
+py-3
+font-semibold
+text-red-600
+transition-colors
+${sidebarOpen ? "justify-start gap-3 px-4" : "justify-center px-0"}
+${isDark ? " hover:bg-slate-800" : " hover:bg-red-50"}
+`}
         >
           <LogoutIcon size={20} />
-          {logoutItem.title}
+
+          {sidebarOpen && logoutItem.title}
         </button>
       </div>
     </aside>

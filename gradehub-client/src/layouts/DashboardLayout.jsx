@@ -21,16 +21,15 @@ function DashboardLayout({
 
       <div
         className={`
-      transition-all
-      duration-300
-      ${sidebarOpen ? "ml-80" : "ml-0"}
-    `}
+    flex
+    flex-1
+    flex-col
+    transition-all
+    duration-300
+    ${sidebarOpen ? "ml-80" : "ml-30"}
+  `}
       >
-        <TopNavbar
-          user={user}
-          routes={routes}
-          onToggleSidebar={toggleSidebar}
-        />
+        <TopNavbar user={user} routes={routes} />
 
         <main className="pt-20 h-screen overflow-y-auto">
           <div className="mx-auto max-w-[1680px] px-8 py-6">
