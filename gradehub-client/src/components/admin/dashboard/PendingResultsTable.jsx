@@ -46,28 +46,32 @@ function PendingResultsTable({ results }) {
   };
 
   return (
-    <Card padding="none">
-      <div className="flex items-center justify-between border-b border-slate-200 px-6 py-5">
-        <div>
-          <h3 className="text-lg font-semibold">Results Requiring Attention</h3>
+    <div className="pt-5">
+      <Card padding="none">
+        <div className="flex items-center justify-between border-b border-slate-200 px-6 py-5">
+          <div>
+            <h3 className="text-lg font-semibold">
+              Results Requiring Attention
+            </h3>
 
-          <p className="text-sm text-slate-500">
-            Upload, approve or review academic results.
-          </p>
+            <p className="text-sm text-slate-500">
+              Upload, approve or review academic results.
+            </p>
+          </div>
+
+          <Button size="sm" onClick={() => navigate("/admin/results")}>
+            View All
+          </Button>
         </div>
 
-        <Button size="sm" onClick={() => navigate("/admin/results")}>
-          View All
-        </Button>
-      </div>
-
-      <DataTable
-        columns={pendingResultsColumns}
-        data={results}
-        renderCell={renderCell}
-        onRowClick={(result) => navigate(`/admin/results/${result.id}`)}
-      />
-    </Card>
+        <DataTable
+          columns={pendingResultsColumns}
+          data={results}
+          renderCell={renderCell}
+          onRowClick={(result) => navigate(`/admin/results/${result.id}`)}
+        />
+      </Card>
+    </div>
   );
 }
 

@@ -61,26 +61,28 @@ function RecentStudentsTable({ students }) {
   };
 
   return (
-    <Card padding="none">
-      <div className="flex items-center justify-between border-b border-slate-200 px-6 py-5">
-        <div>
-          <h3 className="text-lg font-semibold">Recent Students</h3>
+    <div className="pt-5">
+      <Card padding="none">
+        <div className="flex items-center justify-between border-b border-slate-200 px-6 py-5">
+          <div>
+            <h3 className="text-lg font-semibold">Recent Students</h3>
 
-          <p className="text-sm text-slate-500">Latest registered students</p>
+            <p className="text-sm text-slate-500">Latest registered students</p>
+          </div>
+
+          <Button size="sm" onClick={() => navigate("/admin/students")}>
+            View All
+          </Button>
         </div>
 
-        <Button size="sm" onClick={() => navigate("/admin/students")}>
-          View All
-        </Button>
-      </div>
-
-      <DataTable
-        columns={recentStudentsColumns}
-        data={students}
-        renderCell={renderCell}
-        onRowClick={(student) => navigate(`/admin/students/${student.id}`)}
-      />
-    </Card>
+        <DataTable
+          columns={recentStudentsColumns}
+          data={students}
+          renderCell={renderCell}
+          onRowClick={(student) => navigate(`/admin/students/${student.id}`)}
+        />
+      </Card>
+    </div>
   );
 }
 

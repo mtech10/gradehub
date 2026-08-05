@@ -31,12 +31,12 @@ function DashboardLayout({
       >
         <TopNavbar user={user} routes={routes} />
 
-        <main className="pt-20 h-screen overflow-y-auto">
+        <main className="flex-1 overflow-y-auto pt-20">
           <div className="mx-auto max-w-[1680px] px-8 py-6">
             <Outlet />
-            <AuthFooter />
           </div>
         </main>
+        <AuthFooter />
       </div>
     </div>
   );

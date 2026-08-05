@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
+import { useLayout } from "../../context/LayoutContext";
 
 function AuthFooter() {
+  const { sidebarOpen } = useLayout();
+
   return (
     <footer className="border-t border-slate-200 bg-white py-5">
       <div className="mx-auto flex max-w-7xl items-center justify-center gap-4 text-sm text-slate-500">

@@ -2,7 +2,7 @@ import QuickActionCard from "./QuickActionCard";
 
 function DashboardQuickActions({ actions }) {
   return (
-    <section className="space-y-4">
+    <section className="space-y-4 pt-4">
       <div>
         <h2 className="text-lg font-semibold text-slate-900">Quick Actions</h2>
 

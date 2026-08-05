@@ -17,12 +17,12 @@ import { useState } from "react";
 
 function Dashboard() {
   const [dashboardData, setDashboardData] = useState({
-    stats: [],
-    quickActions: [],
-    recentStudents: [],
-    pendingResults: [],
-    departments: [],
-    activities: [],
+    stats: dashboardStats,
+    quickActions: dashboardQuickActions,
+    recentStudents,
+    pendingResults,
+    departments: departmentOverview,
+    activities: upcomingActivities,
   });
 
   return (

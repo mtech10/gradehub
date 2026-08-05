@@ -17,48 +17,50 @@ function UpcomingActivities({ activities }) {
   const navigate = useNavigate();
 
   return (
-    <Card padding="lg">
-      <div className="mb-6 flex items-center justify-between">
-        <div>
-          <h3 className="text-lg font-semibold text-slate-900">
-            Upcoming Activities
-          </h3>
+    <div className="pt-5">
+      <Card padding="md">
+        <div className="mb-6 flex items-center justify-between">
+          <div>
+            <h3 className="text-lg font-semibold text-slate-900">
+              Upcoming Activities
+            </h3>
 
-          <p className="text-sm text-slate-500">Important academic events</p>
+            <p className="text-sm text-slate-500">Important academic events</p>
+          </div>
+
+          <Button size="sm" onClick={() => navigate("/admin/calendar")}>
+            Calendar
+          </Button>
         </div>
 
-        <Button size="sm" onClick={() => navigate("/admin/calendar")}>
-          Calendar
-        </Button>
-      </div>
+        <div className="space-y-4">
+          {activities.map((activity) => {
+            const Icon = activity.icon;
 
-      <div className="space-y-4">
-        {activities.map((activity) => {
-          const Icon = activity.icon;
-
-          return (
-            <div
-              key={activity.id}
-              className="flex items-center gap-4 rounded-xl border border-slate-100 p-4 transition hover:border-blue-200 hover:bg-slate-50"
-            >
+            return (
               <div
-                className={`flex h-11 w-11 items-center justify-center rounded-xl ${colors[activity.color]}`}
+                key={activity.id}
+                className="flex items-center gap-4 rounded-xl border border-slate-100 p-4 transition hover:border-blue-200 hover:bg-slate-50"
               >
-                <Icon size={20} />
+                <div
+                  className={`flex h-11 w-11 items-center justify-center rounded-xl ${colors[activity.color]}`}
+                >
+                  <Icon size={20} />
+                </div>
+
+                <div className="flex-1">
+                  <p className="font-medium text-slate-900">{activity.title}</p>
+
+                  <p className="text-sm text-slate-500">{activity.date}</p>
+                </div>
+
+                <ChevronRight size={18} className="text-slate-400" />
               </div>
-
-              <div className="flex-1">
-                <p className="font-medium text-slate-900">{activity.title}</p>
-
-                <p className="text-sm text-slate-500">{activity.date}</p>
-              </div>
-
-              <ChevronRight size={18} className="text-slate-400" />
-            </div>
-          );
-        })}
-      </div>
-    </Card>
+            );
+          })}
+        </div>
+      </Card>
+    </div>
   );
 }
 

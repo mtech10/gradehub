@@ -51,14 +51,14 @@ export const dashboardQuickActions = [
     description: "Register a new student",
     icon: UserPlus,
     color: "blue",
-    path: "/admin/students/add",
+    path: "/admin/students/new",
   },
   {
     title: "Upload Results",
     description: "Upload semester results",
     icon: Upload,
     color: "green",
-    path: "/admin/results",
+    path: "/admin/results/upload",
   },
   {
     title: "Manage Courses",
