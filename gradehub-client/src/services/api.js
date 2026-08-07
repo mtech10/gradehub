@@ -1,4 +1,7 @@
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+// Ensure we clean up trailing slashes from the env variable just in case
+const RAW_BASE_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+const BASE_URL = RAW_BASE_URL.replace(/\/+$/, "");
 
 async function request(endpoint, options = {}) {
   const token = localStorage.getItem("gradehub_token");
@@ -12,7 +15,12 @@ async function request(endpoint, options = {}) {
     headers.Authorization = `Bearer ${token}`;
   }
 
-  const response = await fetch(`${BASE_URL}${endpoint}`, {
+  // Ensure endpoint starts with a single slash
+  const formattedEndpoint = endpoint.startsWith("/")
+    ? endpoint
+    : `/${endpoint}`;
+
+  const response = await fetch(`${BASE_URL}${formattedEndpoint}`, {
     ...options,
     headers,
   });
