@@ -1,20 +1,42 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PageHeader from "../../components/common/PageHeader";
 import RegistrationSummary from "../../components/courseRegistration/RegistrationSummary";
 import CourseRegistrationTable from "../../components/courseRegistration/CourseRegistrationTable";
-import {
-  initialRegistrationCourses,
-  registrationRules,
-} from "../../constants/courseRegistration/registrationData";
+import { courseRegistrationService } from "../../services/courseRegistrationService";
 import { getRegistrationSummary } from "../../utils/registrationHelpers";
 
 function CourseRegistration() {
-  const [courses, setCourses] = useState(initialRegistrationCourses);
-  const [selectedCodes, setSelectedCodes] = useState([]); // Courses to ADD
-  const [droppedCodes, setDroppedCodes] = useState([]); // Courses to DROP
+  const [courses, setCourses] = useState([]);
+  const [rules, setRules] = useState({
+    minUnits: 12,
+    maxUnits: 24,
+    status: "Open",
+    deadline: "Soon",
+  });
+  const [selectedCodes, setSelectedCodes] = useState([]);
+  const [droppedCodes, setDroppedCodes] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("all");
-  const [isEditing, setIsEditing] = useState(false); // Edit Mode Flag
+  const [isEditing, setIsEditing] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+
+  // Fetch live courses and rules on mount
+  useEffect(() => {
+    const fetchRegistrationInfo = async () => {
+      try {
+        const data = await courseRegistrationService.getRegistrationData();
+        setCourses(data.courses || []);
+        if (data.rules) setRules(data.rules);
+      } catch (error) {
+        console.error("Failed to load course registration details:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRegistrationInfo();
+  }, []);
 
   const filteredCourses = courses.filter((course) => {
     const matchesSearch =
@@ -37,10 +59,8 @@ function CourseRegistration() {
     const course = courses.find((c) => c.code === code);
 
     if (course.status === "Registered") {
-      // If it's already registered, they must be in Edit mode to toggle it
       if (!isEditing) return;
 
-      // Toggle it in the dropped cart
       setDroppedCodes((prev) => {
         const next = prev.includes(code)
           ? prev.filter((c) => c !== code)
@@ -49,7 +69,6 @@ function CourseRegistration() {
         return next;
       });
     } else {
-      // If it's available, toggle it in the selected cart
       setSelectedCodes((prev) => {
         const next = prev.includes(code)
           ? prev.filter((c) => c !== code)
@@ -76,46 +95,70 @@ function CourseRegistration() {
     if (course.status === "Registered" && !isEditing) {
       return;
     }
-
     handleToggleSelection(course.code);
   };
 
-  const handleSubmitRegistration = () => {
-    setCourses((prevCourses) =>
-      prevCourses.map((course) => {
-        if (selectedCodes.includes(course.code)) {
-          return { ...course, status: "Registered" };
-        }
-        if (droppedCodes.includes(course.code)) {
-          return { ...course, status: "Available" }; // Resets it to available
-        }
-        return course;
-      }),
-    );
-    // Clear carts and exit edit mode
-    setSelectedCodes([]);
-    setDroppedCodes([]);
-    setIsEditing(false);
-    alert("Registration updated successfully!");
+  const handleSubmitRegistration = async () => {
+    try {
+      setSubmitting(true);
+      await courseRegistrationService.submitRegistration({
+        selectedCodes,
+        droppedCodes,
+      });
+
+      // Update local state to reflect successful registration
+      setCourses((prevCourses) =>
+        prevCourses.map((course) => {
+          if (selectedCodes.includes(course.code)) {
+            return { ...course, status: "Registered" };
+          }
+          if (droppedCodes.includes(course.code)) {
+            return { ...course, status: "Available" };
+          }
+          return course;
+        }),
+      );
+
+      setSelectedCodes([]);
+      setDroppedCodes([]);
+      setIsEditing(false);
+      alert("Registration updated successfully!");
+    } catch (error) {
+      console.error("Submission failed:", error);
+      alert(
+        error.response?.data?.message ||
+          "Failed to submit course registration.",
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleCancelEdit = () => {
     setIsEditing(false);
-    setDroppedCodes([]); // Revert any drops they made
+    setDroppedCodes([]);
   };
 
   const summary = getRegistrationSummary({
     courses,
     selectedCodes,
     droppedCodes,
-    rules: registrationRules,
+    rules,
   });
+
+  if (loading) {
+    return (
+      <div className="p-10 text-center text-slate-500">
+        Loading course registration portal...
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">
       <PageHeader
         title="Course Registration"
-        subtitle="Register your courses for the 2024/2025 academic session."
+        subtitle="Register your courses for the current academic session."
       />
 
       <div className="grid gap-8 xl:grid-cols-12">
@@ -142,11 +185,12 @@ function CourseRegistration() {
           <div className="sticky top-24">
             <RegistrationSummary
               summary={summary}
-              rules={registrationRules}
+              rules={rules}
               isEditing={isEditing}
               onEdit={() => setIsEditing(true)}
               onCancelEdit={handleCancelEdit}
               onSubmit={handleSubmitRegistration}
+              disabled={submitting}
             />
           </div>
         </div>

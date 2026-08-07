@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CheckCircle2, Headphones } from "lucide-react";
 import PageHeader from "../../components/common/PageHeader";
 import Button from "../../components/ui/Button";
@@ -6,30 +6,55 @@ import Card from "../../components/ui/Card";
 import NotificationList from "../../components/notifications/NotificationList";
 import NotificationSummary from "../../components/notifications/NotificationSummary";
 
-import {
-  notificationsList,
-  notificationSettings,
-} from "../../constants/notifications/notificationData";
+import { notificationService } from "../../services/notificationService";
 
 function Notifications() {
-  const [notifications, setNotifications] = useState(notificationsList);
-  const [settings, setSettings] = useState(notificationSettings);
+  const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const handleMarkAllAsRead = () => {
-    setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const liveData = await notificationService.getNotifications();
+        setNotifications(liveData);
+      } catch (error) {
+        console.error("Failed to load notifications:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchNotifications();
+  }, []);
+
+  const handleMarkAllAsRead = async () => {
+    try {
+      await notificationService.markAllAsRead();
+      setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
+    } catch (error) {
+      console.error("Failed to mark all as read:", error);
+    }
   };
 
-  const handleMarkAsRead = (id) => {
-    setNotifications((prev) =>
-      prev.map((n) => (n.id === id ? { ...n, isRead: true } : n)),
+  const handleMarkAsRead = async (id) => {
+    try {
+      await notificationService.markAsRead(id);
+      // Optimistically update just the one clicked notification
+      setNotifications((prev) =>
+        prev.map((n) => (n.id === id ? { ...n, isRead: true } : n)),
+      );
+    } catch (error) {
+      console.error("Failed to mark notification as read:", error);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="p-10 text-center text-slate-500">
+        Loading notifications...
+      </div>
     );
-  };
-
-  const handleToggleSetting = (id) => {
-    setSettings((prev) =>
-      prev.map((s) => (s.id === id ? { ...s, enabled: !s.enabled } : s)),
-    );
-  };
+  }
 
   return (
     <div className="space-y-8">
@@ -42,6 +67,7 @@ function Notifications() {
           variant="outline"
           className="shrink-0 bg-white"
           onClick={handleMarkAllAsRead}
+          disabled={!notifications.some((n) => !n.isRead)} // Disable if all are already read
         >
           <CheckCircle2 size={18} />
           Mark all as read

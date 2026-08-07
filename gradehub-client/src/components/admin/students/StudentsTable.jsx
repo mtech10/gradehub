@@ -22,6 +22,7 @@ function StudentsTable({
 }) {
   const navigate = useNavigate();
 
+  // Inside StudentsTable.jsx
   const renderCell = (student, column) => {
     switch (column.key) {
       case "matricNumber":
@@ -46,7 +47,6 @@ function StudentsTable({
             >
               {student.fullName}
             </button>
-
             <p className="text-sm text-slate-500">{student.email}</p>
           </div>
         );
@@ -67,6 +67,16 @@ function StudentsTable({
             {student.status}
           </Badge>
         );
+
+      // ✅ ADD THESE CASES to extract the string values from your backend objects
+      case "department":
+        return student.department?.name || "-";
+
+      case "level":
+        return student.level?.name || "-";
+
+      case "session":
+        return student.session?.name || "-";
 
       case "actions":
         return (
@@ -93,6 +103,7 @@ function StudentsTable({
         );
 
       default:
+        // If it reaches here with an object, React will crash.
         return student[column.key];
     }
   };

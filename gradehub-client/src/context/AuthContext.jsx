@@ -1,53 +1,34 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import authService from "../services/authService";
 
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
+  const [user, setUser] = useState(() => {
+    const stored = localStorage.getItem("gradehub_user");
+    return stored ? JSON.parse(stored) : null;
+  });
+
+  const [token, setToken] = useState(() => {
+    return localStorage.getItem("gradehub_token");
+  });
   const [loading, setLoading] = useState(true);
 
-  // Simulate checking for an existing login
   useEffect(() => {
-    const storedUser = localStorage.getItem("gradehub_user");
-    const storedToken = localStorage.getItem("gradehub_token");
-
-    if (storedUser && storedToken) {
-      setUser(JSON.parse(storedUser));
-      setToken(storedToken);
-    }
-
     setLoading(false);
   }, []);
 
   const login = async (credentials) => {
-    // Temporary mock authentication
-    const isAdmin = credentials.email.includes("admin");
-    const mockUser = {
-      id: 1,
-      firstName: "Ademola",
-      lastName: "Oyelusi",
-      fullName: "Ademola Oyelusi",
-      email: credentials.email,
+    const data = await authService.login(credentials);
 
-      role: isAdmin ? "admin" : "student",
+    localStorage.setItem("gradehub_user", JSON.stringify(data.user));
 
-      department: isAdmin ? "Academic Affairs" : "Agricultural Engineering",
+    localStorage.setItem("gradehub_token", data.token);
 
-      level: isAdmin ? "Administrator" : "400 Level",
+    setUser(data.user);
+    setToken(data.token);
 
-      avatar: "https://i.pravatar.cc/150?img=12",
-    };
-    const mockToken = "mock-jwt-token";
-
-    localStorage.setItem("gradehub_user", JSON.stringify(mockUser));
-
-    localStorage.setItem("gradehub_token", mockToken);
-
-    setUser(mockUser);
-    setToken(mockToken);
-
-    return mockUser;
+    return data.user;
   };
 
   const register = async (data) => {

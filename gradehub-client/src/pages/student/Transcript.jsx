@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import PageHeader from "../../components/common/PageHeader";
 import TranscriptHeader from "../../components/transcript/TranscriptHeader";
 import StudentInformation from "../../components/transcript/StudentInformation";
@@ -5,37 +6,56 @@ import TranscriptRecord from "../../components/transcript/TranscriptRecord";
 import OverallSummary from "../../components/transcript/OverallSummary";
 import CgpaProgress from "../../components/transcript/CgpaProgress";
 import TranscriptNotice from "../../components/transcript/TranscriptNotice";
-
-import {
-  getCurrentStudentProfile,
-  getCurrentStudentTranscript,
-} from "../../utils/transcriptHelpers";
-
-import {
-  getTranscriptSummary,
-  getCgpaProgress,
-} from "../../utils/transcriptUtils";
+import transcriptService from "../../services/transcriptService";
 
 function Transcript() {
-  const profile = getCurrentStudentProfile();
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const transcript = getCurrentStudentTranscript();
+  useEffect(() => {
+    const fetchTranscript = async () => {
+      try {
+        const fullTranscript = await transcriptService.getMyTranscriptFull();
+        setData(fullTranscript);
+      } catch (err) {
+        console.error("Failed to load transcript:", err);
+        setError("Unable to load transcript data.");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const summary = getTranscriptSummary(transcript.sessions);
+    fetchTranscript();
+  }, []);
 
-  const progress = getCgpaProgress(transcript.sessions);
+  if (loading) {
+    return (
+      <div className="p-10 text-center text-slate-500">
+        Loading academic transcript...
+      </div>
+    );
+  }
+
+  if (error || !data) {
+    return (
+      <div className="p-10 text-center text-red-500">
+        {error || "Data unavailable"}
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">
       <TranscriptHeader />
 
-      <StudentInformation profile={profile} />
+      <StudentInformation profile={data.profile} />
 
-      <TranscriptRecord transcript={transcript} />
+      <TranscriptRecord transcript={data.transcript} />
 
-      <OverallSummary summary={summary} />
+      <OverallSummary summary={data.summary} />
 
-      <CgpaProgress progress={progress} />
+      <CgpaProgress progress={data.progress} />
 
       <TranscriptNotice />
     </div>

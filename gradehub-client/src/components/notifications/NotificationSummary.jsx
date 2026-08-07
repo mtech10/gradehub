@@ -1,9 +1,25 @@
 import Card from "../ui/Card";
 import { Bell, Mail, Calendar, FileText } from "lucide-react";
 
-function NotificationSummary({ notifications }) {
+function NotificationSummary({ notifications = [] }) {
   const total = notifications.length;
   const unread = notifications.filter((n) => !n.isRead).length;
+
+  // Calculate dates for filtering
+  const now = new Date();
+  const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+  const oneMonthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+
+  // Safely parse the 'time' string or fallback to raw date if you added it to the service
+  const thisWeek = notifications.filter((n) => {
+    const notifDate = new Date(n.rawDate || n.time);
+    return !isNaN(notifDate) && notifDate >= oneWeekAgo;
+  }).length;
+
+  const thisMonth = notifications.filter((n) => {
+    const notifDate = new Date(n.rawDate || n.time);
+    return !isNaN(notifDate) && notifDate >= oneMonthAgo;
+  }).length;
 
   const dynamicSummary = [
     {
@@ -22,14 +38,14 @@ function NotificationSummary({ notifications }) {
     },
     {
       label: "This Week",
-      value: "7",
+      value: thisWeek,
       icon: Calendar,
       color: "text-green-600",
       bg: "bg-green-50",
     },
     {
       label: "This Month",
-      value: "15",
+      value: thisMonth,
       icon: FileText,
       color: "text-orange-600",
       bg: "bg-orange-50",

@@ -1,12 +1,13 @@
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Card from "../../ui/Card";
-
 import StudentPhotoUpload from "./StudentPhotoUpload";
 import PersonalInformation from "./PersonalInformation";
 import AcademicInformation from "./AcademicInformation";
 import PortalAccess from "./PortalAccess";
 import StudentFormActions from "./StudentFormActions";
+import { studentService } from "../../../services/admin/studentService";
+
 import {
   GENDERS,
   STATES,
@@ -19,6 +20,14 @@ import {
 } from "../../../constants/options";
 
 function StudentForm({ mode = "create", initialValues = {} }) {
+  const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoadingOptions, setIsLoadingOptions] = useState(true);
+
+  const [departments, setDepartments] = useState([]);
+  const [levels, setLevels] = useState([]);
+  const [sessions, setSessions] = useState([]);
+
   const [formData, setFormData] = useState({
     matricNumber: initialValues.matricNumber ?? "",
     firstName: initialValues.firstName ?? "",
@@ -47,16 +56,86 @@ function StudentForm({ mode = "create", initialValues = {} }) {
     photo: initialValues.photo ?? null,
   });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    const fetchOptions = async () => {
+      try {
+        const [deptRes, levelRes, sessionRes] = await Promise.all([
+          studentService.getDepartments(),
+          studentService.getLevels(),
+          studentService.getSessions(),
+        ]);
 
-    if (mode === "create") {
-      console.log("Creating student...", formData);
-    } else {
-      console.log("Updating student...", formData);
+        // Map the backend data into the { label, value } format your Select component expects
+        setDepartments(
+          deptRes.data.map((d) => ({ label: d.name, value: d.id })),
+        );
+        setLevels(levelRes.data.map((l) => ({ label: l.name, value: l.id })));
+        setSessions(
+          sessionRes.data.map((s) => ({ label: s.name, value: s.id })),
+        );
+      } catch (error) {
+        console.error("Failed to load form options:", error);
+      } finally {
+        setIsLoadingOptions(false);
+      }
+    };
+
+    fetchOptions();
+  }, []);
+
+  const handleSave = async () => {
+    setIsSubmitting(true);
+
+    try {
+      if (mode === "create") {
+        const payload = {
+          matricNumber: formData.matricNumber,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+
+          // Only parse if it actually has a value, otherwise send empty string
+          admissionYear: formData.admissionYear
+            ? parseInt(formData.admissionYear, 10)
+            : "",
+
+          departmentId: formData.department,
+          levelId: formData.level,
+          sessionId: formData.session,
+          gender: formData.gender,
+          photo: "https://example.com/default-avatar.png",
+
+          ...(formData.email && { email: formData.email }),
+          ...(formData.phone && { phone: formData.phone }),
+          ...(formData.dateOfBirth && { dateOfBirth: formData.dateOfBirth }),
+          ...(formData.middleName && { middleName: formData.middleName }),
+        };
+        // Fire the API call
+        console.log("React is sending this payload:", payload);
+        await studentService.createStudent(payload);
+
+        // Redirect to the students list upon success
+        navigate("/admin/students");
+      } else {
+        console.log("Updating student...", formData);
+      }
+      // Inside StudentForm.jsx -> handleSave()
+    } catch (error) {
+      console.error("Failed to save student:", error);
+
+      // ✅ ADD THIS: Extract the exact backend validation errors
+      if (error.response && error.response.data) {
+        console.error("Backend Validation Details:", error.response.data);
+
+        // Show a more descriptive alert
+        const errorDetails =
+          error.response.data.message || error.response.data.errors;
+        alert(`Validation Error: ${JSON.stringify(errorDetails)}`);
+      } else {
+        alert("Failed to save student. Check console for details.");
+      }
+    } finally {
+      setIsSubmitting(false);
     }
-
-    // API integration comes later
   };
 
   const handleChange = (field, value) => {
@@ -65,6 +144,12 @@ function StudentForm({ mode = "create", initialValues = {} }) {
       [field]: value,
     }));
   };
+
+  if (isLoadingOptions) {
+    return (
+      <div className="p-8 text-center text-slate-500">Loading form data...</div>
+    );
+  }
 
   return (
     <Card className="p-8">
@@ -82,17 +167,22 @@ function StudentForm({ mode = "create", initialValues = {} }) {
           <AcademicInformation
             formData={formData}
             handleChange={handleChange}
-            departments={DEPARTMENTS}
-            levels={LEVELS}
+            departments={departments}
+            levels={levels}
+            sessions={sessions}
             programmes={PROGRAMMES}
             admissionYears={ADMISSION_YEARS}
-            sessions={SESSIONS}
             studentStatuses={STUDENT_STATUS}
           />
 
           <PortalAccess formData={formData} handleChange={handleChange} />
 
-          <StudentFormActions formData={formData} mode={mode} />
+          {/* ✅ Pass down the handler and loading state */}
+          <StudentFormActions
+            mode={mode}
+            onSave={handleSave}
+            isSubmitting={isSubmitting}
+          />
         </div>
       </div>
     </Card>

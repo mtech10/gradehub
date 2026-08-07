@@ -90,6 +90,7 @@ function Login() {
   });
 
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -104,10 +105,10 @@ function Login() {
     e.preventDefault();
 
     try {
+      setError("");
       setSubmitting(true);
 
       const user = await login(formData);
-
       const redirectTo = location.state?.from?.pathname;
 
       if (redirectTo) {
@@ -121,7 +122,7 @@ function Login() {
         navigate("/student");
       }
     } catch (error) {
-      console.error(error);
+      setError(error.message);
     } finally {
       setSubmitting(false);
     }
@@ -160,6 +161,8 @@ function Login() {
 
           <AuthLink to="/forgot-password">Forgot Password?</AuthLink>
         </div>
+
+        {error && <p className="text-sm text-red-600">{error}</p>}
 
         <Button type="submit" fullWidth size="lg" loading={submitting}>
           Login

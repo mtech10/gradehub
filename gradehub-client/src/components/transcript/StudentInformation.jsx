@@ -2,8 +2,6 @@ import Card from "../ui/Card";
 import { studentInformation } from "../../constants/studentInformation";
 
 function StudentInformation({ profile }) {
-  const transcript = profile?.transcript;
-
   const student = {
     name: profile?.name,
     matricNumber: profile?.matricNumber,
@@ -11,9 +9,14 @@ function StudentInformation({ profile }) {
     programme: profile?.programme,
     admissionYear: profile?.admissionYear,
     level: profile?.level,
-    session:
-      transcript?.sessions?.[transcript.sessions.length - 1]?.session ?? "—",
-    transcriptDate: "15 May 2024",
+    // Safely read the session we just added to the mapper
+    session: profile?.session ?? "—",
+    // Make the print date dynamic to today
+    transcriptDate: new Date().toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    }),
   };
 
   return (

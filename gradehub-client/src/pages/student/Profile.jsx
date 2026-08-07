@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Edit3 } from "lucide-react";
 
 import PageHeader from "../../components/common/PageHeader";
@@ -17,27 +16,53 @@ import {
   initialStudentData,
   generateProfileUI,
 } from "../../constants/profile/profileData";
+import { useEffect, useState } from "react";
+
+import profileService from "../../services/profileService";
 
 function Profile() {
   // Backend-ready student model
-  const [student, setStudent] = useState(initialStudentData);
+  const [student, setStudent] = useState(null);
+
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const data = await profileService.getStudentProfile();
+
+        setStudent(data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, []);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Presentation model
-  const profileData = generateProfileUI(student);
+  const profileData = student ? generateProfileUI(student) : null;
+  const handleProfileUpdate = async (updatedFields) => {
+    try {
+      const updatedProfile =
+        await profileService.updateStudentProfile(updatedFields);
 
-  const handleProfileUpdate = (updatedFields) => {
-    // Later:
-    // await profileService.updateProfile(updatedFields);
+      setStudent(updatedProfile);
 
-    setStudent((prev) => ({
-      ...prev,
-      ...updatedFields,
-    }));
-
-    setIsModalOpen(false);
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error(error);
+    }
   };
+
+  if (loading) {
+    return <div className="p-10 text-center">Loading profile...</div>;
+  }
+  if (!profileData) {
+    return <div className="p-10 text-center">Unable to load profile.</div>;
+  }
 
   return (
     <div className="space-y-8">

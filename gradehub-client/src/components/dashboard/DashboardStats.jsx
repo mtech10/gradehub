@@ -44,7 +44,9 @@ function DashboardStats({
                 ${colors.bg}
               `}
             >
-              <Icon size={compact ? 22 : 30} className={colors.icon} />
+              {Icon && (
+                <Icon size={compact ? 22 : 30} className={colors.icon} />
+              )}
             </div>
 
             <p className="text-sm text-slate-500">{title}</p>
@@ -70,7 +72,9 @@ function DashboardStats({
             <div
               className={`flex items-center justify-center rounded-full ${compact ? "h-12 w-12" : "h-16 w-16"} ${colors.bg}`}
             >
-              <Icon size={compact ? 22 : 30} className={colors.icon} />
+              {Icon && (
+                <Icon size={compact ? 22 : 30} className={colors.icon} />
+              )}
             </div>
 
             <div className="text-right">

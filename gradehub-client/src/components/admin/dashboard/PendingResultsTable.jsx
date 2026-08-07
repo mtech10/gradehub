@@ -69,6 +69,7 @@ function PendingResultsTable({ results }) {
           data={results}
           renderCell={renderCell}
           onRowClick={(result) => navigate(`/admin/results/${result.id}`)}
+          totalItems={results?.length || 0}
         />
       </Card>
     </div>

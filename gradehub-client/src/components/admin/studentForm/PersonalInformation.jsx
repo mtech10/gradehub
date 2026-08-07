@@ -61,6 +61,7 @@ function PersonalInformation({ formData, handleChange, genders, states }) {
           label="Gender"
           required
           value={formData.gender}
+          placeholder="Select gender"
           onChange={(e) => handleChange("gender", e.target.value)}
           options={genders}
         />
@@ -68,6 +69,7 @@ function PersonalInformation({ formData, handleChange, genders, states }) {
           label="State of Origin"
           required
           value={formData.state}
+          placeholder="State of Origin"
           onChange={(e) => handleChange("state", e.target.value)}
           options={states}
         />

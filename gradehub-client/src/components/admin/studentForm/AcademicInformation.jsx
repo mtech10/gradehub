@@ -25,6 +25,7 @@ function AcademicInformation({
         <Select
           label="Department"
           required
+          placeholder="Select department"
           value={formData.department}
           onChange={(e) => handleChange("department", e.target.value)}
           options={departments}
@@ -33,6 +34,7 @@ function AcademicInformation({
         <Select
           label="Level"
           required
+          placeholder="Select level"
           value={formData.level}
           onChange={(e) => handleChange("level", e.target.value)}
           options={levels}
@@ -41,6 +43,7 @@ function AcademicInformation({
         <Select
           label="Programme"
           required
+          placeholder="Select programme"
           value={formData.programme}
           onChange={(e) => handleChange("programme", e.target.value)}
           options={programmes}
@@ -49,6 +52,7 @@ function AcademicInformation({
         <Select
           label="Admission Year"
           required
+          placeholder="Select admission year"
           value={formData.admissionYear}
           onChange={(e) => handleChange("admissionYear", e.target.value)}
           options={admissionYears}
@@ -57,6 +61,7 @@ function AcademicInformation({
         <Select
           label="Academic Session"
           required
+          placeholder="Select session"
           value={formData.session}
           onChange={(e) => handleChange("session", e.target.value)}
           options={sessions}
@@ -65,6 +70,7 @@ function AcademicInformation({
         <Select
           label="Student Status"
           required
+          placeholder="Select status"
           value={formData.status}
           onChange={(e) => handleChange("status", e.target.value)}
           options={studentStatuses}
