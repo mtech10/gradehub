@@ -11,11 +11,11 @@ function UploadDetailsCard({
   courseOptions,
 }) {
   return (
-    <Card className="p-4">
-      <div className="mb-8">
-        <h2 className="text-xl font-semibold text-slate-900">
+    <Card>
+      <div className="mb-6">
+        <h3 className="text-sm font-semibold text-slate-900">
           1. Select Details
-        </h2>
+        </h3>
 
         <p className="mt-1 text-sm text-slate-500">
           Select the academic information before uploading results.
@@ -26,41 +26,49 @@ function UploadDetailsCard({
         <Select
           label="Academic Session"
           required
+          placeholder="Select Session"
           options={sessions}
-          value={formData.session}
-          onChange={(e) => updateField("session", e.target.value)}
+          value={formData.sessionId}
+          onChange={(e) => updateField("sessionId", e.target.value)}
         />
 
         <Select
           label="Semester"
           required
+          placeholder="Select Semester"
           options={semesters}
-          value={formData.semester}
-          onChange={(e) => updateField("semester", e.target.value)}
+          value={formData.semesterId}
+          onChange={(e) => updateField("semesterId", e.target.value)}
         />
 
         <Select
           label="Department"
           required
+          placeholder="Select Department"
           options={departments}
-          value={formData.department}
-          onChange={(e) => updateField("department", e.target.value)}
+          value={formData.departmentId}
+          onChange={(e) => updateField("departmentId", e.target.value)}
         />
 
         <Select
           label="Course"
           required
+          placeholder="Select Course"
           options={courseOptions}
-          value={formData.course}
-          onChange={(e) => updateField("course", e.target.value)}
+          value={formData.courseId}
+          onChange={(e) => updateField("courseId", e.target.value)}
+          disabled={
+            !formData.departmentId || !formData.levelId || !formData.semesterId
+          }
         />
 
         <Select
           label="Level"
           required
+          placeholder="Select Level"
           options={levels}
-          value={formData.level}
-          onChange={(e) => updateField("level", e.target.value)}
+          value={formData.levelId}
+          onChange={(e) => updateField("levelId", e.target.value)}
         />
 
         <div>

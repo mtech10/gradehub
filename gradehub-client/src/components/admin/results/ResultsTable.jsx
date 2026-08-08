@@ -23,26 +23,36 @@ function ResultsTable({
       case "studentName":
         return (
           <div>
-            <p className="font-semibold text-slate-900">{result.studentName}</p>
+            <p className="font-semibold text-slate-900">
+              {result.studentName || "Unknown"}
+            </p>
 
-            <p className="text-sm text-slate-500">{result.matricNumber}</p>
+            <p className="text-sm text-slate-500">
+              {result.matricNumber || "-"}
+            </p>
           </div>
         );
 
       case "courseCode":
         return (
           <div>
-            <p className="font-medium text-blue-600">{result.courseCode}</p>
+            <p className="font-medium text-blue-600">{result.code || "-"}</p>
 
-            <p className="text-sm text-slate-500">{result.courseTitle}</p>
+            <p className="text-sm text-slate-500">{result.course || "-"}</p>
           </div>
         );
 
       case "score":
-        return <span className="font-medium">{result.score}</span>;
+        return <span className="font-medium">{result.score ?? "-"}</span>;
 
       case "grade":
-        return <span className="font-semibold">{result.grade}</span>;
+        return <span className="font-semibold">{result.grade || "-"}</span>;
+
+      case "semester":
+        return <span>{result.semester || "-"}</span>;
+
+      case "session":
+        return <span>{result.session || "-"}</span>;
 
       case "status":
         return (
@@ -55,7 +65,7 @@ function ResultsTable({
                   : "danger"
             }
           >
-            {result.status}
+            {result.status || "Pending"}
           </Badge>
         );
 
@@ -84,7 +94,7 @@ function ResultsTable({
         );
 
       default:
-        return result[column.key];
+        return result[column.key] ?? "-";
     }
   };
 
@@ -93,14 +103,12 @@ function ResultsTable({
       columns={columns}
       data={results}
       renderCell={renderCell}
-      pagination
-      currentPage={currentPage}
-      onPageChange={onPageChange}
       totalItems={totalItems}
       totalPages={totalPages}
-      totalPages={totalPages}
-      itemLabel="results"
-      loading={false}
+      currentPage={currentPage}
+      onPageChange={onPageChange}
+      pageSize={pageSize}
+      serverPagination
       sortKey={sortKey}
       sortDirection={sortDirection}
       onSort={onSort}
@@ -108,6 +116,7 @@ function ResultsTable({
       selectedRows={selectedRows}
       onRowSelect={onRowSelect}
       onSelectAll={onSelectAll}
+      getRowId={(row) => row.id}
     />
   );
 }

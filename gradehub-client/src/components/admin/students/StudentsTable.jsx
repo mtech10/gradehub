@@ -22,8 +22,16 @@ function StudentsTable({
 }) {
   const navigate = useNavigate();
 
-  // Inside StudentsTable.jsx
   const renderCell = (student, column) => {
+    // 1. Safely extract and normalize the data from PostgreSQL
+    const matric = student.matricNumber || student.matricnumber || "-";
+    const fName =
+      student.fullName ||
+      `${student.firstName || student.firstname || ""} ${student.lastName || student.lastname || ""}`.trim() ||
+      "Unknown Student";
+    const studentStatus = student.status || "Active"; // Fallback if status is null/empty in DB
+    const studentCgpa = student.cgpa || student.cgpi || "0.00";
+
     switch (column.key) {
       case "matricNumber":
         return (
@@ -31,7 +39,7 @@ function StudentsTable({
             onClick={() => navigate(`/admin/students/${student.id}`)}
             className="font-medium text-blue-600 hover:underline"
           >
-            {student.matricNumber}
+            {matric}
           </button>
         );
 
@@ -45,7 +53,7 @@ function StudentsTable({
               }}
               className="font-semibold text-slate-900 transition-colors hover:text-blue-600"
             >
-              {student.fullName}
+              {fName}
             </button>
             <p className="text-sm text-slate-500">{student.email}</p>
           </div>
@@ -55,28 +63,46 @@ function StudentsTable({
         return (
           <Badge
             variant={
-              student.status === "Active"
+              studentStatus === "Active"
                 ? "success"
-                : student.status === "Graduated"
+                : studentStatus === "Graduated"
                   ? "info"
-                  : student.status === "Deferred"
+                  : studentStatus === "Deferred"
                     ? "warning"
                     : "danger"
             }
           >
-            {student.status}
+            {studentStatus}
           </Badge>
         );
 
-      // ✅ ADD THESE CASES to extract the string values from your backend objects
+      // Handle both object-style (student.department.name) and raw SQL alias (student.department_name)
       case "department":
-        return student.department?.name || "-";
+        return (
+          student.department?.name ||
+          student.department_name ||
+          student.department ||
+          "-"
+        );
 
       case "level":
-        return student.level?.name || "-";
+        return (
+          student.level?.name || student.level_name || student.level || "-"
+        );
 
       case "session":
-        return student.session?.name || "-";
+        return (
+          student.session?.name ||
+          student.session_name ||
+          student.session ||
+          "-"
+        );
+
+      // 2. Add the missing CGPA case
+      case "cgpa":
+        return (
+          <span className="font-medium text-slate-700">{studentCgpa}</span>
+        );
 
       case "actions":
         return (
@@ -103,11 +129,9 @@ function StudentsTable({
         );
 
       default:
-        // If it reaches here with an object, React will crash.
         return student[column.key];
     }
   };
-
   return (
     <DataTable
       columns={columns}

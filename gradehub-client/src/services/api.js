@@ -1,13 +1,15 @@
-// Ensure we clean up trailing slashes from the env variable just in case
 const RAW_BASE_URL =
   import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+
 const BASE_URL = RAW_BASE_URL.replace(/\/+$/, "");
 
 async function request(endpoint, options = {}) {
   const token = localStorage.getItem("gradehub_token");
 
+  const isFormData = options.body instanceof FormData;
+
   const headers = {
-    "Content-Type": "application/json",
+    ...(isFormData ? {} : { "Content-Type": "application/json" }),
     ...(options.headers || {}),
   };
 
@@ -15,7 +17,6 @@ async function request(endpoint, options = {}) {
     headers.Authorization = `Bearer ${token}`;
   }
 
-  // Ensure endpoint starts with a single slash
   const formattedEndpoint = endpoint.startsWith("/")
     ? endpoint
     : `/${endpoint}`;
@@ -23,6 +24,12 @@ async function request(endpoint, options = {}) {
   const response = await fetch(`${BASE_URL}${formattedEndpoint}`, {
     ...options,
     headers,
+    body:
+      isFormData || typeof options.body === "string"
+        ? options.body
+        : options.body
+          ? JSON.stringify(options.body)
+          : undefined,
   });
 
   const data = await response.json();
@@ -42,21 +49,28 @@ const api = {
   post(endpoint, body) {
     return request(endpoint, {
       method: "POST",
-      body: JSON.stringify(body),
+      body,
+    });
+  },
+
+  postForm(endpoint, formData) {
+    return request(endpoint, {
+      method: "POST",
+      body: formData,
     });
   },
 
   put(endpoint, body) {
     return request(endpoint, {
       method: "PUT",
-      body: JSON.stringify(body),
+      body,
     });
   },
 
   patch(endpoint, body) {
     return request(endpoint, {
       method: "PATCH",
-      body: JSON.stringify(body),
+      body,
     });
   },
 

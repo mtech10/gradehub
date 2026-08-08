@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 
@@ -8,22 +8,67 @@ import Button from "../../components/ui/Button";
 import StudentQuickStats from "../../components/admin/studentDetails/StudentQuickStats";
 import StudentInfoCard from "../../components/admin/studentDetails/StudentInfoCard";
 import StudentAcademicSummary from "../../components/admin/studentDetails/StudentAcademicSummary";
-
-import { students } from "../../constants/admin/students";
 import StudentProfileCard from "../../components/admin/studentDetails/StudentProfileCard";
 import StudentResultsTable from "../../components/admin/studentDetails/StudentResultsTable";
-import { results } from "../../constants/admin/results";
-import { transcripts } from "../../constants/admin/transcripts";
+
+import { studentService } from "../../services/admin/studentService";
 
 function StudentDetails() {
   const navigate = useNavigate();
   const { id } = useParams();
 
+  const [student, setStudent] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("overview");
 
-  const student = useMemo(() => {
-    return students.find((s) => String(s.id) === id);
+  useEffect(() => {
+    const fetchStudentDetails = async () => {
+      setLoading(true);
+      try {
+        const response = await studentService.getStudentById(id);
+
+        // Ensure we get the object whether it's wrapped in 'data' or not
+        const rawData = response.data || response;
+
+        // 🚨 PREVENT THE CRASH: Map database fields to what your UI expects
+        const normalizedStudent = {
+          ...rawData,
+          // Safely construct fullName to prevent .split() from crashing
+          fullName:
+            rawData.fullName ||
+            `${rawData.firstName || rawData.firstname || ""} ${rawData.lastName || rawData.lastname || ""}`.trim() ||
+            "Unknown Student",
+
+          matricNumber: rawData.matricNumber || rawData.matricnumber || "N/A",
+          admissionYear:
+            rawData.admissionYear || rawData.admission_year || "N/A",
+          department: rawData.department || rawData.department_name || "N/A",
+          level: rawData.level || rawData.level_name || "N/A",
+          session: rawData.session || rawData.session_name || "N/A",
+          status: rawData.status || "Active",
+        };
+
+        setStudent(normalizedStudent);
+      } catch (error) {
+        console.error("Failed to fetch student details:", error);
+        setStudent(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchStudentDetails();
+    }
   }, [id]);
+
+  if (loading) {
+    return (
+      <div className="flex h-64 items-center justify-center text-slate-500">
+        Loading student profile...
+      </div>
+    );
+  }
 
   if (!student) {
     return (
@@ -37,14 +82,6 @@ function StudentDetails() {
       </div>
     );
   }
-
-  const studentResults = results.filter(
-    (result) => result.studentId === student.id,
-  );
-
-  const studentTranscript = transcripts.find(
-    (transcript) => transcript.studentId === student.id,
-  );
 
   return (
     <div className="space-y-8">
@@ -69,7 +106,6 @@ function StudentDetails() {
       <StudentQuickStats student={student} />
 
       {/* Tabs */}
-
       <div className="flex gap-2 border-b border-slate-200">
         {["overview", "academic-records", "transcript", "attendance"].map(
           (tab) => (
@@ -91,17 +127,18 @@ function StudentDetails() {
       {activeTab === "overview" && (
         <div className="grid gap-4 xl:grid-cols-2">
           <StudentInfoCard student={student} />
-
           <StudentAcademicSummary student={student} />
         </div>
       )}
 
       {activeTab === "academic-records" && (
-        <StudentResultsTable results={studentResults} />
+        <StudentResultsTable results={student.results || []} />
       )}
 
       {activeTab === "transcript" && (
-        <StudentTranscript transcript={studentTranscript} />
+        <div className="rounded-2xl border border-dashed border-slate-300 bg-white py-20 text-center text-slate-500">
+          Transcript module coming next.
+        </div>
       )}
 
       {activeTab === "attendance" && (

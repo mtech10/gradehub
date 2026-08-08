@@ -1,12 +1,23 @@
 import Card from "../../ui/Card";
-import Badge from "../../ui/Badge";
 
-function UploadPreviewCard({ formData }) {
+function UploadPreviewCard({
+  formData,
+  validation,
+  sessions,
+  semesters,
+  departments,
+  levels,
+  courseOptions,
+}) {
   const hasFile = Boolean(formData.file);
 
+  const getLabel = (options, value) => {
+    return options?.find((option) => option.value === value)?.label || "-";
+  };
+
   return (
-    <Card className="p-4">
-      <div className="mb-3">
+    <Card>
+      <div className="mb-6">
         <h3 className="text-lg font-semibold text-slate-900">Upload Preview</h3>
 
         <p className="mt-1 text-sm text-slate-500">
@@ -27,15 +38,31 @@ function UploadPreviewCard({ formData }) {
             value={`${(formData.file.size / 1024).toFixed(2)} KB`}
           />
 
-          <PreviewRow label="Session" value={formData.session || "-"} />
+          <PreviewRow
+            label="Session"
+            value={getLabel(sessions, formData.sessionId)}
+          />
 
-          <PreviewRow label="Semester" value={formData.semester || "-"} />
+          <PreviewRow
+            label="Semester"
+            value={getLabel(semesters, formData.semesterId)}
+          />
 
-          <PreviewRow label="Department" value={formData.department || "-"} />
+          <PreviewRow
+            label="Department"
+            value={getLabel(departments, formData.departmentId)}
+          />
 
-          <PreviewRow label="Course" value={formData.course || "-"} />
+          <PreviewRow
+            label="Course"
+            value={getLabel(courseOptions, formData.courseId)}
+          />
 
-          <PreviewRow label="Level" value={formData.level || "-"} />
+          <PreviewRow
+            label="Level"
+            value={getLabel(levels, formData.levelId)}
+          />
+
           <PreviewRow
             label="Upload Type"
             value={
@@ -44,6 +71,17 @@ function UploadPreviewCard({ formData }) {
                 : "New Results"
             }
           />
+
+          {validation?.academic && (
+            <>
+              <div className="my-4 border-t border-slate-200" />
+
+              <PreviewRow
+                label="Validation Status"
+                value="Validated successfully"
+              />
+            </>
+          )}
         </div>
       )}
     </Card>
@@ -52,7 +90,7 @@ function UploadPreviewCard({ formData }) {
 
 function PreviewRow({ label, value }) {
   return (
-    <div className="flex items-center justify-between border-b border-slate-100 pb-3 last:border-none">
+    <div className="flex items-center justify-between gap-4">
       <span className="text-sm text-slate-500">{label}</span>
 
       <span className="text-sm font-semibold text-slate-900">{value}</span>

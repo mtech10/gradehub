@@ -1,8 +1,21 @@
 import { Camera } from "lucide-react";
 
 function StudentPhotoUpload({ formData, handleChange }) {
-  const preview = formData.photo ? URL.createObjectURL(formData.photo) : null;
+  // ✅ ADD THIS SAFE PREVIEW LOGIC:
+  let preview = ""; // Add a default avatar path here if you have one
 
+  if (formData.photo) {
+    if (typeof formData.photo === "string") {
+      // If it's a string, it's already a URL from the database!
+      preview = formData.photo;
+    } else if (
+      formData.photo instanceof File ||
+      formData.photo instanceof Blob
+    ) {
+      // If it's a File object, the user just selected it from their computer
+      preview = URL.createObjectURL(formData.photo);
+    }
+  }
   return (
     <div className="flex flex-col items-center gap-5">
       <div className="flex h-40 w-40 items-center justify-center overflow-hidden rounded-full border-2 border-dashed border-slate-300 bg-slate-50">

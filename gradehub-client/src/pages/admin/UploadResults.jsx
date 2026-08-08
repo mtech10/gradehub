@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import PageHeader from "../../components/common/PageHeader";
 
@@ -7,58 +7,184 @@ import UploadPreviewCard from "../../components/admin/uploadResults/UploadPrevie
 import UploadSummaryCard from "../../components/admin/uploadResults/UploadSummaryCard";
 import UploadNotesCard from "../../components/admin/uploadResults/UploadNotesCard";
 
-import {
-  SESSIONS,
-  SEMESTERS,
-  DEPARTMENTS,
-  LEVELS,
-} from "../../constants/options";
-
-import { courses } from "../../constants/admin/courses";
-
-import { getCourseOptions } from "../../utils/courseOptions";
+import { getSessions } from "../../services/admin/sessionService";
+import { getSemesters } from "../../services/admin/semesterService";
+import { getDepartments } from "../../services/admin/departmentService";
+import { getLevels } from "../../services/admin/levelService";
+import { getCourses } from "../../services/admin/courseService";
 
 function UploadResults() {
   const [formData, setFormData] = useState({
-    session: "",
-    semester: "",
-    department: "",
-    course: "",
-    level: "",
+    sessionId: "",
+    semesterId: "",
+    departmentId: "",
+    courseId: "",
+    levelId: "",
     uploadType: "new",
     file: null,
   });
+
+  const [validation, setValidation] = useState(null);
+
+  const [options, setOptions] = useState({
+    sessions: [],
+    semesters: [],
+    departments: [],
+    levels: [],
+    courses: [],
+  });
+
+  const [loadingOptions, setLoadingOptions] = useState(true);
+  const [optionsError, setOptionsError] = useState("");
 
   const updateField = (field, value) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
     }));
+
+    setValidation(null);
   };
 
-  const courseOptions = getCourseOptions(courses);
+  useEffect(() => {
+    const fetchOptions = async () => {
+      try {
+        setLoadingOptions(true);
+        setOptionsError("");
+
+        const [
+          sessionsResponse,
+          semestersResponse,
+          departmentsResponse,
+          levelsResponse,
+          coursesResponse,
+        ] = await Promise.all([
+          getSessions({ limit: 100 }),
+          getSemesters({ limit: 100 }),
+          getDepartments({ limit: 100 }),
+          getLevels({ limit: 100 }),
+          getCourses({ limit: 100 }),
+        ]);
+
+        setOptions({
+          sessions: sessionsResponse.data || [],
+          semesters: semestersResponse.data || [],
+          departments: departmentsResponse.data || [],
+          levels: levelsResponse.data || [],
+          courses: coursesResponse.data || [],
+        });
+      } catch (error) {
+        console.error("Failed to load upload options:", error);
+        setOptionsError(
+          error.message || "Failed to load academic information.",
+        );
+      } finally {
+        setLoadingOptions(false);
+      }
+    };
+
+    fetchOptions();
+  }, []);
+
+  /*
+   * Convert database records into the format expected by Select.
+   */
+  const sessionOptions = options.sessions.map((session) => ({
+    value: session.id,
+    label: session.name,
+  }));
+
+  const semesterOptions = options.semesters.map((semester) => ({
+    value: semester.id,
+    label: semester.name,
+  }));
+
+  const departmentOptions = options.departments.map((department) => ({
+    value: department.id,
+    label: department.name,
+  }));
+
+  const levelOptions = options.levels.map((level) => ({
+    value: level.id,
+    label: level.name,
+  }));
+
+  /*
+   * Only show courses belonging to the selected
+   * department, level and semester.
+   */
+  const filteredCourses = options.courses.filter((course) => {
+    const matchesDepartment =
+      !formData.departmentId || course.department?.id === formData.departmentId;
+
+    const matchesLevel =
+      !formData.levelId || course.level?.id === formData.levelId;
+
+    const matchesSemester =
+      !formData.semesterId || course.semester?.id === formData.semesterId;
+
+    return matchesDepartment && matchesLevel && matchesSemester;
+  });
+
+  const courseOptions = filteredCourses.map((course) => ({
+    value: course.id,
+    label: `${course.code} — ${course.title}`,
+  }));
+
+  /*
+   * If the selected course no longer belongs to the
+   * selected academic combination, clear it.
+   */
+  useEffect(() => {
+    if (!formData.courseId) return;
+
+    const courseStillValid = filteredCourses.some(
+      (course) => course.id === formData.courseId,
+    );
+
+    if (!courseStillValid) {
+      updateField("courseId", "");
+    }
+  }, [formData.departmentId, formData.levelId, formData.semesterId]);
 
   return (
-    <div className="space-y-8">
+    <div>
       <PageHeader
         title="Upload Results"
-        subtitle="Upload student results in bulk using an Excel file."
+        description="Upload and validate student results."
       />
+
+      {optionsError && (
+        <div className="mb-6 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+          {optionsError}
+        </div>
+      )}
 
       <div className="grid gap-6 xl:grid-cols-[2fr_1fr]">
         <UploadResultForm
           formData={formData}
           updateField={updateField}
-          sessions={SESSIONS}
-          semesters={SEMESTERS}
-          departments={DEPARTMENTS}
-          levels={LEVELS}
+          sessions={sessionOptions}
+          semesters={semesterOptions}
+          departments={departmentOptions}
+          levels={levelOptions}
           courseOptions={courseOptions}
+          loadingOptions={loadingOptions}
+          onValidationComplete={setValidation}
         />
-        <div className="space-y-6">
-          <UploadPreviewCard formData={formData} />
 
-          <UploadSummaryCard />
+        <div className="space-y-6">
+          <UploadPreviewCard
+            formData={formData}
+            validation={validation}
+            sessions={sessionOptions}
+            semesters={semesterOptions}
+            departments={departmentOptions}
+            levels={levelOptions}
+            courseOptions={courseOptions}
+          />
+
+          <UploadSummaryCard validation={validation} />
 
           <UploadNotesCard />
         </div>

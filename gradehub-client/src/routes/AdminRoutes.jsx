@@ -27,7 +27,7 @@ function AdminRoutes() {
         <Route path="students" element={<Students />} />
         <Route path="students/new" element={<AddStudent />} />
         <Route path="students/:id" element={<StudentDetails />} />
-        <Route path="/admin/students/:id/edit" element={<EditStudent />} />
+        <Route path="students/:id/edit" element={<EditStudent />} />
         <Route path="courses" element={<AllCourses />} />
         <Route path="results" element={<AllResults />} />
         <Route path="results/upload" element={<UploadResults />} />

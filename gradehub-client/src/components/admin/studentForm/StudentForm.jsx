@@ -65,13 +65,23 @@ function StudentForm({ mode = "create", initialValues = {} }) {
           studentService.getSessions(),
         ]);
 
-        // Map the backend data into the { label, value } format your Select component expects
+        // Bulletproof array extraction to prevent .map() crashes
+        const extractArray = (res) => {
+          if (Array.isArray(res)) return res;
+          if (res?.data && Array.isArray(res.data)) return res.data;
+          if (res?.data?.data && Array.isArray(res.data.data))
+            return res.data.data;
+          return [];
+        };
+
         setDepartments(
-          deptRes.data.map((d) => ({ label: d.name, value: d.id })),
+          extractArray(deptRes).map((d) => ({ label: d.name, value: d.id })),
         );
-        setLevels(levelRes.data.map((l) => ({ label: l.name, value: l.id })));
+        setLevels(
+          extractArray(levelRes).map((l) => ({ label: l.name, value: l.id })),
+        );
         setSessions(
-          sessionRes.data.map((s) => ({ label: s.name, value: s.id })),
+          extractArray(sessionRes).map((s) => ({ label: s.name, value: s.id })),
         );
       } catch (error) {
         console.error("Failed to load form options:", error);
@@ -87,46 +97,38 @@ function StudentForm({ mode = "create", initialValues = {} }) {
     setIsSubmitting(true);
 
     try {
+      // Build a unified payload for both Create and Edit
+      const payload = {
+        matricNumber: formData.matricNumber,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        admissionYear: formData.admissionYear
+          ? parseInt(formData.admissionYear, 10)
+          : null,
+        departmentId: formData.department,
+        levelId: formData.level,
+        sessionId: formData.session,
+        gender: formData.gender,
+        status: formData.status,
+        ...(formData.email && { email: formData.email }),
+        ...(formData.phone && { phone: formData.phone }),
+        ...(formData.dateOfBirth && { dateOfBirth: formData.dateOfBirth }),
+        ...(formData.middleName && { middleName: formData.middleName }),
+      };
+
       if (mode === "create") {
-        const payload = {
-          matricNumber: formData.matricNumber,
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-
-          // Only parse if it actually has a value, otherwise send empty string
-          admissionYear: formData.admissionYear
-            ? parseInt(formData.admissionYear, 10)
-            : "",
-
-          departmentId: formData.department,
-          levelId: formData.level,
-          sessionId: formData.session,
-          gender: formData.gender,
-          photo: "https://example.com/default-avatar.png",
-
-          ...(formData.email && { email: formData.email }),
-          ...(formData.phone && { phone: formData.phone }),
-          ...(formData.dateOfBirth && { dateOfBirth: formData.dateOfBirth }),
-          ...(formData.middleName && { middleName: formData.middleName }),
-        };
-        // Fire the API call
-        console.log("React is sending this payload:", payload);
+        payload.photo = "https://example.com/default-avatar.png"; // Default for new
         await studentService.createStudent(payload);
-
-        // Redirect to the students list upon success
         navigate("/admin/students");
-      } else {
-        console.log("Updating student...", formData);
+      } else if (mode === "edit") {
+        // Send the PUT request with the student ID
+        await studentService.updateStudent(initialValues.id, payload);
+        // Navigate back to the student's profile page after a successful update!
+        navigate(`/admin/students/${initialValues.id}`);
       }
-      // Inside StudentForm.jsx -> handleSave()
     } catch (error) {
       console.error("Failed to save student:", error);
-
-      // ✅ ADD THIS: Extract the exact backend validation errors
-      if (error.response && error.response.data) {
-        console.error("Backend Validation Details:", error.response.data);
-
-        // Show a more descriptive alert
+      if (error.response?.data) {
         const errorDetails =
           error.response.data.message || error.response.data.errors;
         alert(`Validation Error: ${JSON.stringify(errorDetails)}`);

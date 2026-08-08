@@ -1,51 +1,89 @@
 import { useEffect, useState } from "react";
 
 import PageHeader from "../../components/common/PageHeader";
-
 import ResultStats from "../../components/admin/results/ResultStats";
 import ResultToolbar from "../../components/admin/results/ResultToolbar";
 import ResultsTable from "../../components/admin/results/ResultsTable";
-
 import BulkActionBar from "../../components/admin/common/BulkActionBar";
 
-import {
-  enrichResults,
-  filterResults,
-  sortResults,
-} from "../../utils/resultHelpers";
-import {
-  results,
-  resultStatistics,
-  resultFilters,
-} from "../../constants/admin/results";
+// Make sure you have this service created in your frontend!
+import { resultService } from "../../services/admin/resultService";
+import { resultFilters } from "../../constants/admin/results";
 import { resultColumns } from "../../constants/tables/resultColumns";
 
 function AllResults() {
+  // --- States ---
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [pagination, setPagination] = useState({ total: 0, totalPages: 1 });
+  const [resultStats, setResultStats] = useState({
+    totalResults: 0,
+    approved: 0,
+    pending: 0,
+    missing: 0,
+  });
+  // --- Filter & Sort States ---
   const [search, setSearch] = useState("");
-
   const [session, setSession] = useState("");
   const [semester, setSemester] = useState("");
-  const [level, setLevel] = useState("");
-
+  const [level, setLevel] = useState(""); // If your backend supports level filtering
   const [currentPage, setCurrentPage] = useState(1);
-
-  const [sortKey, setSortKey] = useState("");
-  const [sortDirection, setSortDirection] = useState("asc");
-
+  const [sortKey, setSortKey] = useState("createdat");
+  const [sortDirection, setSortDirection] = useState("desc");
   const [selectedRows, setSelectedRows] = useState([]);
 
   const pageSize = 8;
 
-  const resultsWithDetails = enrichResults(results);
+  useEffect(() => {
+    const fetchResults = async () => {
+      setLoading(true);
+      try {
+        const queryParams = {
+          page: currentPage,
+          limit: pageSize,
+          search: search || undefined,
+          sessionId: session || undefined,
+          semesterId: semester || undefined,
+          sort: sortKey,
+          order: sortDirection,
+        };
 
-  const filteredResults = filterResults(resultsWithDetails, {
-    search,
-    session,
-    semester,
-    level,
-  });
+        const cleanParams = Object.fromEntries(
+          Object.entries(queryParams).filter(([_, v]) => v !== undefined),
+        );
 
-  const sortedResults = sortResults(filteredResults, sortKey, sortDirection);
+        const response = await resultService.getResults(cleanParams);
+
+        setResults(response.data || response.results || []);
+        if (response.pagination) {
+          setPagination(response.pagination);
+        }
+        const statistics = await resultService.getResultStatistics({
+          search: search || undefined,
+          sessionId: session || undefined,
+          semesterId: semester || undefined,
+        });
+
+        setResultStats(statistics);
+      } catch (error) {
+        console.error("Failed to fetch results:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const delayDebounceFn = setTimeout(() => {
+      fetchResults();
+    }, 300);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [search, session, semester, level, currentPage, sortKey, sortDirection]);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+    setSelectedRows([]);
+  }, [search, session, semester, level]);
 
   const handleSort = (key) => {
     if (sortKey === key) {
@@ -64,7 +102,6 @@ function AllResults() {
 
   const handleSelectAll = (pageIds) => {
     const allSelected = pageIds.every((id) => selectedRows.includes(id));
-
     if (allSelected) {
       setSelectedRows((prev) => prev.filter((id) => !pageIds.includes(id)));
     } else {
@@ -76,11 +113,6 @@ function AllResults() {
     setSelectedRows([]);
   };
 
-  useEffect(() => {
-    setCurrentPage(1);
-    setSelectedRows([]);
-  }, [search, session, semester, level]);
-
   return (
     <div className="space-y-8">
       <PageHeader
@@ -88,8 +120,7 @@ function AllResults() {
         subtitle="Manage and review students' academic results."
       />
 
-      <ResultStats stats={resultStatistics} />
-
+      <ResultStats stats={resultStats} />
       <ResultToolbar
         search={search}
         setSearch={setSearch}
@@ -115,9 +146,10 @@ function AllResults() {
 
       <ResultsTable
         columns={resultColumns}
-        results={sortedResults}
-        totalItems={filteredResults.length}
-        totalPages={Math.ceil(filteredResults.length / pageSize)}
+        results={results}
+        loading={loading}
+        totalItems={pagination.total || 0}
+        totalPages={pagination.totalPages || 1}
         currentPage={currentPage}
         onPageChange={setCurrentPage}
         pageSize={pageSize}

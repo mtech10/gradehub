@@ -4,37 +4,52 @@ import { RotateCcw, Upload } from "lucide-react";
 import Card from "../../ui/Card";
 import Button from "../../ui/Button";
 
-function UploadActions({ formData, onReset }) {
+function UploadActions({ formData, onReset, loading }) {
   const navigate = useNavigate();
 
   const isDisabled =
-    !formData.session ||
-    !formData.semester ||
-    !formData.department ||
-    !formData.course ||
-    !formData.level ||
-    !formData.file;
+    !formData.sessionId ||
+    !formData.semesterId ||
+    !formData.departmentId ||
+    !formData.courseId ||
+    !formData.levelId ||
+    !formData.file ||
+    loading;
 
   return (
-    <div className="flex items-center gap-3 justify-end">
-      <Button
-        type="button"
-        variant="secondary"
-        onClick={() => navigate("/admin/results")}
-      >
-        Cancel
-      </Button>
-      <Button type="button" variant="secondary" onClick={onReset}>
-        <RotateCcw size={18} />
-        Reset
-      </Button>
+    <Card>
+      <div className="flex items-center justify-between gap-4">
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={() => navigate("/admin/results")}
+        >
+          Cancel
+        </Button>
 
-      <Button type="submit" disabled={isDisabled}>
-        <Upload size={18} />
+        <div className="flex gap-3">
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={onReset}
+            disabled={loading}
+          >
+            <RotateCcw size={18} />
+            Reset
+          </Button>
 
-        {formData.file ? "Upload Results" : "Select File to Continue"}
-      </Button>
-    </div>
+          <Button type="submit">
+            <Upload size={18} />
+
+            {loading
+              ? "Validating..."
+              : formData.file
+                ? "Validate Results"
+                : "Select File to Continue"}
+          </Button>
+        </div>
+      </div>
+    </Card>
   );
 }
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Edit3 } from "lucide-react";
 import PageHeader from "../../components/common/PageHeader";
 import Button from "../../components/ui/Button";
@@ -9,27 +9,71 @@ import {
   ProfileNotice,
 } from "../../components/profile/ProfileCards";
 import EditProfileModal from "../../components/profile/EditProfileModal";
-import {
-  initialAdminData,
-  generateAdminProfile,
-} from "../../constants/profile/profileData";
+import { generateAdminProfile } from "../../constants/profile/profileData";
+import { profileService } from "../../services/admin/profileService";
 
-function Profile() {
-  // Store the raw, API-ready data in state
-  const [admin, setAdmin] = useState(initialAdminData);
+function AdminProfile() {
+  const [admin, setAdmin] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Generate the formatted UI data on the fly
-  const Data = generateAdminProfile(admin);
+  // Fetch real admin data on mount
+  useEffect(() => {
+    const fetchAdminProfile = async () => {
+      try {
+        const response = await profileService.getProfile();
+        // Normalize DB columns to match what your generateAdminProfile function expects
+        const rawData = response.data || response;
 
-  const handleSaveProfile = (updatedFields) => {
-    setAdmin((prev) => ({
-      ...prev,
-      ...updatedFields,
-    }));
+        setAdmin({
+          ...rawData,
+          firstName: rawData.firstName || rawData.firstname || "",
+          lastName: rawData.lastName || rawData.lastname || "",
+          phone: rawData.phone || "",
+          email: rawData.email || "",
+          // Add any other mappings your generateAdminProfile requires here
+        });
+      } catch (error) {
+        console.error("Failed to fetch admin profile:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    setIsModalOpen(false);
+    fetchAdminProfile();
+  }, []);
+
+  const handleSaveProfile = async (updatedFields) => {
+    try {
+      // Fire the update to the backend
+      const response = await profileService.updateProfile(updatedFields);
+      const rawData = response.data || response;
+
+      // Update the local state so the UI reflects the changes instantly
+      setAdmin((prev) => ({
+        ...prev,
+        ...rawData,
+        firstName: rawData.firstName || rawData.firstname || prev.firstName,
+        lastName: rawData.lastName || rawData.lastname || prev.lastName,
+      }));
+
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error("Failed to update profile:", error);
+      alert("Failed to update profile. Check console for details.");
+    }
   };
+
+  if (loading || !admin) {
+    return (
+      <div className="p-8 text-center text-slate-500">
+        Loading profile data...
+      </div>
+    );
+  }
+
+  // Generate the formatted UI data on the fly using the real DB data
+  const Data = generateAdminProfile(admin);
 
   return (
     <div className="space-y-8">
@@ -49,7 +93,7 @@ function Profile() {
         </Button>
       </div>
 
-      {/* Pass the dynamically generated  Data to the components */}
+      {/* Pass the dynamically generated Data to the components */}
       <ProfileMainCard data={Data} />
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -77,4 +121,4 @@ function Profile() {
   );
 }
 
-export default Profile;
+export default AdminProfile;

@@ -13,28 +13,46 @@ function DataTable({
   rowClassName = "",
   getRowClassName,
   onRowClick,
+
   currentPage = 1,
   totalPages = 1,
-  totalItems = 0,
+  totalItems,
   pageSize = 10,
 
   onPageChange,
   pagination = true,
   itemLabel = "items",
   loading = false,
+
   sortKey,
   sortDirection,
   onSort,
+
   selectable = false,
   selectedRows = [],
   onRowSelect,
   onSelectAll,
+
+  serverPagination = false,
 }) {
+  const resolvedTotalItems =
+    totalItems !== undefined ? totalItems : data.length;
+
+  const resolvedTotalPages =
+    totalPages !== undefined && totalPages > 0
+      ? totalPages
+      : Math.max(1, Math.ceil(resolvedTotalItems / pageSize));
+
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = startIndex + pageSize;
 
-  const paginatedData = pagination ? data.slice(startIndex, endIndex) : data;
-
+  // Backend-paginated data is already sliced.
+  // Client-paginated data needs slicing here.
+  const paginatedData = serverPagination
+    ? data
+    : pagination
+      ? data.slice(startIndex, endIndex)
+      : data;
   const currentPageIds = paginatedData.map((row) => row.id);
 
   const allCurrentPageSelected =
@@ -157,8 +175,8 @@ function DataTable({
       {pagination && (
         <Pagination
           currentPage={currentPage}
-          totalPages={totalPages}
-          totalItems={totalItems}
+          totalPages={resolvedTotalPages}
+          totalItems={resolvedTotalItems}
           pageSize={pageSize}
           itemLabel={itemLabel}
           onPageChange={onPageChange}

@@ -130,25 +130,38 @@ export const initialAdminData = {
 };
 
 export function generateAdminProfile(admin) {
+  // 1. Safely construct the full name from the DB columns
+  const fullName =
+    admin.fullName ||
+    `${admin.firstName || admin.firstname || ""} ${
+      admin.lastName || admin.lastname || ""
+    }`.trim() ||
+    "Unknown Admin";
+
+  // 2. Provide safe fallbacks for missing DB columns
+  const role = admin.role || "System Administrator";
+  const employeeId = admin.employeeId || admin.employeeid || "N/A";
+  const department = admin.department || "ICT Directorate";
+  const office = admin.office || "N/A";
+  const address = admin.address || "N/A";
+
   return {
     personal: {
       avatar:
         admin.avatar ||
-        "https://ui-avatars.com/api/?name=" +
-          encodeURIComponent(admin.fullName),
+        "https://ui-avatars.com/api/?name=" + encodeURIComponent(fullName),
 
-      name: admin.fullName,
-
-      levelBadge: admin.role,
+      name: fullName,
+      levelBadge: role,
 
       contact: [
         {
           icon: Mail,
-          value: admin.email,
+          value: admin.email || "No email provided",
         },
         {
           icon: Phone,
-          value: admin.phone,
+          value: admin.phone || "No phone provided",
         },
       ],
     },
@@ -157,76 +170,71 @@ export function generateAdminProfile(admin) {
       {
         icon: Hash,
         label: "Employee ID",
-        value: admin.employeeId,
+        value: employeeId,
       },
-
       {
         icon: Briefcase,
         label: "Role",
-        value: admin.role,
+        value: role,
       },
-
       {
         icon: Building2,
         label: "Department",
-        value: admin.department,
+        value: department,
       },
-
       {
         icon: MapPin,
         label: "Office",
-        value: admin.office,
+        value: office,
       },
-
       {
         icon: ShieldCheck,
         label: "Account Status",
         value: "Active",
         isBadge: true,
       },
-
       {
         icon: Clock3,
         label: "Last Login",
-        value: "Today • 08:42 AM",
+        value: "Today • 08:42 AM", // You can wire this up to a real DB timestamp later!
       },
     ],
 
     personalInfo: [
       {
         label: "Full Name",
-        value: admin.fullName,
+        value: fullName,
       },
       {
         label: "Email Address",
-        value: admin.email,
+        value: admin.email || "N/A",
       },
       {
         label: "Phone Number",
-        value: admin.phone,
+        value: admin.phone || "N/A",
       },
       {
         label: "Address",
-        value: admin.address,
+        value: address,
       },
     ],
 
     employmentInfo: [
       {
         label: "Employee ID",
-        value: admin.employeeId,
+        value: employeeId,
       },
       {
         label: "Role",
-        value: admin.role,
+        value: role,
       },
       {
         label: "Department",
-        value: admin.department,
+        value: department,
       },
       {
         label: "Office",
-        value: admin.office,
+        value: office,
       },
     ],
 
@@ -237,7 +245,7 @@ export function generateAdminProfile(admin) {
       },
       {
         label: "Permissions",
-        value: "Administrator",
+        value: role,
       },
       {
         label: "Last Login",
