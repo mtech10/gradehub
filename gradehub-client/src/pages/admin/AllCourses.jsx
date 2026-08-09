@@ -1,23 +1,63 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import PageHeader from "../../components/common/PageHeader";
 
 import CourseStats from "../../components/admin/courses/CourseStats";
 import CourseToolbar from "../../components/admin/courses/CourseToolbar";
 import CoursesTable from "../../components/admin/courses/CoursesTable";
-
 import BulkActionBar from "../../components/admin/common/BulkActionBar";
 
-import {
-  courses,
-  courseStatistics,
-  courseFilters,
-} from "../../constants/admin/courses";
+import courseService from "../../services/admin/courseService";
+import { getDepartments } from "../../services/admin/departmentService";
+import { getLevels } from "../../services/admin/levelService";
 
 import { courseColumns } from "../../constants/tables/courseColumns";
 
-import { filterCourses, sortCourses } from "../../utils/courseHelpers";
+import { BookOpen, CheckCircle, GraduationCap, Clock3 } from "lucide-react";
 
 function AllCourses() {
+  const [courses, setCourses] = useState([]);
+
+  const [stats, setStats] = useState([
+    {
+      title: "Total Courses",
+      value: 0,
+      icon: BookOpen,
+      color: "blue",
+      subtitle: "Across all departments",
+    },
+    {
+      title: "Active Courses",
+      value: 0,
+      icon: CheckCircle,
+      color: "green",
+      subtitle: "Currently active",
+    },
+    {
+      title: "Departments",
+      value: 0,
+      icon: GraduationCap,
+      color: "purple",
+      subtitle: "Offering courses",
+    },
+    {
+      title: "Pending Approval",
+      value: 0,
+      icon: Clock3,
+      color: "amber",
+      subtitle: "Awaiting approval",
+    },
+  ]);
+
+  const [filters, setFilters] = useState({
+    departments: [],
+    levels: [],
+    statuses: [
+      { value: "", label: "All Status" },
+      { value: "active", label: "Active" },
+      { value: "inactive", label: "Inactive" },
+    ],
+  });
+
   const [search, setSearch] = useState("");
   const [department, setDepartment] = useState("");
   const [level, setLevel] = useState("");
@@ -25,25 +65,149 @@ function AllCourses() {
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  const [sortKey, setSortKey] = useState("");
+  const [pagination, setPagination] = useState({
+    total: 0,
+    totalPages: 1,
+  });
+
+  const [sortKey, setSortKey] = useState("title");
   const [sortDirection, setSortDirection] = useState("asc");
 
   const [selectedRows, setSelectedRows] = useState([]);
 
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
   const pageSize = 8;
 
-  const filteredCourses = filterCourses(courses, {
-    search,
-    department,
-    level,
-    status,
-  });
+  /*
+   * Load filter options from the database.
+   */
+  useEffect(() => {
+    const loadFilterOptions = async () => {
+      try {
+        const [departmentsResponse, levelsResponse] = await Promise.all([
+          getDepartments({ limit: 100 }),
+          getLevels({ limit: 100 }),
+        ]);
 
-  const sortedCourses = sortCourses(filteredCourses, sortKey, sortDirection);
+        setFilters((prev) => ({
+          ...prev,
 
-  const totalItems = sortedCourses.length;
+          departments: [
+            { value: "", label: "All Departments" },
+            ...(departmentsResponse.data || []).map((department) => ({
+              value: department.id,
+              label: department.name,
+            })),
+          ],
 
-  const totalPages = Math.ceil(totalItems / pageSize) || 1;
+          levels: [
+            { value: "", label: "All Levels" },
+            ...(levelsResponse.data || []).map((level) => ({
+              value: level.id,
+              label: level.name,
+            })),
+          ],
+        }));
+      } catch (error) {
+        console.error("Failed to load course filters:", error);
+      }
+    };
+
+    loadFilterOptions();
+  }, []);
+
+  /*
+   * Fetch courses from the database.
+   */
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        setLoading(true);
+        setError("");
+
+        const response = await courseService.getCourses({
+          page: currentPage,
+          limit: pageSize,
+          search: search || undefined,
+          departmentId: department || undefined,
+          levelId: level || undefined,
+          status: status || undefined,
+          sort: sortKey,
+          order: sortDirection,
+        });
+
+        setCourses(response.courses || []);
+
+        setPagination(
+          response.pagination || {
+            total: 0,
+            totalPages: 1,
+          },
+        );
+      } catch (error) {
+        console.error("Failed to fetch courses:", error);
+        setError(error.message || "Failed to load courses.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const debounce = setTimeout(fetchCourses, 300);
+
+    return () => clearTimeout(debounce);
+  }, [currentPage, search, department, level, status, sortKey, sortDirection]);
+
+  useEffect(() => {
+    const fetchCourseStatistics = async () => {
+      try {
+        const statistics = await courseService.getCourseStatistics();
+
+        setStats((prev) =>
+          prev.map((stat) => {
+            switch (stat.title) {
+              case "Total Courses":
+                return {
+                  ...stat,
+                  value: statistics.totalCourses ?? 0,
+                };
+
+              case "Active Courses":
+                return {
+                  ...stat,
+                  value: statistics.activeCourses ?? 0,
+                };
+
+              case "Departments":
+                return {
+                  ...stat,
+                  value: statistics.departments ?? 0,
+                };
+
+              case "Pending Approval":
+                return {
+                  ...stat,
+                  value: statistics.pendingApproval ?? 0,
+                };
+
+              default:
+                return stat;
+            }
+          }),
+        );
+      } catch (error) {
+        console.error("Failed to fetch course statistics:", error);
+      }
+    };
+
+    fetchCourseStatistics();
+  }, []);
+
+  useEffect(() => {
+    setCurrentPage(1);
+    setSelectedRows([]);
+  }, [search, department, level, status]);
 
   const handleSort = (key) => {
     if (sortKey === key) {
@@ -74,16 +238,20 @@ function AllCourses() {
     setSelectedRows([]);
   };
 
-  useEffect(() => {
-    setCurrentPage(1);
-    setSelectedRows([]);
-  }, [search, department, level, status]);
-
   return (
-    <div className="space-y-8">
-      <PageHeader title="Courses" subtitle="Manage courses." />
+    <div>
+      <PageHeader
+        title="Courses"
+        description="Manage courses and course assignments."
+      />
 
-      <CourseStats stats={courseStatistics} />
+      {error && (
+        <div className="mb-6 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+          {error}
+        </div>
+      )}
+
+      <CourseStats stats={stats} />
 
       <CourseToolbar
         search={search}
@@ -94,7 +262,7 @@ function AllCourses() {
         setLevel={setLevel}
         status={status}
         setStatus={setStatus}
-        filters={courseFilters}
+        filters={filters}
       />
 
       {selectedRows.length > 0 && (
@@ -110,12 +278,13 @@ function AllCourses() {
 
       <CoursesTable
         columns={courseColumns}
-        courses={sortedCourses}
+        courses={courses}
+        loading={loading}
         currentPage={currentPage}
         onPageChange={setCurrentPage}
         pageSize={pageSize}
-        totalItems={totalItems}
-        totalPages={totalPages}
+        totalItems={pagination.total || 0}
+        totalPages={pagination.totalPages || 1}
         sortKey={sortKey}
         sortDirection={sortDirection}
         onSort={handleSort}

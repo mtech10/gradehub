@@ -6,6 +6,7 @@ export function getCourseProgress(progress) {
       color: "bg-green-700",
     };
   }
+
   if (progress >= 75) {
     return {
       status: "On Track",
@@ -38,37 +39,47 @@ export function getCourseProgress(progress) {
 }
 
 export function getSemesterBadge(semester) {
-  switch (semester) {
-    case 1:
-      return {
-        label: "1st Semester",
-        variant: "primary",
-      };
-    case 2:
-      return {
-        label: "2nd Semester",
-        variant: "success",
-      };
-    default:
-      return {
-        label: "-",
-        variant: "secondary",
-      };
+  const value = String(
+    semester?.name ?? semester?.semesterName ?? semester ?? "",
+  ).toLowerCase();
+
+  if (value === "1" || value.includes("first") || value.includes("1st")) {
+    return {
+      label: "1st",
+      variant: "primary",
+    };
   }
+
+  if (value === "2" || value.includes("second") || value.includes("2nd")) {
+    return {
+      label: "2nd",
+      variant: "success",
+    };
+  }
+
+  return {
+    label: "-",
+    variant: "secondary",
+  };
 }
 
 export function getCourseStatusBadge(status) {
   const normalizedStatus = status?.toLowerCase();
 
-  if (normalizedStatus === "completed") {
-    return "success";
-  }
-  if (normalizedStatus === "in progress" || normalizedStatus === "registered") {
-    return "info";
-  }
-  if (normalizedStatus === "dropped") {
-    return "danger";
-  }
+  switch (normalizedStatus) {
+    case "completed":
+      return "success";
 
-  return "secondary";
+    case "current":
+    case "in progress":
+    case "registered":
+      return "info";
+
+    case "failed":
+    case "dropped":
+      return "danger";
+
+    default:
+      return "secondary";
+  }
 }

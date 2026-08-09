@@ -4,8 +4,8 @@ import Textarea from "../../ui/Textarea";
 
 function CourseBasicInformation({ formData, updateField }) {
   return (
-    <Card className="p-4">
-      <div className="mb-6">
+    <Card>
+      <div>
         <h2 className="text-lg font-semibold text-slate-900">
           Basic Information
         </h2>
@@ -15,7 +15,7 @@ function CourseBasicInformation({ formData, updateField }) {
         </p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="mt-6 grid gap-4 md:grid-cols-2">
         <Input
           label="Course Code"
           placeholder="e.g. AGE401"

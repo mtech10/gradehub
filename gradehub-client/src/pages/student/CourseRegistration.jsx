@@ -1,8 +1,12 @@
 import { useState, useEffect } from "react";
+
 import PageHeader from "../../components/common/PageHeader";
 import RegistrationSummary from "../../components/courseRegistration/RegistrationSummary";
 import CourseRegistrationTable from "../../components/courseRegistration/CourseRegistrationTable";
+
 import { courseRegistrationService } from "../../services/courseRegistrationService";
+import { courseService } from "../../services/courseService";
+
 import { getRegistrationSummary } from "../../utils/registrationHelpers";
 
 function CourseRegistration() {
@@ -13,6 +17,7 @@ function CourseRegistration() {
     status: "Open",
     deadline: "Soon",
   });
+
   const [selectedCodes, setSelectedCodes] = useState([]);
   const [droppedCodes, setDroppedCodes] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -21,13 +26,63 @@ function CourseRegistration() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
-  // Fetch live courses and rules on mount
   useEffect(() => {
     const fetchRegistrationInfo = async () => {
       try {
-        const data = await courseRegistrationService.getRegistrationData();
-        setCourses(data.courses || []);
-        if (data.rules) setRules(data.rules);
+        setLoading(true);
+
+        const registrationData =
+          await courseRegistrationService.getRegistrationData();
+
+        const {
+          student,
+          session,
+          semester,
+          registeredCourses = [],
+          rules: registrationRules,
+        } = registrationData;
+
+        console.log("Registration context:", {
+          student,
+          session,
+          semester,
+          registeredCourses,
+          rules: registrationRules,
+        });
+
+        const availableCourses = await courseService.getAvailableCourses({
+          departmentId: student.department.id,
+          levelId: student.level.id,
+          sessionId: session.id,
+          semesterId: semester.id,
+        });
+
+        console.log("Available courses:", availableCourses);
+
+        const registeredIds = new Set(
+          registeredCourses.map((course) => course.id),
+        );
+
+        const mergedCourses = availableCourses.map((course) => ({
+          id: course.id,
+          code: course.code,
+          title: course.title,
+
+          units: Number(course.creditUnit ?? course.unit ?? 0),
+          creditUnit: Number(course.creditUnit ?? course.unit ?? 0),
+
+          semester: course.semester,
+
+          status: registeredIds.has(course.id) ? "Registered" : "Available",
+        }));
+
+        console.log("Final courses for table:", mergedCourses);
+
+        setCourses(mergedCourses);
+
+        if (registrationRules) {
+          setRules(registrationRules);
+        }
       } catch (error) {
         console.error("Failed to load course registration details:", error);
       } finally {
@@ -45,12 +100,19 @@ function CourseRegistration() {
       course.code.toLowerCase().includes(searchQuery.toLowerCase());
 
     let matchesTab = true;
-    if (activeTab === "available")
+
+    if (activeTab === "available") {
       matchesTab =
         course.status === "Available" && !selectedCodes.includes(course.code);
-    if (activeTab === "selected")
+    }
+
+    if (activeTab === "selected") {
       matchesTab = selectedCodes.includes(course.code);
-    if (activeTab === "registered") matchesTab = course.status === "Registered";
+    }
+
+    if (activeTab === "registered") {
+      matchesTab = course.status === "Registered";
+    }
 
     return matchesSearch && matchesTab;
   });
@@ -58,24 +120,18 @@ function CourseRegistration() {
   const handleToggleSelection = (code) => {
     const course = courses.find((c) => c.code === code);
 
+    if (!course) return;
+
     if (course.status === "Registered") {
       if (!isEditing) return;
 
-      setDroppedCodes((prev) => {
-        const next = prev.includes(code)
-          ? prev.filter((c) => c !== code)
-          : [...prev, code];
-
-        return next;
-      });
+      setDroppedCodes((prev) =>
+        prev.includes(code) ? prev.filter((c) => c !== code) : [...prev, code],
+      );
     } else {
-      setSelectedCodes((prev) => {
-        const next = prev.includes(code)
-          ? prev.filter((c) => c !== code)
-          : [...prev, code];
-
-        return next;
-      });
+      setSelectedCodes((prev) =>
+        prev.includes(code) ? prev.filter((c) => c !== code) : [...prev, code],
+      );
     }
   };
 
@@ -95,26 +151,40 @@ function CourseRegistration() {
     if (course.status === "Registered" && !isEditing) {
       return;
     }
+
     handleToggleSelection(course.code);
   };
 
   const handleSubmitRegistration = async () => {
     try {
       setSubmitting(true);
+
+      /*
+       * IMPORTANT:
+       * The service expects selectedCodes and droppedCodes.
+       */
       await courseRegistrationService.submitRegistration({
         selectedCodes,
         droppedCodes,
       });
 
-      // Update local state to reflect successful registration
+      // Only update the UI after the backend confirms success.
       setCourses((prevCourses) =>
         prevCourses.map((course) => {
           if (selectedCodes.includes(course.code)) {
-            return { ...course, status: "Registered" };
+            return {
+              ...course,
+              status: "Registered",
+            };
           }
+
           if (droppedCodes.includes(course.code)) {
-            return { ...course, status: "Available" };
+            return {
+              ...course,
+              status: "Available",
+            };
           }
+
           return course;
         }),
       );
@@ -122,9 +192,11 @@ function CourseRegistration() {
       setSelectedCodes([]);
       setDroppedCodes([]);
       setIsEditing(false);
+
       alert("Registration updated successfully!");
     } catch (error) {
       console.error("Submission failed:", error);
+
       alert(
         error.response?.data?.message ||
           "Failed to submit course registration.",
@@ -147,18 +219,14 @@ function CourseRegistration() {
   });
 
   if (loading) {
-    return (
-      <div className="p-10 text-center text-slate-500">
-        Loading course registration portal...
-      </div>
-    );
+    return <div>Loading course registration portal...</div>;
   }
 
   return (
-    <div className="space-y-8">
+    <div>
       <PageHeader
         title="Course Registration"
-        subtitle="Register your courses for the current academic session."
+        subtitle="Register and manage your courses for the current semester."
       />
 
       <div className="grid gap-8 xl:grid-cols-12">

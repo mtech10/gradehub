@@ -84,9 +84,16 @@ export const getResultStatistics = async (params = {}) => {
 
   return response.data;
 };
+
+export const getResultById = async (id) => {
+  const response = await api.get(`/results/${id}`);
+  return response.data;
+};
+
 export const resultService = {
   getResults,
   getResultStatistics,
+  getResultById,
 };
 
 export default resultService;

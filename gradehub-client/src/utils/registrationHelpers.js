@@ -1,5 +1,14 @@
 export function getSemesterBadge(semester) {
-  if (semester === 1 || semester === "1") {
+  if (
+    semester === 1 ||
+    semester === "1" ||
+    String(semester?.name || semester)
+      .toLowerCase()
+      .includes("first") ||
+    String(semester?.name || semester)
+      .toLowerCase()
+      .includes("1st")
+  ) {
     return {
       label: "1st",
       variant: "primary",
@@ -18,6 +27,48 @@ export function getRegistrationSummary({
   droppedCodes,
   rules,
 }) {
+  /*
+   * Determine the semester number safely.
+   *
+   * Courses can have:
+   * semester: 1
+   *
+   * or:
+   * semester: "1"
+   *
+   * or:
+   * semester: {
+   *   id: "...",
+   *   name: "First Semester"
+   * }
+   */
+  const getSemesterNumber = (semester) => {
+    if (!semester) return null;
+
+    if (semester === 1 || semester === "1") {
+      return 1;
+    }
+
+    if (semester === 2 || semester === "2") {
+      return 2;
+    }
+
+    const semesterName = String(semester.name || semester).toLowerCase();
+
+    if (semesterName.includes("first") || semesterName.includes("1st")) {
+      return 1;
+    }
+
+    if (semesterName.includes("second") || semesterName.includes("2nd")) {
+      return 2;
+    }
+
+    return null;
+  };
+
+  /*
+   * Courses currently counting toward registration.
+   */
   const activeCourses = courses.filter((course) => {
     if (course.status === "Registered") {
       return !droppedCodes.includes(course.code);
@@ -26,26 +77,40 @@ export function getRegistrationSummary({
     return selectedCodes.includes(course.code);
   });
 
+  /*
+   * Total units.
+   */
   const totalUnits = activeCourses.reduce(
-    (sum, course) => sum + course.units,
+    (sum, course) => sum + Number(course.units || 0),
     0,
   );
 
+  /*
+   * First semester units.
+   */
   const firstSemesterUnits = activeCourses
-    .filter((course) => Number(course.semester) === 1)
-    .reduce((sum, course) => sum + course.units, 0);
+    .filter((course) => getSemesterNumber(course.semester) === 1)
+    .reduce((sum, course) => sum + Number(course.units || 0), 0);
 
+  /*
+   * Second semester units.
+   */
   const secondSemesterUnits = activeCourses
-    .filter((course) => Number(course.semester) === 2)
-    .reduce((sum, course) => sum + course.units, 0);
+    .filter((course) => getSemesterNumber(course.semester) === 2)
+    .reduce((sum, course) => sum + Number(course.units || 0), 0);
 
-  const progressPercentage = (totalUnits / rules.maxUnits) * 100;
+  const maxUnits = Number(rules?.maxUnits || 24);
+
+  const progressPercentage = maxUnits > 0 ? (totalUnits / maxUnits) * 100 : 0;
 
   const hasChanges = selectedCodes.length > 0 || droppedCodes.length > 0;
 
-  const hasRegisteredCourses = activeCourses.length > 0;
+  const hasRegisteredCourses = activeCourses.some(
+    (course) => course.status === "Registered",
+  );
 
-  const isValid = totalUnits >= rules.minUnits && totalUnits <= rules.maxUnits;
+  const isValid =
+    totalUnits >= Number(rules?.minUnits || 12) && totalUnits <= maxUnits;
 
   return {
     activeCourses,
@@ -56,7 +121,9 @@ export function getRegistrationSummary({
     hasChanges,
     hasRegisteredCourses,
     isValid,
-    registeredCount: activeCourses.length,
+    registeredCount: activeCourses.filter(
+      (course) => course.status === "Registered",
+    ).length,
     selectedCount: selectedCodes.length,
     rules,
   };

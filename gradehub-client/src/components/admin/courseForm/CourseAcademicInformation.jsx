@@ -7,11 +7,12 @@ function CourseAcademicInformation({
   updateField,
   departments,
   levels,
+  sessions,
   semesters,
 }) {
   return (
-    <Card className="p-4">
-      <div className="mb-6">
+    <Card>
+      <div>
         <h2 className="text-lg font-semibold text-slate-900">
           Academic Information
         </h2>
@@ -21,38 +22,64 @@ function CourseAcademicInformation({
         </p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="mt-6 grid gap-4 md:grid-cols-2">
         <Select
           label="Department"
           placeholder="Select Department"
-          options={departments}
-          value={formData.department}
-          onChange={(e) => updateField("department", e.target.value)}
+          options={departments.map((department) => ({
+            value: department.id,
+            label: department.name,
+          }))}
+          value={formData.departmentId}
+          onChange={(e) => updateField("departmentId", e.target.value)}
+          required
         />
 
         <Select
           label="Level"
           placeholder="Select Level"
-          options={levels}
-          value={formData.level}
-          onChange={(e) => updateField("level", e.target.value)}
+          options={levels.map((level) => ({
+            value: level.id,
+            label: level.name,
+          }))}
+          value={formData.levelId}
+          onChange={(e) => updateField("levelId", e.target.value)}
+          required
+        />
+
+        <Select
+          label="Session"
+          placeholder="Select Session"
+          options={sessions.map((session) => ({
+            value: session.id,
+            label: session.name,
+          }))}
+          value={formData.sessionId}
+          onChange={(e) => updateField("sessionId", e.target.value)}
+          required
         />
 
         <Select
           label="Semester"
           placeholder="Select Semester"
-          options={semesters}
-          value={formData.semester}
-          onChange={(e) => updateField("semester", e.target.value)}
+          options={semesters.map((semester) => ({
+            value: semester.id,
+            label: semester.name,
+          }))}
+          value={formData.semesterId}
+          onChange={(e) => updateField("semesterId", e.target.value)}
+          required
         />
 
         <Input
           label="Course Unit"
           type="number"
           min={1}
+          max={10}
           placeholder="3"
-          value={formData.unit}
-          onChange={(e) => updateField("unit", e.target.value)}
+          value={formData.creditUnit}
+          onChange={(e) => updateField("creditUnit", e.target.value)}
+          required
         />
       </div>
     </Card>

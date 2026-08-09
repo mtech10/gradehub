@@ -15,7 +15,7 @@ function CourseFilterBar({
     { id: "all", label: "All Courses" },
     { id: "current", label: "Current Session" },
     { id: "completed", label: "Completed" },
-    { id: "dropped", label: "Dropped" },
+    { id: "failed", label: "Failed" },
   ];
 
   return (

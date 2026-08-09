@@ -1,23 +1,29 @@
 import { useNavigate } from "react-router-dom";
 
 import Button from "../../ui/Button";
-import Card from "../../ui/Card";
 
-function CourseFormActions({ mode }) {
+function CourseFormActions({ mode, loading = false }) {
   const navigate = useNavigate();
 
   return (
-    <div className="flex items-center justify-end gap-4 p-4">
+    <div className="flex justify-end gap-3">
       <Button
         type="button"
         variant="secondary"
         onClick={() => navigate("/admin/courses")}
+        disabled={loading}
       >
         Cancel
       </Button>
 
-      <Button type="submit">
-        {mode === "edit" ? "Update Course" : "Create Course"}
+      <Button type="submit" disabled={loading}>
+        {loading
+          ? mode === "edit"
+            ? "Updating..."
+            : "Creating..."
+          : mode === "edit"
+            ? "Update Course"
+            : "Create Course"}
       </Button>
     </div>
   );

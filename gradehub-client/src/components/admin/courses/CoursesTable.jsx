@@ -23,6 +23,8 @@ function CoursesTable({
   selectedRows,
   onRowSelect,
   onSelectAll,
+
+  loading,
 }) {
   const navigate = useNavigate();
 
@@ -51,14 +53,25 @@ function CoursesTable({
               {course.title}
             </button>
 
-            <p className="text-sm text-slate-500">{course.department}</p>
+            <p className="text-sm text-slate-500">
+              {course.department?.name || "-"}
+            </p>
           </div>
         );
 
+      case "unit":
+        return course.creditUnit ?? "-";
+
+      case "level":
+        return course.level?.name || "-";
+
+      case "semester":
+        return course.semester?.name || "-";
+
       case "status":
         return (
-          <Badge variant={course.status === "Active" ? "success" : "danger"}>
-            {course.status}
+          <Badge variant={course.isActive ? "success" : "danger"}>
+            {course.isActive ? "Active" : "Inactive"}
           </Badge>
         );
 
@@ -79,7 +92,7 @@ function CoursesTable({
                 onClick: () => {},
               },
               {
-                label: "Archive Course",
+                label: course.isActive ? "Archive Course" : "Restore Course",
                 onClick: () => {},
               },
             ]}
@@ -87,7 +100,7 @@ function CoursesTable({
         );
 
       default:
-        return course[column.key];
+        return course[column.key] ?? "-";
     }
   };
 
@@ -96,14 +109,12 @@ function CoursesTable({
       columns={columns}
       data={courses}
       renderCell={renderCell}
-      pagination
+      loading={loading}
       currentPage={currentPage}
       onPageChange={onPageChange}
-      totalItems={totalItems}
-      totalItems={totalItems}
       pageSize={pageSize}
-      itemLabel="courses"
-      loading={false}
+      totalItems={totalItems}
+      totalPages={totalPages}
       sortKey={sortKey}
       sortDirection={sortDirection}
       onSort={onSort}
@@ -111,6 +122,8 @@ function CoursesTable({
       selectedRows={selectedRows}
       onRowSelect={onRowSelect}
       onSelectAll={onSelectAll}
+      serverPagination
+      itemLabel="courses"
     />
   );
 }

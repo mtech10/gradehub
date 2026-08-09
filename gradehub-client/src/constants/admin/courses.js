@@ -1,40 +1,5 @@
 import { BookOpen, CheckCircle, GraduationCap, Clock3 } from "lucide-react";
 
-export const courseStatistics = [
-  {
-    title: "Total Courses",
-    value: 15,
-    change: "+2",
-    description: "Across all departments",
-    icon: BookOpen,
-    color: "blue",
-  },
-  {
-    title: "Active Courses",
-    value: 13,
-    change: "+1",
-    description: "Available this session",
-    icon: CheckCircle,
-    color: "green",
-  },
-  {
-    title: "Departments",
-    value: 5,
-    change: "0",
-    description: "Offering courses",
-    icon: GraduationCap,
-    color: "purple",
-  },
-  {
-    title: "Pending Approval",
-    value: 2,
-    change: "-1",
-    description: "Awaiting HOD approval",
-    icon: Clock3,
-    color: "amber",
-  },
-];
-
 export const courseFilters = {
   departments: [
     { value: "", label: "All Departments" },

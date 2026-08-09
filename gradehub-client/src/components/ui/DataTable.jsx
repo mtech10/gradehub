@@ -133,7 +133,7 @@ function DataTable({
 
                       onRowClick?.(row);
                     }}
-                    className={`border-bborder-slate-100 transition-all duration-200 ${selectable && selectedRows.includes(row.id) ? "bg-blue-50" : "hover:bg-slate-50"}
+                    className={`border-b border-slate-100 transition-all duration-200 ${selectable && selectedRows.includes(row.id) ? "bg-blue-50" : "hover:bg-slate-50"}
                     ${onRowClick ? "cursor-pointer" : ""}
                     ${typeof rowClassName === "function" ? rowClassName(row) : rowClassName}`}
                   >

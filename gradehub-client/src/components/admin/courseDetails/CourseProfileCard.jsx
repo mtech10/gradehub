@@ -1,68 +1,76 @@
-import {
-  BookOpen,
-  GraduationCap,
-  Calendar,
-  Building2,
-  User,
-} from "lucide-react";
+import { BookOpen, GraduationCap, Calendar, Building2 } from "lucide-react";
 
 import Card from "../../ui/Card";
 import Badge from "../../ui/Badge";
 
 function CourseProfileCard({ course }) {
   return (
-    <Card className="p-3">
-      <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
-        <div className="flex items-center gap-4">
-          <div className="flex h-24 w-24 items-center justify-center rounded-2xl bg-blue-100">
-            <BookOpen size={42} className="text-blue-600" />
-          </div>
-
-          <div>
-            <h2 className="text-3xl font-bold text-slate-900">{course.code}</h2>
-
-            <p className="mt-1 text-lg text-slate-700">{course.title}</p>
-
-            <p className="mt-1 text-slate-500">{course.department}</p>
-
-            <div className="mt-3 flex flex-wrap gap-2">
-              <Badge variant="blue">{course.level} Level</Badge>
-
-              <Badge variant="green">{course.semester} Semester</Badge>
-
-              <Badge variant="purple">{course.unit} Units</Badge>
-            </div>
-          </div>
+    <Card>
+      <div className="flex items-start gap-4">
+        <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+          <BookOpen size={28} />
         </div>
 
-        <div className="grid gap-5 sm:grid-cols-2">
-          <InfoItem
-            icon={Building2}
-            label="Department"
-            value={course.department}
-          />
+        <div>
+          <h2 className="text-3xl font-bold text-slate-900">{course.code}</h2>
 
-          <InfoItem icon={User} label="Lecturer" value={course.lecturer} />
+          <p className="mt-1 text-lg text-slate-700">{course.title}</p>
 
-          <InfoItem
-            icon={Calendar}
-            label="Semester"
-            value={`${course.semester} Semester`}
-          />
+          <p className="mt-1 text-slate-500">{course.department?.name}</p>
 
-          <InfoItem icon={GraduationCap} label="Status" value={course.status} />
+          <div className="mt-3 flex flex-wrap gap-2">
+            <Badge variant="blue">{course.level?.name}</Badge>
+
+            <Badge variant="green">{course.semester?.name}</Badge>
+
+            <Badge variant="purple">{course.creditUnit} Units</Badge>
+
+            <Badge variant={course.isActive ? "green" : "amber"}>
+              {course.isActive ? "Active" : "Inactive"}
+            </Badge>
+          </div>
         </div>
       </div>
+
+      <div className="mt-6 grid gap-5 border-t border-slate-100 pt-6 sm:grid-cols-3">
+        <InfoItem
+          icon={Building2}
+          label="Department"
+          value={course.department?.name || "—"}
+        />
+
+        <InfoItem
+          icon={GraduationCap}
+          label="Level"
+          value={course.level?.name || "—"}
+        />
+
+        <InfoItem
+          icon={Calendar}
+          label="Semester"
+          value={course.semester?.name || "—"}
+        />
+      </div>
+
+      {course.description && (
+        <div className="mt-6 border-t border-slate-100 pt-6">
+          <p className="text-xs uppercase tracking-wide text-slate-500">
+            Description
+          </p>
+
+          <p className="mt-1 text-sm leading-6 text-slate-600">
+            {course.description}
+          </p>
+        </div>
+      )}
     </Card>
   );
 }
 
 function InfoItem({ icon: Icon, label, value }) {
   return (
-    <div className="flex items-center gap-3">
-      <div className="rounded-lg bg-slate-100 p-2">
-        <Icon size={18} className="text-slate-600" />
-      </div>
+    <div className="flex items-start gap-3">
+      <Icon size={18} className="mt-0.5 text-slate-400" />
 
       <div>
         <p className="text-xs uppercase tracking-wide text-slate-500">
