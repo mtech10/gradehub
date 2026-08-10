@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 
@@ -5,8 +6,33 @@ import PageHeader from "../../components/common/PageHeader";
 import Button from "../../components/ui/Button";
 import DepartmentForm from "../../components/admin/departmentForm/DepartmentForm";
 
+import departmentService from "../../services/admin/departmentService";
+
 function AddDepartment() {
   const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleCreateDepartment = async (payload) => {
+    setIsSubmitting(true);
+    try {
+      // Fire the payload to the backend API
+      await departmentService.createDepartment(payload);
+
+      // Redirect back to the departments table upon success
+      navigate("/admin/departments");
+    } catch (error) {
+      console.error("Failed to create department:", error);
+
+      // Extract validation messages from your Express error handler
+      const errorMessage =
+        error.response?.data?.message ||
+        error.response?.data?.errors ||
+        "Failed to create department.";
+      alert(`Error: ${JSON.stringify(errorMessage)}`);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="space-y-8">
@@ -21,11 +47,16 @@ function AddDepartment() {
           onClick={() => navigate("/admin/departments")}
         >
           <ArrowLeft size={18} />
-          Back to Department
+          Back to Departments
         </Button>
       </div>
 
-      <DepartmentForm mode="add" />
+      {/* Pass the submit handler and loading state down to the form */}
+      <DepartmentForm
+        mode="add"
+        onSubmit={handleCreateDepartment}
+        isSubmitting={isSubmitting}
+      />
     </div>
   );
 }

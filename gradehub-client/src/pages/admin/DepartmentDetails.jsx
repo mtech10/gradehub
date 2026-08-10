@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 
@@ -11,18 +11,58 @@ import DepartmentQuickStats from "../../components/admin/departmentDetails/Depar
 import DepartmentInformationCard from "../../components/admin/departmentDetails/DepartmentInformationCard";
 import DepartmentLecturersTable from "../../components/admin/departmentDetails/DepartmentLecturersTable";
 
-import { departments } from "../../constants/admin/departments";
-import { students } from "../../constants/admin/students";
+import departmentService from "../../services/admin/departmentService";
 
 function DepartmentDetails() {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const department = useMemo(() => {
-    return departments.find((department) => String(department.id) === id);
+  const [department, setDepartment] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchDepartmentDetails = async () => {
+      try {
+        const response = await departmentService.getDepartmentById(id);
+        const data = response.data || response;
+
+        // Map the backend DB columns to the format your UI components expect
+        setDepartment({
+          id: data.id,
+          name: data.name,
+          code: data.code,
+          faculty: data.faculty_name || data.faculty?.name || "N/A",
+          hod: data.hod || "Not Assigned",
+          status: data.isactive || data.isActive ? "Active" : "Inactive",
+          // Fallbacks for fields that might not be in your DB schema yet
+          office: data.description || "N/A",
+          email: "N/A",
+          phone: "N/A",
+          students: 0,
+          courses: 0,
+          lecturers: 0,
+        });
+      } catch (error) {
+        console.error("Failed to fetch department details:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchDepartmentDetails();
+    }
   }, [id]);
 
-  if (!department) {
+  if (loading) {
+    return (
+      <div className="flex h-64 items-center justify-center text-slate-500">
+        Loading department details...
+      </div>
+    );
+  }
+
+  if (!department && !loading) {
     return (
       <div className="space-y-6">
         <PageHeader
@@ -41,22 +81,8 @@ function DepartmentDetails() {
     );
   }
 
-  // Temporary lecturer data until a Lecturer module is created.
-  const lecturers = students
-    .filter(
-      (student) =>
-        student.department === department.name ||
-        student.department === department.code,
-    )
-    .slice(0, 6)
-    .map((student, index) => ({
-      id: student.id,
-      staffId: `STF${String(index + 1).padStart(3, "0")}`,
-      fullName: student.fullName,
-      rank: "Senior Lecturer",
-      email: student.email,
-      status: "Active",
-    }));
+  // Passing an empty array until the Lecturer/Staff module is built
+  const lecturers = [];
 
   return (
     <div className="space-y-8">
@@ -71,7 +97,7 @@ function DepartmentDetails() {
           onClick={() => navigate("/admin/departments")}
         >
           <ArrowLeft size={18} />
-          Back to Department
+          Back to Departments
         </Button>
 
         <Button

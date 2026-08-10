@@ -1,15 +1,33 @@
+import { useState, useEffect } from "react";
 import Input from "../../ui/Input";
 import Select from "../../ui/Select";
+import facultyService from "../../../services/admin/facultyService";
 
 function DepartmentInformation({ formData, onChange }) {
-  const facultyOptions = [
-    { value: "", label: "Select Faculty" },
-    { value: "Engineering", label: "Engineering" },
-    { value: "Science", label: "Science" },
-    { value: "Agriculture", label: "Agriculture" },
-    { value: "Arts", label: "Arts" },
-    { value: "Education", label: "Education" },
-  ];
+  const [faculties, setFaculties] = useState([
+    { value: "", label: "Loading faculties..." },
+  ]);
+
+  useEffect(() => {
+    const fetchFaculties = async () => {
+      try {
+        const response = await facultyService.getFaculties();
+
+        // Extract the array safely, accommodating different possible backend structures
+        const data = response.data || response.faculties || response;
+
+        if (Array.isArray(data)) {
+          const options = data.map((f) => ({ value: f.id, label: f.name }));
+          setFaculties([{ value: "", label: "Select Faculty" }, ...options]);
+        }
+      } catch (error) {
+        console.error("Failed to load faculties:", error);
+        setFaculties([{ value: "", label: "Failed to load faculties" }]);
+      }
+    };
+
+    fetchFaculties();
+  }, []);
 
   return (
     <div className="space-y-8">
@@ -17,7 +35,6 @@ function DepartmentInformation({ formData, onChange }) {
         <h3 className="text-lg font-semibold text-slate-900">
           Department Information
         </h3>
-
         <p className="mt-1 text-sm text-slate-500">
           Enter the department's basic information.
         </p>
@@ -40,11 +57,12 @@ function DepartmentInformation({ formData, onChange }) {
           required
         />
 
+        {/* Dynamic Faculty Dropdown */}
         <Select
           label="Faculty"
-          value={formData.faculty}
-          options={facultyOptions}
-          onChange={(e) => onChange("faculty", e.target.value)}
+          value={formData.facultyId || formData.faculty || ""}
+          options={faculties}
+          onChange={(e) => onChange("facultyId", e.target.value)}
           required
         />
 

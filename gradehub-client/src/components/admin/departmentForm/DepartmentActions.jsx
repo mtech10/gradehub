@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import Button from "../../ui/Button";
 
-function DepartmentActions({ mode = "add" }) {
+function DepartmentActions({ mode = "add", isSubmitting }) {
   const navigate = useNavigate();
 
   return (
@@ -10,12 +10,19 @@ function DepartmentActions({ mode = "add" }) {
         type="button"
         variant="secondary"
         onClick={() => navigate("/admin/departments")}
+        disabled={isSubmitting}
       >
         Cancel
       </Button>
 
-      <Button type="submit">
-        {mode === "edit" ? "Update Department" : "Create Department"}
+      <Button type="submit" disabled={isSubmitting}>
+        {isSubmitting
+          ? mode === "edit"
+            ? "Updating Department..."
+            : "Creating Department..."
+          : mode === "edit"
+            ? "Update Department"
+            : "Create Department"}
       </Button>
     </div>
   );

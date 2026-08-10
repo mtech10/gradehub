@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Plus } from "lucide-react";
 
@@ -10,8 +10,9 @@ import AdminStatCard from "../../components/admin/dashboard/AdminStatCard";
 import DataTable from "../../components/ui/DataTable";
 import Badge from "../../components/ui/Badge";
 
+import departmentService from "../../services/admin/departmentService";
+import facultyService from "../../services/admin/facultyService";
 import {
-  departments,
   departmentStatistics,
   departmentFilters,
 } from "../../constants/admin/departments";
@@ -19,67 +20,132 @@ import {
 function Departments() {
   const navigate = useNavigate();
 
+  const [departments, setDepartments] = useState([]);
+  const [facultyOptions, setFacultyOptions] = useState(
+    departmentFilters.faculties,
+  );
+
+  // Real-time stats state mapped directly to the card titles
+  const [stats, setStats] = useState({
+    "Total Departments": 0,
+    "Active Departments": 0,
+    "Total Students": 0,
+    "Total Courses": 0,
+  });
+
+  const [loading, setLoading] = useState(true);
+  const [pagination, setPagination] = useState({
+    totalItems: 0,
+    totalPages: 1,
+  });
+
   const [search, setSearch] = useState("");
   const [faculty, setFaculty] = useState("");
   const [status, setStatus] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10;
 
-  const filteredDepartments = useMemo(() => {
-    return departments.filter((department) => {
-      const matchesSearch =
-        department.name.toLowerCase().includes(search.toLowerCase()) ||
-        department.code.toLowerCase().includes(search.toLowerCase()) ||
-        department.hod.toLowerCase().includes(search.toLowerCase());
+  // Fetch Stats and Faculties on Mount
+  useEffect(() => {
+    const fetchInitialData = async () => {
+      try {
+        // Fetch stats
+        const statsRes = await departmentService.getDepartmentStats();
+        const statData = statsRes.data || statsRes;
 
-      const matchesFaculty = !faculty || department.faculty === faculty;
+        setStats({
+          "Total Departments": parseInt(statData.total_departments, 10) || 0,
+          "Active Departments": parseInt(statData.active_departments, 10) || 0,
+          "Total Students": parseInt(statData.total_students, 10) || 0,
+          "Total Courses": parseInt(statData.total_courses, 10) || 0,
+        });
 
-      const matchesStatus = !status || department.status === status;
+        // Fetch faculties for the search filter dropdown
+        const facultyRes = await facultyService.getFaculties();
+        const facData = facultyRes.data || facultyRes;
+        if (Array.isArray(facData)) {
+          const formattedFaculties = facData.map((f) => ({
+            value: f.id,
+            label: f.name,
+          }));
+          setFacultyOptions([
+            { value: "", label: "All Faculties" },
+            ...formattedFaculties,
+          ]);
+        }
+      } catch (error) {
+        console.error("Failed to load initial data:", error);
+      }
+    };
 
-      return matchesSearch && matchesFaculty && matchesStatus;
-    });
-  }, [search, faculty, status]);
+    fetchInitialData();
+  }, []);
+
+  // Fetch Departments Table Data
+  useEffect(() => {
+    const fetchDepartments = async () => {
+      setLoading(true);
+      try {
+        const params = {
+          page: currentPage,
+          limit: pageSize,
+          search: search || undefined,
+          status:
+            status === "Active"
+              ? "active"
+              : status === "Inactive"
+                ? "inactive"
+                : undefined,
+          facultyId: faculty || undefined,
+        };
+
+        const response = await departmentService.getDepartments(params);
+        setDepartments(response.data || []);
+        if (response.pagination) {
+          setPagination(response.pagination);
+        }
+      } catch (error) {
+        console.error("Failed to fetch departments:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const delayDebounceFn = setTimeout(() => {
+      fetchDepartments();
+    }, 300);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [search, status, faculty, currentPage]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search, status, faculty]);
 
   const columns = [
-    {
-      key: "name",
-      title: "Department",
-    },
-    {
-      key: "code",
-      title: "Code",
-      align: "center",
-    },
-    {
-      key: "hod",
-      title: "Head of Department",
-    },
-    {
-      key: "students",
-      title: "Students",
-      align: "center",
-    },
-    {
-      key: "courses",
-      title: "Courses",
-      align: "center",
-    },
-    {
-      key: "status",
-      title: "Status",
-      align: "center",
-    },
+    { key: "name", title: "Department" },
+    { key: "code", title: "Code", align: "center" },
+    { key: "hod", title: "Head of Department" },
+    { key: "faculty_name", title: "Faculty" },
+    { key: "status", title: "Status", align: "center" },
   ];
 
   const renderCell = (department, column) => {
     switch (column.key) {
       case "status":
+        // Map the backend boolean 'isactive' or 'isActive' to a UI string
+        const isActive = department.isActive || department.isactive;
         return (
-          <Badge variant={department.status === "Active" ? "green" : "red"}>
-            {department.status}
+          <Badge variant={isActive ? "green" : "red"}>
+            {isActive ? "Active" : "Inactive"}
           </Badge>
         );
 
+      case "faculty_name":
+        return department.faculty_name || department.faculty?.name || "-";
+
       default:
-        return department[column.key];
+        return department[column.key] || "-";
     }
   };
 
@@ -92,7 +158,12 @@ function Departments() {
 
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
         {departmentStatistics.map((stat) => (
-          <AdminStatCard key={stat.title} {...stat} />
+          <AdminStatCard
+            key={stat.title}
+            {...stat}
+            value={stats[stat.title] || 0}
+            change=""
+          />
         ))}
       </div>
 
@@ -107,7 +178,7 @@ function Departments() {
           <Select
             value={faculty}
             onChange={(e) => setFaculty(e.target.value)}
-            options={departmentFilters.faculties}
+            options={facultyOptions}
           />
 
           <Select
@@ -125,15 +196,16 @@ function Departments() {
 
       <DataTable
         columns={columns}
-        data={filteredDepartments}
+        data={departments}
         renderCell={renderCell}
         selectable
         pagination
-        pageSize={10}
-        totalItems={filteredDepartments.length}
-        currentPage={1}
-        totalPages={1}
-        onPageChange={() => {}}
+        pageSize={pageSize}
+        totalItems={pagination.totalItems || departments.length}
+        currentPage={currentPage}
+        totalPages={pagination.totalPages || 1}
+        onPageChange={setCurrentPage}
+        loading={loading}
         onRowClick={(department) =>
           navigate(`/admin/departments/${department.id}`)
         }

@@ -1,16 +1,21 @@
 import { useState } from "react";
 
 import Card from "../../ui/Card";
-
 import DepartmentInformation from "./DepartmentInformation";
 import DepartmentHeadSelector from "./DepartmentHeadSelector";
 import DepartmentActions from "./DepartmentActions";
 
-function DepartmentForm({ mode = "add", initialValues = {}, onSubmit }) {
+function DepartmentForm({
+  mode = "add",
+  initialValues = {},
+  onSubmit,
+  isSubmitting,
+}) {
   const [formData, setFormData] = useState({
     name: initialValues.name || "",
     code: initialValues.code || "",
-    faculty: initialValues.faculty || "",
+    facultyId: initialValues.facultyId || initialValues.faculty_id || "", // Adjusted for backend
+    description: initialValues.description || "", // Added for backend
     office: initialValues.office || "",
     email: initialValues.email || "",
     phone: initialValues.phone || "",
@@ -29,11 +34,17 @@ function DepartmentForm({ mode = "add", initialValues = {}, onSubmit }) {
     e.preventDefault();
 
     if (onSubmit) {
-      onSubmit(formData);
-      return;
-    }
+      // Build the strict payload your Express controller requires
+      const payload = {
+        name: formData.name,
+        code: formData.code,
+        facultyId: formData.facultyId,
+        hod: formData.hod,
+        description: formData.description || formData.office, // Fallback if you want to repurpose 'office'
+      };
 
-    console.log(formData);
+      onSubmit(payload);
+    }
   };
 
   return (
@@ -46,7 +57,8 @@ function DepartmentForm({ mode = "add", initialValues = {}, onSubmit }) {
         <DepartmentHeadSelector formData={formData} onChange={handleChange} />
       </Card>
 
-      <DepartmentActions mode={mode} />
+      {/* 2. Pass it down to the Actions component */}
+      <DepartmentActions mode={mode} isSubmitting={isSubmitting} />
     </form>
   );
 }
