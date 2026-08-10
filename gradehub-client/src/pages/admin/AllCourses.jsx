@@ -137,6 +137,7 @@ function AllCourses() {
           sort: sortKey,
           order: sortDirection,
         });
+        console.log("Raw API Course Response:", response);
 
         setCourses(response.courses || []);
 

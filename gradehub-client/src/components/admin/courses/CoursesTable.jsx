@@ -54,24 +54,25 @@ function CoursesTable({
             </button>
 
             <p className="text-sm text-slate-500">
-              {course.department?.name || "-"}
+              {course.department?.name || course.department_name || "-"}
             </p>
           </div>
         );
 
       case "unit":
-        return course.creditUnit ?? "-";
+        return course.creditUnit ?? course.creditunit ?? "-";
 
       case "level":
-        return course.level?.name || "-";
+        return course.level?.name || course.level_name || "-";
 
       case "semester":
-        return course.semester?.name || "-";
+        return course.semester?.name || course.semester_name || "-";
 
       case "status":
+        const isActive = course.isActive ?? course.isactive ?? true;
         return (
-          <Badge variant={course.isActive ? "success" : "danger"}>
-            {course.isActive ? "Active" : "Inactive"}
+          <Badge variant={isActive ? "success" : "danger"}>
+            {isActive ? "Active" : "Inactive"}
           </Badge>
         );
 
@@ -85,14 +86,17 @@ function CoursesTable({
               },
               {
                 label: "Edit Course",
-                onClick: () => {},
+                onClick: () => navigate(`/admin/courses/${course.id}/edit`),
               },
               {
                 label: "Assign Lecturer",
                 onClick: () => {},
               },
               {
-                label: course.isActive ? "Archive Course" : "Restore Course",
+                label:
+                  (course.isActive ?? course.isactive)
+                    ? "Archive Course"
+                    : "Restore Course",
                 onClick: () => {},
               },
             ]}

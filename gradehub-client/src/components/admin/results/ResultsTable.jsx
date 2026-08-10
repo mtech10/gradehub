@@ -1,10 +1,12 @@
 import Badge from "../../ui/Badge";
 import DataTable from "../../ui/DataTable";
 import DropdownMenu from "../../ui/DropdownMenu";
+import resultUploadService from "../../../services/admin/resultUploadService";
 
 function ResultsTable({
   columns,
   results,
+  onRefresh, // <--- We will use this consistently now
   totalItems,
   totalPages,
   currentPage,
@@ -18,6 +20,40 @@ function ResultsTable({
   onRowSelect,
   onSelectAll,
 }) {
+  // --- CONSISTENT ROW HANDLERS ---
+  const handleApprove = async (id) => {
+    try {
+      await resultUploadService.approveResult(id);
+      alert("Result approved successfully!");
+      onRefresh?.(); // Smooth React state refresh instead of window.reload()
+    } catch (error) {
+      alert(error.message || "Failed to approve result.");
+    }
+  };
+
+  const handleSuspend = async (id) => {
+    if (!window.confirm("Are you sure you want to suspend this result?"))
+      return;
+    try {
+      await resultUploadService.deactivateResult(id);
+      alert("Result suspended successfully!");
+      onRefresh?.();
+    } catch (error) {
+      alert(error.message || "Failed to suspend result.");
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this result?")) return;
+    try {
+      await resultUploadService.deleteResult(id);
+      alert("Result deleted successfully!");
+      onRefresh?.();
+    } catch (error) {
+      alert(error.message || "Failed to delete result.");
+    }
+  };
+
   const renderCell = (result, column) => {
     switch (column.key) {
       case "studentName":
@@ -75,19 +111,23 @@ function ResultsTable({
             items={[
               {
                 label: "View Result",
-                onClick: () => {},
+                onClick: () => navigate(`/admin/results/${result.id}`),
               },
               {
                 label: "Edit Result",
-                onClick: () => {},
+                onClick: () => navigate(`/admin/results/${result.id}/edit`),
               },
               {
                 label: "Approve Result",
-                onClick: () => {},
+                onClick: () => handleApprove(result.id),
+              },
+              {
+                label: "Suspend Result", // <--- Added here
+                onClick: () => handleSuspend(result.id),
               },
               {
                 label: "Delete Result",
-                onClick: () => {},
+                onClick: () => handleDelete(result.id),
               },
             ]}
           />

@@ -71,7 +71,7 @@ function UploadResults() {
           semesters: semestersResponse.data || [],
           departments: departmentsResponse.data || [],
           levels: levelsResponse.data || [],
-          courses: coursesResponse.data || [],
+          courses: coursesResponse.courses || [],
         });
       } catch (error) {
         console.error("Failed to load upload options:", error);
@@ -86,9 +86,6 @@ function UploadResults() {
     fetchOptions();
   }, []);
 
-  /*
-   * Convert database records into the format expected by Select.
-   */
   const sessionOptions = options.sessions.map((session) => ({
     value: session.id,
     label: session.name,
@@ -109,10 +106,6 @@ function UploadResults() {
     label: level.name,
   }));
 
-  /*
-   * Only show courses belonging to the selected
-   * department, level and semester.
-   */
   const filteredCourses = options.courses.filter((course) => {
     const matchesDepartment =
       !formData.departmentId || course.department?.id === formData.departmentId;
@@ -131,10 +124,6 @@ function UploadResults() {
     label: `${course.code} — ${course.title}`,
   }));
 
-  /*
-   * If the selected course no longer belongs to the
-   * selected academic combination, clear it.
-   */
   useEffect(() => {
     if (!formData.courseId) return;
 

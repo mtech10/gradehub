@@ -104,32 +104,6 @@ function Results() {
         onPageChange={setCurrentPage}
       />
 
-      <ResultsSummary
-        summary={[
-          {
-            title: "Credit Units Earned",
-            value: data.stats.totalEarnedUnits,
-            subtitle: `Out of ${data.stats.totalUnits} Units`,
-            footer: "Successfully completed",
-            icon: GraduationCap,
-          },
-          {
-            title: "Highest Score",
-            value: `${data.stats.highestScore}%`,
-            subtitle: "Best Result",
-            footer: "Highest score achieved",
-            icon: TrendingUp,
-          },
-          {
-            title: "Lowest Score",
-            value: `${data.stats.lowestScore}%`,
-            subtitle: "Lowest Result",
-            footer: "Lowest score recorded",
-            icon: TrendingDown,
-          },
-        ]}
-      />
-
       <ReviewNotice />
     </div>
   );

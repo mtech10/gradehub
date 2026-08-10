@@ -10,9 +10,9 @@ import BulkActionBar from "../../components/admin/common/BulkActionBar";
 import { resultService } from "../../services/admin/resultService";
 import { resultFilters } from "../../constants/admin/results";
 import { resultColumns } from "../../constants/tables/resultColumns";
+import resultUploadService from "../../services/admin/resultUploadService";
 
 function AllResults() {
-  // --- States ---
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState({ total: 0, totalPages: 1 });
@@ -22,7 +22,6 @@ function AllResults() {
     pending: 0,
     missing: 0,
   });
-  // --- Filter & Sort States ---
   const [search, setSearch] = useState("");
   const [session, setSession] = useState("");
   const [semester, setSemester] = useState("");
@@ -34,44 +33,44 @@ function AllResults() {
 
   const pageSize = 8;
 
-  useEffect(() => {
-    const fetchResults = async () => {
-      setLoading(true);
-      try {
-        const queryParams = {
-          page: currentPage,
-          limit: pageSize,
-          search: search || undefined,
-          sessionId: session || undefined,
-          semesterId: semester || undefined,
-          sort: sortKey,
-          order: sortDirection,
-        };
+  const fetchResults = async () => {
+    setLoading(true);
+    try {
+      const queryParams = {
+        page: currentPage,
+        limit: pageSize,
+        search: search || undefined,
+        sessionId: session || undefined,
+        semesterId: semester || undefined,
+        sort: sortKey,
+        order: sortDirection,
+      };
 
-        const cleanParams = Object.fromEntries(
-          Object.entries(queryParams).filter(([_, v]) => v !== undefined),
-        );
+      const cleanParams = Object.fromEntries(
+        Object.entries(queryParams).filter(([_, v]) => v !== undefined),
+      );
 
-        const response = await resultService.getResults(cleanParams);
+      const response = await resultService.getResults(cleanParams);
 
-        setResults(response.data || response.results || []);
-        if (response.pagination) {
-          setPagination(response.pagination);
-        }
-        const statistics = await resultService.getResultStatistics({
-          search: search || undefined,
-          sessionId: session || undefined,
-          semesterId: semester || undefined,
-        });
-
-        setResultStats(statistics);
-      } catch (error) {
-        console.error("Failed to fetch results:", error);
-      } finally {
-        setLoading(false);
+      setResults(response.data || response.results || []);
+      if (response.pagination) {
+        setPagination(response.pagination);
       }
-    };
+      const statistics = await resultService.getResultStatistics({
+        search: search || undefined,
+        sessionId: session || undefined,
+        semesterId: semester || undefined,
+      });
 
+      setResultStats(statistics);
+    } catch (error) {
+      console.error("Failed to fetch results:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       fetchResults();
     }, 300);
@@ -79,7 +78,63 @@ function AllResults() {
     return () => clearTimeout(delayDebounceFn);
   }, [search, session, semester, level, currentPage, sortKey, sortDirection]);
 
-  // Reset to page 1 when filters change
+  const handleBulkApprove = async () => {
+    if (!selectedRows.length) return;
+    if (
+      !window.confirm(
+        `Are you sure you want to approve ${selectedRows.length} selected results?`,
+      )
+    )
+      return;
+
+    try {
+      await resultUploadService.bulkApproveResults(selectedRows);
+      alert("Selected results approved successfully!");
+      setSelectedRows([]);
+      fetchResults();
+    } catch (error) {
+      alert(error.message || "Failed to bulk approve results.");
+    }
+  };
+
+  const handleBulkSuspend = async () => {
+    if (!selectedRows.length) return;
+    if (
+      !window.confirm(
+        `Are you sure you want to suspend ${selectedRows.length} selected results?`,
+      )
+    )
+      return;
+
+    try {
+      await resultUploadService.bulkDeactivateResults(selectedRows);
+      alert("Selected results suspended successfully!");
+      setSelectedRows([]);
+      fetchResults();
+    } catch (error) {
+      alert(error.message || "Failed to bulk suspend results.");
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    if (!selectedRows.length) return;
+    if (
+      !window.confirm(
+        `Are you sure you want to delete ${selectedRows.length} selected results?`,
+      )
+    )
+      return;
+
+    try {
+      await resultUploadService.bulkDeleteResults(selectedRows);
+      alert("Selected results deleted successfully!");
+      setSelectedRows([]);
+      fetchResults();
+    } catch (error) {
+      alert(error.message || "Failed to bulk delete results.");
+    }
+  };
+
   useEffect(() => {
     setCurrentPage(1);
     setSelectedRows([]);
@@ -139,8 +194,9 @@ function AllResults() {
           itemLabel="results"
           onClearSelection={clearSelection}
           onExport={() => console.log("Export")}
-          onSuspend={() => console.log("Approve")}
-          onDelete={() => console.log("Delete")}
+          onApprove={handleBulkApprove}
+          onSuspend={handleBulkSuspend}
+          onDelete={handleBulkDelete}
         />
       )}
 
@@ -148,6 +204,7 @@ function AllResults() {
         columns={resultColumns}
         results={results}
         loading={loading}
+        onRefresh={fetchResults}
         totalItems={pagination.total || 0}
         totalPages={pagination.totalPages || 1}
         currentPage={currentPage}

@@ -1,22 +1,61 @@
-import { useMemo } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 
 import PageHeader from "../../components/common/PageHeader";
 import Button from "../../components/ui/Button";
 
-import { courses } from "../../constants/admin/courses";
+import courseService from "../../services/admin/courseService";
 import CourseForm from "../../components/admin/courseForm/CourseForm";
 
 function EditCourse() {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const course = useMemo(() => {
-    return courses.find((course) => String(course.id) === id);
+  const [course, setCourse] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCourse = async () => {
+      try {
+        const response = await courseService.getCourseById(id);
+        const data = response.data || response;
+
+        // Map the backend DB columns to match the form's expected initialValues
+        setCourse({
+          id: data.id,
+          code: data.code || "",
+          title: data.title || "",
+          description: data.description || "",
+          departmentId:
+            data.departmentId || data.department_id || data.departmentid || "",
+          levelId: data.levelId || data.level_id || data.levelid || "",
+          semesterId:
+            data.semesterId || data.semester_id || data.semesterid || "",
+          sessionId: data.sessionId || data.session_id || data.sessionid || "", // Included for UI compatibility
+          creditUnit: data.creditUnit || data.creditunit || "",
+        });
+      } catch (error) {
+        console.error("Failed to fetch course details:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchCourse();
+    }
   }, [id]);
 
-  if (!course) {
+  if (loading) {
+    return (
+      <div className="flex h-64 items-center justify-center text-slate-500">
+        Loading course data...
+      </div>
+    );
+  }
+
+  if (!course && !loading) {
     return (
       <div className="space-y-6">
         <PageHeader title="Edit Course" subtitle="Course not found." />
@@ -36,7 +75,7 @@ function EditCourse() {
       <div className="flex justify-end">
         <Button
           variant="secondary"
-          onClick={() => navigate(`/admin/courses/${course.id}`)}
+          onClick={() => navigate(`/admin/courses/${id}`)}
         >
           <ArrowLeft size={18} />
           Back to Details

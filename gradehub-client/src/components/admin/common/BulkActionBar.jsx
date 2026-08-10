@@ -1,10 +1,11 @@
 import Button from "../../ui/Button";
-import { Download, Trash2, Ban } from "lucide-react";
+import { Download, Trash2, Ban, CheckCircle2 } from "lucide-react";
 
 function BulkActionBar({
   count = 0,
   itemLabel = "items",
   onExport,
+  onApprove,
   onSuspend,
   onDelete,
   onClearSelection,
@@ -34,6 +35,12 @@ function BulkActionBar({
         <Button variant="secondary" onClick={onExport}>
           <Download size={18} />
           Export
+        </Button>
+
+        {/* 2. Add the Approve Button here */}
+        <Button variant="secondary" onClick={onApprove}>
+          <CheckCircle2 size={18} />
+          Approve
         </Button>
 
         <Button variant="secondary" onClick={onSuspend}>
