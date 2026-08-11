@@ -48,5 +48,6 @@ export const resultColumns = [
     key: "actions",
     title: "",
     align: "center",
+    sortable: false,
   },
 ];

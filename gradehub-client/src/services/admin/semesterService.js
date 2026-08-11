@@ -16,7 +16,7 @@ export const getSemesters = async (params = {}) => {
   const response = await api.get(endpoint);
 
   return {
-    data: response.data,
+    data: response.data || response.semesters, // Fallback to match mapping
     pagination: response.pagination,
   };
 };
@@ -26,9 +26,22 @@ export const getSemesterById = async (id) => {
   return response.data;
 };
 
+// --- New Methods ---
+export const createSemester = async (data) => {
+  const response = await api.post("/semesters", data);
+  return response.data;
+};
+
+export const makeSemesterCurrent = async (id) => {
+  const response = await api.patch(`/semesters/${id}/current`);
+  return response.data;
+};
+
 const semesterService = {
   getSemesters,
   getSemesterById,
+  createSemester,
+  makeSemesterCurrent,
 };
 
 export default semesterService;

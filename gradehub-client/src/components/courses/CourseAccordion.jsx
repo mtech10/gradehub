@@ -38,7 +38,6 @@ function CourseAccordion({ data }) {
     >
       <div className="flex flex-col">
         {data.courses.length > 0 ? (
-          // 2. Added 'index' to create a guaranteed unique key
           data.courses.map((course, index) => (
             <CourseRow key={`${course.code}-${index}`} course={course} />
           ))

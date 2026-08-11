@@ -7,6 +7,9 @@ function CourseStatistics({ statistics = {} }) {
   const [timeframe, setTimeframe] = useState("this-session");
   const currentData = statistics[timeframe];
 
+  // Safety fallback if data is still loading or undefined
+  if (!currentData) return null;
+
   return (
     <Card
       title="Course Statistics"
@@ -52,28 +55,36 @@ function CourseStatistics({ statistics = {} }) {
         </div>
 
         <div className="flex-1 space-y-2">
-          {currentData.chart.map((item) => (
-            <div
-              key={item.name}
-              className="flex items-center justify-between text-sm"
-            >
-              <div className="flex items-center gap-2">
-                <span
-                  className="h-2.5 w-2.5 rounded-full"
-                  style={{ backgroundColor: item.color }}
-                />
-                <span className="text-slate-600">{item.name}</span>
+          {currentData.chart.map((item) => {
+            // FIX: Prevent dividing by zero to avoid NaN%
+            const percentage =
+              currentData.total > 0
+                ? Math.round((item.value / currentData.total) * 100)
+                : 0;
+
+            return (
+              <div
+                key={item.name}
+                className="flex items-center justify-between text-sm"
+              >
+                <div className="flex items-center gap-2">
+                  <span
+                    className="h-2.5 w-2.5 rounded-full"
+                    style={{ backgroundColor: item.color }}
+                  />
+                  <span className="text-slate-600">{item.name}</span>
+                </div>
+                <div className="flex gap-2">
+                  <span className="font-semibold text-slate-900">
+                    {item.value}
+                  </span>
+                  <span className="w-8 text-right text-slate-400">
+                    ({percentage}%)
+                  </span>
+                </div>
               </div>
-              <div className="flex gap-2">
-                <span className="font-semibold text-slate-900">
-                  {item.value}
-                </span>
-                <span className="w-8 text-right text-slate-400">
-                  ({Math.round((item.value / currentData.total) * 100)}%)
-                </span>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 

@@ -46,3 +46,73 @@ img {
     font-size: 12px; /* try 14px; change to 15px if 14 feels too small */
   }
 }
+
+@media print {
+  /* --- PREVIOUS PRINT RULES --- */
+  aside,
+  nav,
+  header:not(.print-header),
+  footer,
+  button,
+  .print\:hidden {
+    display: none !important;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 10mm;
+  }
+
+  body {
+    background: #fff !important;
+    color: #000 !important;
+    font-family: "Times New Roman", Times, serif !important;
+    font-size: 10pt !important;
+  }
+
+  /* --- NEW FIXES FOR THE SIDEBAR GAP --- */
+
+  /* 1. Force any parent layout wrapper (flex/grid) to collapse to full width */
+  #root,
+  div[class*="flex"],
+  div[class*="grid"],
+  div[class*="min-h-screen"] {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* 2. Remove any fixed left margins or padding typically reserved for sidebars */
+  main,
+  div[class*="ml-"],
+  div[class*="pl-"] {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+    width: 100% !important;
+  }
+
+  /* 3. Document formatting cleanup */
+  .card,
+  div[class*="rounded-"],
+  div[class*="border"] {
+    border: 1px solid #ddd !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    padding: 6px 10px !important;
+    margin-bottom: 6px !important;
+    border-radius: 0 !important;
+  }
+
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+  }
+
+  th,
+  td {
+    border: 1px solid #999 !important;
+    padding: 4px 6px !important;
+    font-size: 9pt !important;
+  }
+}

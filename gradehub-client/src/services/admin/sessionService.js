@@ -16,7 +16,7 @@ export const getSessions = async (params = {}) => {
   const response = await api.get(endpoint);
 
   return {
-    data: response.data,
+    data: response.data || response.sessions, // Fallback to match mapping
     pagination: response.pagination,
   };
 };
@@ -26,9 +26,34 @@ export const getSessionById = async (id) => {
   return response.data;
 };
 
+export const createSession = async (data) => {
+  const response = await api.post("/sessions", data);
+  return response.data;
+};
+
+export const makeSessionCurrent = async (id) => {
+  const response = await api.patch(`/sessions/${id}/current`);
+  return response.data;
+};
+
+// --- New Edit & Delete Methods ---
+export const updateSession = async (id, data) => {
+  const response = await api.put(`/sessions/${id}`, data);
+  return response.data;
+};
+
+export const deleteSession = async (id) => {
+  const response = await api.patch(`/sessions/${id}/deactivate`);
+  return response.data;
+};
+
 const sessionService = {
   getSessions,
   getSessionById,
+  createSession,
+  makeSessionCurrent,
+  updateSession,
+  deleteSession,
 };
 
 export default sessionService;

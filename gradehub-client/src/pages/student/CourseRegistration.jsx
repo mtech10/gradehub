@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useAcademic } from "../../context/AcademicContext";
 
 import PageHeader from "../../components/common/PageHeader";
 import RegistrationSummary from "../../components/courseRegistration/RegistrationSummary";
@@ -6,18 +7,17 @@ import CourseRegistrationTable from "../../components/courseRegistration/CourseR
 
 import { courseRegistrationService } from "../../services/courseRegistrationService";
 import { courseService } from "../../services/courseService";
-
 import { getRegistrationSummary } from "../../utils/registrationHelpers";
 
 function CourseRegistration() {
+  const { currentSession, isLoading: isAcademicLoading } = useAcademic(); // Only need session now
+
   const [courses, setCourses] = useState([]);
   const [rules, setRules] = useState({
     minUnits: 12,
-    maxUnits: 24,
+    maxUnits: 48,
     status: "Open",
-    deadline: "Soon",
   });
-
   const [selectedCodes, setSelectedCodes] = useState([]);
   const [droppedCodes, setDroppedCodes] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -27,37 +27,28 @@ function CourseRegistration() {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
+    if (isAcademicLoading || !currentSession) return;
+
     const fetchRegistrationInfo = async () => {
       try {
         setLoading(true);
 
         const registrationData =
-          await courseRegistrationService.getRegistrationData();
+          await courseRegistrationService.getRegistrationData({
+            sessionId: currentSession.id,
+          });
 
         const {
           student,
-          session,
-          semester,
           registeredCourses = [],
           rules: registrationRules,
         } = registrationData;
 
-        console.log("Registration context:", {
-          student,
-          session,
-          semester,
-          registeredCourses,
-          rules: registrationRules,
-        });
-
         const availableCourses = await courseService.getAvailableCourses({
           departmentId: student.department.id,
           levelId: student.level.id,
-          sessionId: session.id,
-          semesterId: semester.id,
+          sessionId: currentSession.id,
         });
-
-        console.log("Available courses:", availableCourses);
 
         const registeredIds = new Set(
           registeredCourses.map((course) => course.id),
@@ -67,22 +58,14 @@ function CourseRegistration() {
           id: course.id,
           code: course.code,
           title: course.title,
-
           units: Number(course.creditUnit ?? course.unit ?? 0),
           creditUnit: Number(course.creditUnit ?? course.unit ?? 0),
-
           semester: course.semester,
-
           status: registeredIds.has(course.id) ? "Registered" : "Available",
         }));
 
-        console.log("Final courses for table:", mergedCourses);
-
         setCourses(mergedCourses);
-
-        if (registrationRules) {
-          setRules(registrationRules);
-        }
+        if (registrationRules) setRules(registrationRules);
       } catch (error) {
         console.error("Failed to load course registration details:", error);
       } finally {
@@ -91,7 +74,7 @@ function CourseRegistration() {
     };
 
     fetchRegistrationInfo();
-  }, []);
+  }, [isAcademicLoading, currentSession]);
 
   const filteredCourses = courses.filter((course) => {
     const matchesSearch =
@@ -100,31 +83,22 @@ function CourseRegistration() {
       course.code.toLowerCase().includes(searchQuery.toLowerCase());
 
     let matchesTab = true;
-
-    if (activeTab === "available") {
+    if (activeTab === "available")
       matchesTab =
         course.status === "Available" && !selectedCodes.includes(course.code);
-    }
-
-    if (activeTab === "selected") {
+    if (activeTab === "selected")
       matchesTab = selectedCodes.includes(course.code);
-    }
-
-    if (activeTab === "registered") {
-      matchesTab = course.status === "Registered";
-    }
+    if (activeTab === "registered") matchesTab = course.status === "Registered";
 
     return matchesSearch && matchesTab;
   });
 
   const handleToggleSelection = (code) => {
     const course = courses.find((c) => c.code === code);
-
     if (!course) return;
 
     if (course.status === "Registered") {
       if (!isEditing) return;
-
       setDroppedCodes((prev) =>
         prev.includes(code) ? prev.filter((c) => c !== code) : [...prev, code],
       );
@@ -139,19 +113,13 @@ function CourseRegistration() {
     const availableCodes = filteredCourses
       .filter((course) => course.status === "Available")
       .map((course) => course.code);
-
     setSelectedCodes((prev) => [...new Set([...prev, ...availableCodes])]);
   };
 
-  const handleClearSelection = () => {
-    setSelectedCodes([]);
-  };
+  const handleClearSelection = () => setSelectedCodes([]);
 
   const handleRowClick = (course) => {
-    if (course.status === "Registered" && !isEditing) {
-      return;
-    }
-
+    if (course.status === "Registered" && !isEditing) return;
     handleToggleSelection(course.code);
   };
 
@@ -159,32 +127,18 @@ function CourseRegistration() {
     try {
       setSubmitting(true);
 
-      /*
-       * IMPORTANT:
-       * The service expects selectedCodes and droppedCodes.
-       */
       await courseRegistrationService.submitRegistration({
         selectedCodes,
         droppedCodes,
+        sessionId: currentSession.id,
       });
 
-      // Only update the UI after the backend confirms success.
       setCourses((prevCourses) =>
         prevCourses.map((course) => {
-          if (selectedCodes.includes(course.code)) {
-            return {
-              ...course,
-              status: "Registered",
-            };
-          }
-
-          if (droppedCodes.includes(course.code)) {
-            return {
-              ...course,
-              status: "Available",
-            };
-          }
-
+          if (selectedCodes.includes(course.code))
+            return { ...course, status: "Registered" };
+          if (droppedCodes.includes(course.code))
+            return { ...course, status: "Available" };
           return course;
         }),
       );
@@ -192,11 +146,8 @@ function CourseRegistration() {
       setSelectedCodes([]);
       setDroppedCodes([]);
       setIsEditing(false);
-
       alert("Registration updated successfully!");
     } catch (error) {
-      console.error("Submission failed:", error);
-
       alert(
         error.response?.data?.message ||
           "Failed to submit course registration.",
@@ -206,11 +157,6 @@ function CourseRegistration() {
     }
   };
 
-  const handleCancelEdit = () => {
-    setIsEditing(false);
-    setDroppedCodes([]);
-  };
-
   const summary = getRegistrationSummary({
     courses,
     selectedCodes,
@@ -218,15 +164,30 @@ function CourseRegistration() {
     rules,
   });
 
-  if (loading) {
-    return <div>Loading course registration portal...</div>;
-  }
+  if (isAcademicLoading)
+    return (
+      <div className="p-10 text-center text-slate-500 font-medium">
+        Loading course registration portal...
+      </div>
+    );
+  if (!currentSession)
+    return (
+      <div className="p-10 text-center text-red-500">
+        Registration is closed. No active session.
+      </div>
+    );
+  if (loading)
+    return (
+      <div className="p-10 text-center text-slate-500 font-medium">
+        Fetching available courses for {currentSession.name}...
+      </div>
+    );
 
   return (
     <div>
       <PageHeader
         title="Course Registration"
-        subtitle="Register and manage your courses for the current semester."
+        subtitle={`Register and manage your courses for the ${currentSession.name} academic session.`}
       />
 
       <div className="grid gap-8 xl:grid-cols-12">
@@ -256,7 +217,10 @@ function CourseRegistration() {
               rules={rules}
               isEditing={isEditing}
               onEdit={() => setIsEditing(true)}
-              onCancelEdit={handleCancelEdit}
+              onCancelEdit={() => {
+                setIsEditing(false);
+                setDroppedCodes([]);
+              }}
               onSubmit={handleSubmitRegistration}
               disabled={submitting}
             />

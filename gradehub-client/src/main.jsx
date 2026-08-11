@@ -7,13 +7,16 @@ import { AuthProvider } from "./context/AuthContext";
 
 import "./index.css";
 import { LayoutProvider } from "./context/LayoutContext";
+import { AcademicProvider } from "./context/AcademicContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <LayoutProvider>
       <BrowserRouter>
         <AuthProvider>
-          <App />
+          <AcademicProvider>
+            <App />
+          </AcademicProvider>
         </AuthProvider>
       </BrowserRouter>
     </LayoutProvider>

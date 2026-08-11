@@ -38,10 +38,19 @@ function UploadResults() {
   const [optionsError, setOptionsError] = useState("");
 
   const updateField = (field, value) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
+    setFormData((prev) => {
+      const updated = { ...prev, [field]: value };
+
+      if (field === "sessionId") {
+        updated.semesterId = "";
+        updated.courseId = "";
+      }
+      if (field === "semesterId") {
+        updated.courseId = "";
+      }
+
+      return updated;
+    });
 
     setValidation(null);
   };
@@ -91,7 +100,14 @@ function UploadResults() {
     label: session.name,
   }));
 
-  const semesterOptions = options.semesters.map((semester) => ({
+  const filteredSemesters = options.semesters.filter((sem) => {
+    if (!formData.sessionId) return false;
+    // Safely check against standard formats your backend might return
+    const semSessionId = sem.sessionId || sem.session_id || sem.session?.id;
+    return semSessionId === formData.sessionId;
+  });
+
+  const semesterOptions = filteredSemesters.map((semester) => ({
     value: semester.id,
     label: semester.name,
   }));

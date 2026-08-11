@@ -18,12 +18,10 @@ function CourseForm({ mode = "create", initialValues = {} }) {
     code: initialValues.code ?? "",
     title: initialValues.title ?? "",
     description: initialValues.description ?? "",
-
     departmentId: initialValues.departmentId ?? "",
     levelId: initialValues.levelId ?? "",
     sessionId: initialValues.sessionId ?? "",
     semesterId: initialValues.semesterId ?? "",
-
     creditUnit: initialValues.creditUnit ?? "",
   });
 
@@ -53,19 +51,8 @@ function CourseForm({ mode = "create", initialValues = {} }) {
             limit: 100,
             status: "active",
           }),
-
-          levelService.getLevels({
-            page: 1,
-            limit: 100,
-            status: "active",
-          }),
-
-          sessionService.getSessions({
-            page: 1,
-            limit: 100,
-            status: "active",
-          }),
-
+          levelService.getLevels({ page: 1, limit: 100, status: "active" }),
+          sessionService.getSessions({ page: 1, limit: 100, status: "active" }),
           semesterService.getSemesters({
             page: 1,
             limit: 100,
@@ -76,17 +63,13 @@ function CourseForm({ mode = "create", initialValues = {} }) {
         setDepartments(
           departmentsResponse.departments ?? departmentsResponse.data ?? [],
         );
-
         setLevels(levelsResponse.levels ?? levelsResponse.data ?? []);
-
         setSessions(sessionsResponse.sessions ?? sessionsResponse.data ?? []);
-
         setSemesters(
           semestersResponse.semesters ?? semestersResponse.data ?? [],
         );
       } catch (error) {
         console.error("Failed to load course form data:", error);
-
         setError(error?.message || "Failed to load academic information.");
       } finally {
         setLoadingOptions(false);
@@ -97,15 +80,20 @@ function CourseForm({ mode = "create", initialValues = {} }) {
   }, []);
 
   const updateField = (field, value) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
+    setFormData((prev) => {
+      const updatedData = { ...prev, [field]: value };
+
+      // If the session changes, automatically clear the selected semester
+      if (field === "sessionId") {
+        updatedData.semesterId = "";
+      }
+
+      return updatedData;
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (submitting) return;
 
     try {
@@ -116,33 +104,36 @@ function CourseForm({ mode = "create", initialValues = {} }) {
         code: formData.code.trim(),
         title: formData.title.trim(),
         description: formData.description.trim(),
-
         departmentId: formData.departmentId,
         levelId: formData.levelId,
         sessionId: formData.sessionId,
         semesterId: formData.semesterId,
-
         creditUnit: Number(formData.creditUnit),
       };
 
-      console.log("Course payload:", payload);
-
-      const result =
-        mode === "edit"
-          ? await courseService.updateCourse(initialValues.id, payload)
-          : await courseService.createCourse(payload);
-
-      console.log("Course saved successfully:", result);
+      if (mode === "edit") {
+        await courseService.updateCourse(initialValues.id, payload);
+      } else {
+        await courseService.createCourse(payload);
+      }
 
       navigate("/admin/courses");
     } catch (error) {
       console.error("Failed to save course:", error);
-
       setError(error?.message || "Failed to save course. Please try again.");
     } finally {
       setSubmitting(false);
     }
   };
+
+  // Dynamically filter semesters based on the currently selected Session ID
+  const filteredSemesters = semesters.filter((sem) => {
+    if (!formData.sessionId) return false;
+
+    // Safely check against standard formats your backend might return
+    const semSessionId = sem.sessionId || sem.session_id || sem.session?.id;
+    return semSessionId === formData.sessionId;
+  });
 
   if (loadingOptions) {
     return (
@@ -150,18 +141,6 @@ function CourseForm({ mode = "create", initialValues = {} }) {
         <p className="text-sm text-slate-500">
           Loading academic information...
         </p>
-      </div>
-    );
-  }
-
-  if (error && !submitting) {
-    return (
-      <div className="space-y-4">
-        <div className="rounded-xl border border-red-200 bg-red-50 p-4">
-          <p className="text-sm text-red-600">{error}</p>
-        </div>
-
-        {/* Don't completely block the form if saving failed */}
       </div>
     );
   }
@@ -182,10 +161,8 @@ function CourseForm({ mode = "create", initialValues = {} }) {
         departments={departments}
         levels={levels}
         sessions={sessions}
-        semesters={semesters}
+        semesters={filteredSemesters} // ONLY pass the filtered semesters here
       />
-
-      {/* <CourseAssignment formData={formData} updateField={updateField} /> */}
 
       <CourseFormActions mode={mode} loading={submitting} />
     </form>

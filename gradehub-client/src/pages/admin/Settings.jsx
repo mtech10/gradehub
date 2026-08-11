@@ -12,11 +12,12 @@ import AppearanceSettings from "../../components/admin/settings/AppearanceSettin
 import UserManagementSettings from "../../components/admin/settings/UserManagementSettings";
 import BackupSettings from "../../components/admin/settings/BackupSettings";
 
+import AcademicTermSettings from "../../components/admin/settings/AcademicTermSettings";
+
 import { adminSettingsData } from "../../constants/admin/adminSettingsData";
 
 function Settings() {
   const [activeTab, setActiveTab] = useState("profile");
-
   const [settings, setSettings] = useState(adminSettingsData);
 
   const settingTabs = [
@@ -31,6 +32,12 @@ function Settings() {
       label: "System Preferences",
       component: SystemPreferenceSettings,
       section: "system",
+    },
+    {
+      id: "academicTerms",
+      label: "Academic Terms",
+      component: AcademicTermSettings,
+      section: "academicTerms",
     },
     {
       id: "notifications",
@@ -81,7 +88,6 @@ function Settings() {
 
   const handleSave = () => {
     console.log(settings);
-
     alert("Settings saved successfully.");
   };
 
@@ -94,7 +100,6 @@ function Settings() {
   return (
     <div className="space-y-8">
       {/* Header */}
-
       <div className="flex flex-col gap-4 border-b border-slate-200 pb-6 lg:flex-row lg:items-end lg:justify-between">
         <PageHeader
           title="Settings"
@@ -113,8 +118,6 @@ function Settings() {
         </div>
       </div>
 
-      {/* Tabs */}
-
       <div className="flex gap-8 overflow-x-auto border-b border-slate-200">
         {settingTabs.map((tab) => (
           <button
@@ -131,15 +134,12 @@ function Settings() {
         ))}
       </div>
 
-      {/* Content */}
-
       <div className="max-w-4xl">
         <ActiveComponent
-          data={settings[activeSetting.section]}
+          data={settings[activeSetting.section] || {}}
           onChange={updateSection}
         />
       </div>
-      {/* Notice */}
 
       <div className="flex max-w-4xl items-center gap-3 rounded-xl border border-blue-100 bg-blue-50 p-4">
         <div className="flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 text-white">

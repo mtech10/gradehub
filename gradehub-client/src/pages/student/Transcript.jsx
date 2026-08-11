@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import PageHeader from "../../components/common/PageHeader";
 import TranscriptHeader from "../../components/transcript/TranscriptHeader";
 import StudentInformation from "../../components/transcript/StudentInformation";
 import TranscriptRecord from "../../components/transcript/TranscriptRecord";
@@ -46,18 +45,58 @@ function Transcript() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 print:space-y-4 print:bg-white print:text-black">
+      {/* 1. Official Print-Only Letterhead (Hidden on screen, shows on print) */}
+      <div className="hidden print:block text-center space-y-1 mb-6 border-b-2 border-black pb-4">
+        <h1 className="text-2xl font-bold uppercase tracking-wider">
+          GradeHub University
+        </h1>
+        <p className="text-xs">
+          Office of the Registrar • Academic Records Division
+        </p>
+        <h2 className="text-md font-semibold underline uppercase mt-2">
+          Official Academic Transcript
+        </h2>
+      </div>
+
+      {/* 2. Web Control Header (Hidden when printing) */}
       <TranscriptHeader />
 
+      {/* 3. Student Bio Information */}
       <StudentInformation profile={data.profile} />
 
-      <TranscriptRecord transcript={data.transcript} />
-
+      {/* 4. Overall Summary */}
       <OverallSummary summary={data.summary} />
 
-      <CgpaProgress progress={data.progress} />
+      {/* 5. Continuous Chronological Record (Sessions & Semesters) */}
+      <TranscriptRecord transcript={data.transcript} />
 
+      {/* 6. CGPA Progress Chart (Hidden on print to save paper layout) */}
+      <div className="print:hidden">
+        <CgpaProgress progress={data.progress} />
+      </div>
+
+      {/* 7. Notice / Sign-off Footer */}
       <TranscriptNotice />
+
+      {/* Official Print Sign-off Block (Hidden on screen, shows on print) */}
+      <div className="mt-12 hidden print:flex justify-between items-end pt-12">
+        <div className="space-y-1">
+          <p className="text-[10px] text-slate-500">
+            This document is electronically generated and is valid without
+            signature only when bearing the official seal.
+          </p>
+          <p className="text-xs font-semibold">
+            Date Issued: {new Date().toLocaleDateString()}
+          </p>
+        </div>
+        <div className="text-center space-y-2">
+          <div className="w-40 border-b border-black"></div>
+          <p className="text-xs font-semibold">
+            Registrar / Controller of Examinations
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

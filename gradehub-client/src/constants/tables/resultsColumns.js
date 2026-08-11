@@ -32,4 +32,5 @@ export const resultsColumns = [
     align: "center",
     minWidth: "180px",
   },
+  { key: "actions", label: "", sortable: false },
 ];

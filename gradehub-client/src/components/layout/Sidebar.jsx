@@ -33,6 +33,7 @@ function Sidebar({ navigation, user, variant = "light" }) {
     transition-all
     duration-300
     border-r
+    print:hidden
     ${sidebarOpen ? "w-80" : "w-30"}
     ${isDark ? "bg-slate-800 border-slate-800" : "bg-white border-slate-200"}
   `}

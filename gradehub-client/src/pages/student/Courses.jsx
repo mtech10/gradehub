@@ -1,23 +1,37 @@
 import { useState, useEffect } from "react";
+import { useAcademic } from "../../context/AcademicContext"; // Added context import
+
 import CourseHeader from "../../components/courses/CourseHeader";
 import CourseFilterBar from "../../components/courses/CourseFilterBar";
 import CourseStats from "../../components/courses/CourseStats";
-import CourseAccordion from "../../components/courses/CourseAccordion"; // Make sure to import this if used inside RegisteredCourses or map directly
+import CourseAccordion from "../../components/courses/CourseAccordion";
 import QuickLinks from "../../components/courses/QuickLinks";
 import CourseStatistics from "../../components/courses/CourseStatistics";
 import HelpCard from "../../components/courses/HelpCard";
 import { courseService } from "../../services/courseService";
 
 function Courses() {
+  const {
+    currentSession,
+    currentSemester,
+    isLoading: isAcademicLoading,
+  } = useAcademic();
+
   const [activeTab, setActiveTab] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (isAcademicLoading) return;
+
     const fetchCourses = async () => {
       try {
-        const result = await courseService.getStudentCoursesData();
+        setLoading(true);
+        const result = await courseService.getStudentCoursesData({
+          sessionId: currentSession?.id,
+          semesterId: currentSemester?.id,
+        });
         setData(result);
       } catch (error) {
         console.error("Failed to load courses:", error);
@@ -25,12 +39,15 @@ function Courses() {
         setLoading(false);
       }
     };
-    fetchCourses();
-  }, []);
 
-  if (loading) {
+    fetchCourses();
+  }, [isAcademicLoading, currentSession, currentSemester]); // Re-run if active terms change
+
+  if (isAcademicLoading || loading) {
     return (
-      <div className="p-10 text-center text-slate-500">Loading courses...</div>
+      <div className="p-10 text-center text-slate-500 font-medium">
+        Loading courses...
+      </div>
     );
   }
 
@@ -42,7 +59,6 @@ function Courses() {
     );
   }
 
-  // Filter semesters/courses based on activeTab and searchQuery
   const filteredSemesters = data.semesters
     .map((session) => {
       const filteredCourses = session.courses.filter((course) => {

@@ -1,10 +1,14 @@
 import { GraduationCap, BookOpen, Trophy, Percent } from "lucide-react";
-
 import StatCard from "../dashboard/DashboardStats";
-import { getSemesterSummary } from "../../utils/transcriptUtils";
 
 function SemesterSummary({ semester }) {
-  const summary = getSemesterSummary(semester);
+  const gpa = semester?.gpa ?? 0;
+
+  const totalUnits =
+    semester?.totalCredits ?? semester?.totalUnits ?? semester?.units ?? 0;
+
+  const totalCourses = semester?.totalCourses ?? semester?.courses?.length ?? 0;
+  const averageScore = semester?.averageScore ?? 0;
 
   return (
     <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-4">
@@ -12,7 +16,6 @@ function SemesterSummary({ semester }) {
         <h3 className="text-lg font-semibold text-slate-900">
           Semester Summary
         </h3>
-
         <p className="mt-1 text-sm text-slate-500">
           Academic performance overview for this semester.
         </p>
@@ -23,7 +26,7 @@ function SemesterSummary({ semester }) {
           compact
           layout="center"
           title="Semester GPA"
-          value={summary.gpa.toFixed(2)}
+          value={Number(gpa).toFixed(2)}
           icon={GraduationCap}
           color="primary"
         />
@@ -32,7 +35,7 @@ function SemesterSummary({ semester }) {
           compact
           layout="center"
           title="Credit Units"
-          value={summary.totalUnits}
+          value={totalUnits}
           icon={BookOpen}
           color="success"
         />
@@ -41,7 +44,7 @@ function SemesterSummary({ semester }) {
           compact
           layout="center"
           title="Courses"
-          value={summary.totalCourses}
+          value={totalCourses}
           icon={Trophy}
           color="purple"
         />
@@ -50,7 +53,7 @@ function SemesterSummary({ semester }) {
           compact
           layout="center"
           title="Average Score"
-          value={`${summary.averageScore.toFixed(1)}%`}
+          value={`${Number(averageScore).toFixed(1)}%`}
           icon={Percent}
           color="warning"
         />
