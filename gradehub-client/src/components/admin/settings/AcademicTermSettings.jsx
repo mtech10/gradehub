@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Edit2, Trash2, X } from "lucide-react"; // Make sure lucide-react is installed!
+import { Edit2, Trash2, X, Loader2, TrendingUp } from "lucide-react";
 import sessionService from "../../../services/admin/sessionService";
 import semesterService from "../../../services/admin/semesterService";
 import Button from "../../ui/Button";
@@ -16,6 +16,7 @@ function AcademicTermSettings() {
   const [sessionName, setSessionName] = useState("");
   const [sessionStart, setSessionStart] = useState("");
   const [sessionEnd, setSessionEnd] = useState("");
+  const [isPromoting, setIsPromoting] = useState(false);
 
   // Semester Form State
   const [editingSemesterId, setEditingSemesterId] = useState(null);
@@ -48,7 +49,6 @@ function AcademicTermSettings() {
     fetchSessions();
   }, []);
 
-  // --- Date Formatter for HTML Inputs ---
   const formatDateForInput = (dateString) => {
     if (!dateString) return "";
     return new Date(dateString).toISOString().split("T")[0];
@@ -91,7 +91,7 @@ function AcademicTermSettings() {
   };
 
   const handleEditSession = (session, e) => {
-    e.stopPropagation(); // Prevents opening the semester list when clicking edit
+    e.stopPropagation();
     setEditingSessionId(session.id);
     setSessionName(session.name);
     setSessionStart(formatDateForInput(session.startDate || session.startdate));
@@ -121,6 +121,36 @@ function AcademicTermSettings() {
       fetchActiveTerms();
     } catch (error) {
       alert("Failed to update current session.");
+    }
+  };
+
+  // --- PROMOTION HANDLER ---
+  const handlePromoteStudents = async (session) => {
+    const confirm = window.confirm(
+      `CRITICAL ACTION: Are you sure you want to run the batch promotion for ${session.name}?\n\nThis will evaluate all active students and move them to their next academic level based on department rules.`,
+    );
+
+    if (!confirm) return;
+
+    try {
+      setIsPromoting(true);
+      const result = await sessionService.promoteStudents(session.id);
+      const stats = result.data;
+
+      alert(
+        `Batch Promotion Complete!\n\n` +
+          `Total Evaluated: ${stats.totalEvaluated}\n` +
+          `Promoted: ${stats.promoted}\n` +
+          `Retained: ${stats.retained}`,
+      );
+    } catch (error) {
+      alert(
+        error.response?.data?.message ||
+          error.message ||
+          "Failed to run batch promotion.",
+      );
+    } finally {
+      setIsPromoting(false);
     }
   };
 
@@ -201,8 +231,9 @@ function AcademicTermSettings() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-        {/* --- SESSIONS SECTION --- */}
+      {/* CHANGED TO 3 COLUMNS HERE (lg:grid-cols-3) */}
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+        {/* --- COLUMN 1: SESSIONS SECTION --- */}
         <div className="space-y-6 rounded-2xl border border-slate-200 bg-slate-50 p-6">
           <h3 className="text-lg font-semibold text-slate-800">Sessions</h3>
 
@@ -255,7 +286,7 @@ function AcademicTermSettings() {
           </form>
 
           {/* SESSIONS LIST */}
-          <div className="space-y-3 max-h-[400px] overflow-y-auto">
+          <div className="space-y-3 max-h-[400px] overflow-y-auto pr-1">
             {sessions.map((session) => {
               const sessionStartVal = session.startDate || session.startdate;
               const sessionEndVal = session.endDate || session.enddate;
@@ -305,17 +336,18 @@ function AcademicTermSettings() {
                         ? new Date(sessionEndVal).toLocaleDateString()
                         : "No Date"}
                     </div>
-                    {/* EDIT & DELETE BUTTONS */}
-                    <div className="flex gap-2">
+                    <div className="flex items-center gap-2">
                       <button
                         onClick={(e) => handleEditSession(session, e)}
                         className="p-1 hover:text-blue-600"
+                        title="Edit Session"
                       >
                         <Edit2 size={14} />
                       </button>
                       <button
                         onClick={(e) => handleDeleteSession(session.id, e)}
                         className="p-1 hover:text-red-600"
+                        title="Delete Session"
                       >
                         <Trash2 size={14} />
                       </button>
@@ -327,15 +359,15 @@ function AcademicTermSettings() {
           </div>
         </div>
 
-        {/* --- SEMESTERS SECTION --- */}
-        <div className="space-y-6 rounded-2xl border border-slate-200 bg-slate-50 p-6">
+        {/* --- COLUMN 2: SEMESTERS SECTION --- */}
+        <div className="space-y-6 rounded-2xl border border-slate-200 bg-slate-50 p-6 h-fit">
           <h3 className="text-lg font-semibold text-slate-800">
             Semesters {selectedSession && `for ${selectedSession.name}`}
           </h3>
 
           {!selectedSession ? (
             <div className="flex h-32 items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50">
-              <p className="text-sm text-slate-500">
+              <p className="text-sm text-slate-500 text-center px-4">
                 Select a session to view/manage semesters.
               </p>
             </div>
@@ -390,7 +422,7 @@ function AcademicTermSettings() {
               </form>
 
               {/* SEMESTERS LIST */}
-              <div className="space-y-3 max-h-[400px] overflow-y-auto">
+              <div className="space-y-3 max-h-[400px] overflow-y-auto pr-1">
                 {semesters.map((semester) => {
                   const semesterStartVal =
                     semester.startDate || semester.startdate;
@@ -431,7 +463,6 @@ function AcademicTermSettings() {
                             ? new Date(semesterEndVal).toLocaleDateString()
                             : "No Date"}
                         </div>
-                        {/* EDIT & DELETE BUTTONS */}
                         <div className="flex gap-2">
                           <button
                             onClick={() => handleEditSemester(semester)}
@@ -457,6 +488,47 @@ function AcademicTermSettings() {
                 )}
               </div>
             </>
+          )}
+        </div>
+
+        {/* --- COLUMN 3: BATCH PROMOTION SECTION --- */}
+        <div className="rounded-2xl border border-indigo-100 bg-indigo-50/50 p-6 shadow-sm h-fit">
+          <div className="mb-4">
+            <h3 className="text-lg font-bold text-indigo-900">
+              Batch Promotion
+            </h3>
+            <p className="mt-2 text-sm text-indigo-700/80 leading-relaxed">
+              Advance all eligible students in the selected session to their
+              next academic level based on your configured department rules.
+            </p>
+          </div>
+
+          {!selectedSession ? (
+            <div className="rounded-xl border border-dashed border-indigo-200 bg-white p-6 text-center text-sm text-indigo-400 mt-6">
+              Select a session from the left column to run promotions.
+            </div>
+          ) : (
+            <div className="flex flex-col items-center gap-5 rounded-xl border border-indigo-100 bg-white p-6 text-center shadow-sm mt-6">
+              <div className="text-sm text-slate-600">
+                Target Session: <br />
+                <span className="font-bold text-lg text-slate-900 mt-1 block">
+                  {selectedSession.name}
+                </span>
+              </div>
+
+              <Button
+                onClick={() => handlePromoteStudents(selectedSession)}
+                disabled={isPromoting}
+                className="flex w-full items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 py-3"
+              >
+                {isPromoting ? (
+                  <Loader2 size={18} className="animate-spin" />
+                ) : (
+                  <TrendingUp size={18} />
+                )}
+                {isPromoting ? "Running Engine..." : `Promote Students`}
+              </Button>
+            </div>
           )}
         </div>
       </div>

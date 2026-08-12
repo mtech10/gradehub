@@ -36,7 +36,6 @@ export const makeSessionCurrent = async (id) => {
   return response.data;
 };
 
-// --- New Edit & Delete Methods ---
 export const updateSession = async (id, data) => {
   const response = await api.put(`/sessions/${id}`, data);
   return response.data;
@@ -47,6 +46,12 @@ export const deleteSession = async (id) => {
   return response.data;
 };
 
+// --- NEW BATCH PROMOTION API CALL ---
+export const promoteStudents = async (id) => {
+  const response = await api.post(`/sessions/${id}/promote`);
+  return response;
+};
+
 const sessionService = {
   getSessions,
   getSessionById,
@@ -54,6 +59,7 @@ const sessionService = {
   makeSessionCurrent,
   updateSession,
   deleteSession,
+  promoteStudents, // <-- Added here
 };
 
 export default sessionService;

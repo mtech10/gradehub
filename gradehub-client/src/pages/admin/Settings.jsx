@@ -15,6 +15,7 @@ import BackupSettings from "../../components/admin/settings/BackupSettings";
 import AcademicTermSettings from "../../components/admin/settings/AcademicTermSettings";
 
 import { adminSettingsData } from "../../constants/admin/adminSettingsData";
+import PromotionManager from "../../components/admin/settings/PromotionManager";
 
 function Settings() {
   const [activeTab, setActiveTab] = useState("profile");
@@ -38,6 +39,12 @@ function Settings() {
       label: "Academic Terms",
       component: AcademicTermSettings,
       section: "academicTerms",
+    },
+    {
+      id: "promotion",
+      label: "Promotion Management",
+      component: PromotionManager,
+      section: "promotion",
     },
     {
       id: "notifications",
@@ -134,7 +141,7 @@ function Settings() {
         ))}
       </div>
 
-      <div className="max-w-4xl">
+      <div className="max-w-full">
         <ActiveComponent
           data={settings[activeSetting.section] || {}}
           onChange={updateSection}

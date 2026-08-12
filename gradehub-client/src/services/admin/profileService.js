@@ -3,13 +3,15 @@ import api from "../api";
 export const profileService = {
   // Fetch the currently logged-in admin's profile
   getProfile: async () => {
-    const response = await api.get("/admin/profile");
+    // Change from "/profile" to "/profile/admin"
+    const response = await api.get("/profile/admin");
     return response.data || response;
   },
 
   // Update the admin's profile
   updateProfile: async (data) => {
-    const response = await api.put("/admin/profile", data);
+    // Change from "/profile" to "/profile/admin"
+    const response = await api.put("/profile/admin", data);
     return response.data || response;
   },
 };
