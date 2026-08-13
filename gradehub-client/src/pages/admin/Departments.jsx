@@ -16,6 +16,7 @@ import {
   departmentStatistics,
   departmentFilters,
 } from "../../constants/admin/departments";
+import StatCardSkeleton from "../../components/ui/skeletons/StatCardSskeleton";
 
 function Departments() {
   const navigate = useNavigate();
@@ -25,7 +26,6 @@ function Departments() {
     departmentFilters.faculties,
   );
 
-  // Real-time stats state mapped directly to the card titles
   const [stats, setStats] = useState({
     "Total Departments": 0,
     "Active Departments": 0,
@@ -34,8 +34,9 @@ function Departments() {
   });
 
   const [loading, setLoading] = useState(true);
+  const [loadingStats, setLoadingStats] = useState(true);
   const [pagination, setPagination] = useState({
-    totalItems: 0,
+    total: 0,
     totalPages: 1,
   });
 
@@ -43,13 +44,11 @@ function Departments() {
   const [faculty, setFaculty] = useState("");
   const [status, setStatus] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 10;
+  const pageSize = 5;
 
-  // Fetch Stats and Faculties on Mount
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
-        // Fetch stats
         const statsRes = await departmentService.getDepartmentStats();
         const statData = statsRes.data || statsRes;
 
@@ -60,7 +59,6 @@ function Departments() {
           "Total Courses": parseInt(statData.total_courses, 10) || 0,
         });
 
-        // Fetch faculties for the search filter dropdown
         const facultyRes = await facultyService.getFaculties();
         const facData = facultyRes.data || facultyRes;
         if (Array.isArray(facData)) {
@@ -75,13 +73,14 @@ function Departments() {
         }
       } catch (error) {
         console.error("Failed to load initial data:", error);
+      } finally {
+        setLoadingStats(false);
       }
     };
 
     fetchInitialData();
   }, []);
 
-  // Fetch Departments Table Data
   useEffect(() => {
     const fetchDepartments = async () => {
       setLoading(true);
@@ -133,7 +132,6 @@ function Departments() {
   const renderCell = (department, column) => {
     switch (column.key) {
       case "status":
-        // Map the backend boolean 'isactive' or 'isActive' to a UI string
         const isActive = department.isActive || department.isactive;
         return (
           <Badge variant={isActive ? "green" : "red"}>
@@ -157,14 +155,18 @@ function Departments() {
       />
 
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-        {departmentStatistics.map((stat) => (
-          <AdminStatCard
-            key={stat.title}
-            {...stat}
-            value={stats[stat.title] || 0}
-            change=""
-          />
-        ))}
+        {loadingStats
+          ? Array.from({ length: 4 }).map((_, i) => (
+              <StatCardSkeleton key={i} />
+            ))
+          : departmentStatistics.map((stat) => (
+              <AdminStatCard
+                key={stat.title}
+                {...stat}
+                value={stats[stat.title] || 0}
+                change=""
+              />
+            ))}
       </div>
 
       <div className="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-6 lg:flex-row lg:items-center lg:justify-between">
@@ -201,11 +203,12 @@ function Departments() {
         selectable
         pagination
         pageSize={pageSize}
-        totalItems={pagination.totalItems || departments.length}
+        totalItems={pagination.total || departments.length || 0}
         currentPage={currentPage}
         totalPages={pagination.totalPages || 1}
         onPageChange={setCurrentPage}
         loading={loading}
+        serverPagination={true}
         onRowClick={(department) =>
           navigate(`/admin/departments/${department.id}`)
         }

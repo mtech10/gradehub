@@ -8,7 +8,9 @@ import DepartmentOverview from "../../components/admin/dashboard/DepartmentOverv
 import UpcomingActivities from "../../components/admin/dashboard/UpcomingActivities";
 import { Users, BookOpen, FileText, GraduationCap } from "lucide-react";
 import { dashboardQuickActions } from "../../constants/admin/dashboardData";
-import { dashboardService } from "../../services/admin//dashboardService";
+import { dashboardService } from "../../services/admin/dashboardService";
+import StatCardSkeleton from "../../components/ui/skeletons/StatCardSskeleton";
+import QuickActionCardSkeleton from "../../components/ui/skeletons/QuickActionCardSkeleton";
 
 function Dashboard() {
   const [dashboardData, setDashboardData] = useState(null);
@@ -19,7 +21,6 @@ function Dashboard() {
       try {
         const data = await dashboardService.getAdminDashboard();
 
-        // 1. Map Overview to Stat Cards
         const mappedStats = [
           {
             id: 1,
@@ -55,7 +56,6 @@ function Dashboard() {
           },
         ];
 
-        // 2. Map Recent Students
         const mappedStudents = (data.recentStudents || []).map((student) => ({
           id: student.id,
           matricNumber: student.matricNumber,
@@ -63,7 +63,6 @@ function Dashboard() {
           status: "Active",
         }));
 
-        // 3. Map Recent Results to Pending Results Table format (FIXED)
         const mappedResults = (data.recentResults || []).map((result) => ({
           id: result.id,
           courseCode: result.course?.code || "-",
@@ -73,13 +72,11 @@ function Dashboard() {
           status: "Awaiting Approval",
         }));
 
-        // 4. Map Department Statistics
         const mappedDepartments = (data.departmentStatistics || []).map(
           (dep) => ({
             id: dep.id,
             name: dep.name,
             students: dep.students,
-            // Generating safe defaults for the UI bars since these aren't in the DB query yet
             completion: Math.min(
               100,
               Math.max(
@@ -94,11 +91,11 @@ function Dashboard() {
 
         setDashboardData({
           stats: mappedStats,
-          quickActions: dashboardQuickActions, // Using local constants for static UI links
+          quickActions: dashboardQuickActions,
           recentStudents: mappedStudents,
           pendingResults: mappedResults,
           departments: mappedDepartments,
-          activities: [], // Empty array prevents crashes; admin DB service doesn't return activities
+          activities: [],
         });
       } catch (error) {
         console.error("Failed to fetch admin dashboard:", error);
@@ -112,8 +109,28 @@ function Dashboard() {
 
   if (loading) {
     return (
-      <div className="p-10 text-center text-slate-500">
-        Loading Dashboard...
+      <div className="space-y-8">
+        <PageHeader title="Dashboard" subtitle="Overview and summaries." />
+
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <StatCardSkeleton key={`stat-skeleton-${i}`} />
+          ))}
+        </div>
+
+        <section className="space-y-4 pt-4">
+          <div>
+            <div className="mb-2 h-6 w-40 animate-pulse rounded bg-slate-200"></div>
+            <div className="h-4 w-64 animate-pulse rounded bg-slate-200"></div>
+          </div>
+          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <QuickActionCardSkeleton key={`action-skeleton-${i}`} />
+            ))}
+          </div>
+        </section>
+
+        <div className="h-64 w-full animate-pulse rounded-2xl bg-slate-200"></div>
       </div>
     );
   }
@@ -127,7 +144,8 @@ function Dashboard() {
   }
 
   return (
-    <>
+    <div className="space-y-8">
+      <PageHeader title="Dashboard" subtitle="Overview and summaries." />
       <DashboardStats stats={dashboardData.stats} />
       <DashboardQuickActions actions={dashboardData.quickActions} />
       <RecentStudentsTable students={dashboardData.recentStudents} />
@@ -136,7 +154,7 @@ function Dashboard() {
       {dashboardData.activities.length > 0 && (
         <UpcomingActivities activities={dashboardData.activities} />
       )}
-    </>
+    </div>
   );
 }
 

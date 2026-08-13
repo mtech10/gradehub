@@ -6,6 +6,7 @@ import UploadResultForm from "../../components/admin/uploadResults/UploadResultF
 import UploadPreviewCard from "../../components/admin/uploadResults/UploadPreviewCard";
 import UploadSummaryCard from "../../components/admin/uploadResults/UploadSummaryCard";
 import UploadNotesCard from "../../components/admin/uploadResults/UploadNotesCard";
+import FormSkeleton from "../../components/ui/skeletons/FormSkeleton";
 
 import { getSessions } from "../../services/admin/sessionService";
 import { getSemesters } from "../../services/admin/semesterService";
@@ -102,7 +103,6 @@ function UploadResults() {
 
   const filteredSemesters = options.semesters.filter((sem) => {
     if (!formData.sessionId) return false;
-    // Safely check against standard formats your backend might return
     const semSessionId = sem.sessionId || sem.session_id || sem.session?.id;
     return semSessionId === formData.sessionId;
   });
@@ -166,32 +166,47 @@ function UploadResults() {
       )}
 
       <div className="grid gap-6 xl:grid-cols-[2fr_1fr]">
-        <UploadResultForm
-          formData={formData}
-          updateField={updateField}
-          sessions={sessionOptions}
-          semesters={semesterOptions}
-          departments={departmentOptions}
-          levels={levelOptions}
-          courseOptions={courseOptions}
-          loadingOptions={loadingOptions}
-          onValidationComplete={setValidation}
-        />
-
-        <div className="space-y-6">
-          <UploadPreviewCard
+        {/* Left Column: Form */}
+        {loadingOptions ? (
+          <FormSkeleton />
+        ) : (
+          <UploadResultForm
             formData={formData}
-            validation={validation}
+            updateField={updateField}
             sessions={sessionOptions}
             semesters={semesterOptions}
             departments={departmentOptions}
             levels={levelOptions}
             courseOptions={courseOptions}
+            loadingOptions={loadingOptions}
+            onValidationComplete={setValidation}
           />
+        )}
 
-          <UploadSummaryCard validation={validation} />
+        {/* Right Column: Skeletons or Cards */}
+        <div className="space-y-6">
+          {loadingOptions ? (
+            <>
+              <div className="h-[400px] w-full animate-pulse rounded-2xl bg-slate-200"></div>
+              <div className="h-48 w-full animate-pulse rounded-2xl bg-slate-200"></div>
+            </>
+          ) : (
+            <>
+              <UploadPreviewCard
+                formData={formData}
+                validation={validation}
+                sessions={sessionOptions}
+                semesters={semesterOptions}
+                departments={departmentOptions}
+                levels={levelOptions}
+                courseOptions={courseOptions}
+              />
 
-          <UploadNotesCard />
+              <UploadSummaryCard validation={validation} />
+
+              <UploadNotesCard />
+            </>
+          )}
         </div>
       </div>
     </div>

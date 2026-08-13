@@ -6,15 +6,16 @@ import ResultToolbar from "../../components/admin/results/ResultToolbar";
 import ResultsTable from "../../components/admin/results/ResultsTable";
 import BulkActionBar from "../../components/admin/common/BulkActionBar";
 
-// Make sure you have this service created in your frontend!
 import { resultService } from "../../services/admin/resultService";
 import { resultFilters } from "../../constants/admin/results";
 import { resultColumns } from "../../constants/tables/resultColumns";
 import resultUploadService from "../../services/admin/resultUploadService";
+import StatCardSkeleton from "../../components/ui/skeletons/StatCardSskeleton";
 
 function AllResults() {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [pagination, setPagination] = useState({ total: 0, totalPages: 1 });
   const [resultStats, setResultStats] = useState({
     totalResults: 0,
@@ -25,7 +26,7 @@ function AllResults() {
   const [search, setSearch] = useState("");
   const [session, setSession] = useState("");
   const [semester, setSemester] = useState("");
-  const [level, setLevel] = useState(""); // If your backend supports level filtering
+  const [level, setLevel] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [sortKey, setSortKey] = useState("createdat");
   const [sortDirection, setSortDirection] = useState("desc");
@@ -67,6 +68,7 @@ function AllResults() {
       console.error("Failed to fetch results:", error);
     } finally {
       setLoading(false);
+      setIsInitialLoad(false); // Prevents the skeleton from flashing again
     }
   };
 
@@ -175,7 +177,16 @@ function AllResults() {
         subtitle="Manage and review students' academic results."
       />
 
-      <ResultStats stats={resultStats} />
+      {isInitialLoad ? (
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <StatCardSkeleton key={`stat-${i}`} />
+          ))}
+        </div>
+      ) : (
+        <ResultStats stats={resultStats} />
+      )}
+
       <ResultToolbar
         search={search}
         setSearch={setSearch}

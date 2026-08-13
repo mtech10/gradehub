@@ -30,14 +30,12 @@ function CourseForm({ mode = "create", initialValues = {} }) {
   const [sessions, setSessions] = useState([]);
   const [semesters, setSemesters] = useState([]);
 
-  const [loadingOptions, setLoadingOptions] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
     const loadAcademicData = async () => {
       try {
-        setLoadingOptions(true);
         setError("");
 
         const [
@@ -134,16 +132,6 @@ function CourseForm({ mode = "create", initialValues = {} }) {
     const semSessionId = sem.sessionId || sem.session_id || sem.session?.id;
     return semSessionId === formData.sessionId;
   });
-
-  if (loadingOptions) {
-    return (
-      <div className="rounded-xl border border-slate-200 bg-white p-6">
-        <p className="text-sm text-slate-500">
-          Loading academic information...
-        </p>
-      </div>
-    );
-  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">

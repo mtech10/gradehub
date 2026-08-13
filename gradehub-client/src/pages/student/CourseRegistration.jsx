@@ -4,13 +4,14 @@ import { useAcademic } from "../../context/AcademicContext";
 import PageHeader from "../../components/common/PageHeader";
 import RegistrationSummary from "../../components/courseRegistration/RegistrationSummary";
 import CourseRegistrationTable from "../../components/courseRegistration/CourseRegistrationTable";
+import CourseRegistrationSkeleton from "../../components/ui/skeletons/CourseRegistrationSkeleton";
 
 import { courseRegistrationService } from "../../services/courseRegistrationService";
 import { courseService } from "../../services/courseService";
 import { getRegistrationSummary } from "../../utils/registrationHelpers";
 
 function CourseRegistration() {
-  const { currentSession, isLoading: isAcademicLoading } = useAcademic(); // Only need session now
+  const { currentSession, isLoading: isAcademicLoading } = useAcademic();
 
   const [courses, setCourses] = useState([]);
   const [rules, setRules] = useState({
@@ -164,22 +165,14 @@ function CourseRegistration() {
     rules,
   });
 
-  if (isAcademicLoading)
-    return (
-      <div className="p-10 text-center text-slate-500 font-medium">
-        Loading course registration portal...
-      </div>
-    );
+  if (isAcademicLoading || loading) {
+    return <CourseRegistrationSkeleton />;
+  }
+
   if (!currentSession)
     return (
       <div className="p-10 text-center text-red-500">
         Registration is closed. No active session.
-      </div>
-    );
-  if (loading)
-    return (
-      <div className="p-10 text-center text-slate-500 font-medium">
-        Fetching available courses for {currentSession.name}...
       </div>
     );
 

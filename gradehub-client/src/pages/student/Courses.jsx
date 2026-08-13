@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useAcademic } from "../../context/AcademicContext"; // Added context import
+import { useAcademic } from "../../context/AcademicContext";
 
 import CourseHeader from "../../components/courses/CourseHeader";
 import CourseFilterBar from "../../components/courses/CourseFilterBar";
@@ -8,6 +8,7 @@ import CourseAccordion from "../../components/courses/CourseAccordion";
 import QuickLinks from "../../components/courses/QuickLinks";
 import CourseStatistics from "../../components/courses/CourseStatistics";
 import HelpCard from "../../components/courses/HelpCard";
+import CoursesSkeleton from "../../components/ui/skeletons/CoursesSkeleton";
 import { courseService } from "../../services/courseService";
 
 function Courses() {
@@ -41,14 +42,10 @@ function Courses() {
     };
 
     fetchCourses();
-  }, [isAcademicLoading, currentSession, currentSemester]); // Re-run if active terms change
+  }, [isAcademicLoading, currentSession, currentSemester]);
 
   if (isAcademicLoading || loading) {
-    return (
-      <div className="p-10 text-center text-slate-500 font-medium">
-        Loading courses...
-      </div>
-    );
+    return <CoursesSkeleton />;
   }
 
   if (!data) {

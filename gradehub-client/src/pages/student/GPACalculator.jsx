@@ -5,6 +5,7 @@ import GPAResultsSummary from "../../components/gpa/GPAResultsSummary";
 import GPATipsCard from "../../components/gpa/GPATipsCard";
 import GradingScaleCard from "../../components/gpa/GradingScaleCard";
 import GPANote from "../../components/gpa/GPANote";
+import GPACalculatorSkeleton from "../../components/ui/skeletons/GPACalculatorSkeleton";
 import { calculateGPA, createEmptyCourse } from "../../utils/gpaUtils";
 import PageHeader from "../../components/ui/PageHeader";
 
@@ -18,8 +19,8 @@ import {
 
 function GPACalculator() {
   const [courses, setCourses] = useState(initialCourses);
-
   const [results, setResults] = useState(() => calculateGPA(initialCourses));
+  const [loading, setLoading] = useState(false); // Toggle to true if fetching initial preset data asynchronously
 
   const totalUnits = useMemo(
     () => courses.reduce((sum, course) => sum + Number(course.units || 0), 0),
@@ -44,6 +45,10 @@ function GPACalculator() {
   const handleCalculate = () => {
     setResults(calculateGPA(courses));
   };
+
+  if (loading) {
+    return <GPACalculatorSkeleton />;
+  }
 
   return (
     <div className="space-y-8">

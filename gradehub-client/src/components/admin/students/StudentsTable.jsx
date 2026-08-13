@@ -9,7 +9,10 @@ function StudentsTable({
   currentPage,
   onPageChange,
   pageSize,
-
+  loading,
+  totalItems,
+  totalPages,
+  onDelete,
   sortKey,
   sortDirection,
   onSort,
@@ -23,13 +26,12 @@ function StudentsTable({
   const navigate = useNavigate();
 
   const renderCell = (student, column) => {
-    // 1. Safely extract and normalize the data from PostgreSQL
     const matric = student.matricNumber || student.matricnumber || "-";
     const fName =
       student.fullName ||
       `${student.firstName || student.firstname || ""} ${student.lastName || student.lastname || ""}`.trim() ||
       "Unknown Student";
-    const studentStatus = student.status || "Active"; // Fallback if status is null/empty in DB
+    const studentStatus = student.status || "Active";
     const studentCgpa = student.cgpa || student.cgpi || "0.00";
 
     switch (column.key) {
@@ -76,7 +78,6 @@ function StudentsTable({
           </Badge>
         );
 
-      // Handle both object-style (student.department.name) and raw SQL alias (student.department_name)
       case "department":
         return (
           student.department?.name ||
@@ -98,7 +99,6 @@ function StudentsTable({
           "-"
         );
 
-      // 2. Add the missing CGPA case
       case "cgpa":
         return (
           <span className="font-medium text-slate-700">{studentCgpa}</span>
@@ -114,15 +114,12 @@ function StudentsTable({
               },
               {
                 label: "Edit Student",
-                onClick: () => {},
+                onClick: () => navigate(`/admin/students/${student.id}/edit`),
               },
               {
-                label: "View Transcript",
-                onClick: () => {},
-              },
-              {
-                label: "View Results",
-                onClick: () => {},
+                label: "Delete Student",
+                onClick: () => onDelete?.(student.id),
+                className: "text-red-600 hover:bg-red-50",
               },
             ]}
           />
@@ -132,6 +129,7 @@ function StudentsTable({
         return student[column.key];
     }
   };
+
   return (
     <DataTable
       columns={columns}
@@ -140,11 +138,12 @@ function StudentsTable({
       pagination
       currentPage={currentPage}
       onPageChange={onPageChange}
-      totalItems={students.length}
-      totalPages={Math.ceil(students.length / pageSize) || 1}
+      totalItems={totalItems}
+      totalPages={totalPages}
       pageSize={pageSize}
+      serverPagination={true}
       itemLabel="students"
-      loading={false}
+      loading={loading}
       sortKey={sortKey}
       sortDirection={sortDirection}
       onSort={onSort}

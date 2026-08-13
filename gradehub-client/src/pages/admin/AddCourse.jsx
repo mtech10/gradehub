@@ -12,6 +12,7 @@ import semesterService from "../../services/admin/semesterService";
 import courseService from "../../services/admin/courseService";
 
 import { toSelectOptions } from "../../utils/selectOptions";
+import FormSkeleton from "../../components/ui/skeletons/FormSkeleton";
 
 function AddCourse() {
   const navigate = useNavigate();
@@ -73,7 +74,6 @@ function AddCourse() {
   const handleSubmit = async (formData) => {
     try {
       await courseService.createCourse(formData);
-
       navigate("/admin/courses");
     } catch (error) {
       console.error("Failed to create course:", error);
@@ -88,20 +88,27 @@ function AddCourse() {
       />
 
       <div className="flex justify-end">
-        <Button variant="secondary" onClick={() => navigate("/admin/courses")}>
+        <Button
+          variant="secondary"
+          onClick={() => navigate("/admin/courses")}
+          disabled={loading}
+        >
           <ArrowLeft size={18} />
           Back to Courses
         </Button>
       </div>
 
-      <CourseForm
-        mode="create"
-        departments={departments}
-        levels={levels}
-        semesters={semesters}
-        loadingOptions={loading}
-        onSubmit={handleSubmit}
-      />
+      {loading ? (
+        <FormSkeleton />
+      ) : (
+        <CourseForm
+          mode="create"
+          departments={departments}
+          levels={levels}
+          semesters={semesters}
+          onSubmit={handleSubmit}
+        />
+      )}
     </div>
   );
 }

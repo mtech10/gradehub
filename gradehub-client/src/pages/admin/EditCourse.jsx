@@ -7,6 +7,7 @@ import Button from "../../components/ui/Button";
 
 import courseService from "../../services/admin/courseService";
 import CourseForm from "../../components/admin/courseForm/CourseForm";
+import FormSkeleton from "../../components/ui/skeletons/FormSkeleton";
 
 function EditCourse() {
   const navigate = useNavigate();
@@ -21,7 +22,6 @@ function EditCourse() {
         const response = await courseService.getCourseById(id);
         const data = response.data || response;
 
-        // Map the backend DB columns to match the form's expected initialValues
         setCourse({
           id: data.id,
           code: data.code || "",
@@ -32,7 +32,7 @@ function EditCourse() {
           levelId: data.levelId || data.level_id || data.levelid || "",
           semesterId:
             data.semesterId || data.semester_id || data.semesterid || "",
-          sessionId: data.sessionId || data.session_id || data.sessionid || "", // Included for UI compatibility
+          sessionId: data.sessionId || data.session_id || data.sessionid || "",
           creditUnit: data.creditUnit || data.creditunit || "",
         });
       } catch (error) {
@@ -46,14 +46,6 @@ function EditCourse() {
       fetchCourse();
     }
   }, [id]);
-
-  if (loading) {
-    return (
-      <div className="flex h-64 items-center justify-center text-slate-500">
-        Loading course data...
-      </div>
-    );
-  }
 
   if (!course && !loading) {
     return (
@@ -76,13 +68,18 @@ function EditCourse() {
         <Button
           variant="secondary"
           onClick={() => navigate(`/admin/courses/${id}`)}
+          disabled={loading}
         >
           <ArrowLeft size={18} />
           Back to Details
         </Button>
       </div>
 
-      <CourseForm mode="edit" initialValues={course} />
+      {loading ? (
+        <FormSkeleton />
+      ) : (
+        <CourseForm mode="edit" initialValues={course} />
+      )}
     </div>
   );
 }

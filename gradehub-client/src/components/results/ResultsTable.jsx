@@ -45,15 +45,15 @@ function ResultsTable({
           </Badge>
         );
 
-      // --- ADDED ACTIONS COLUMN RENDERING ---
       case "actions": {
-        const isOpen = openDropdownId === row.id;
+        const uniqueKey = row.id || row.code;
+        const isOpen = openDropdownId === uniqueKey;
 
         return (
           <div className="relative flex justify-end">
             <button
               type="button"
-              onClick={() => setOpenDropdownId(isOpen ? null : row.id)}
+              onClick={() => setOpenDropdownId(isOpen ? null : uniqueKey)}
               className={`rounded-lg p-2 transition-colors hover:bg-slate-200 hover:text-slate-700 ${
                 isOpen ? "bg-slate-200 text-slate-700" : "text-slate-400"
               }`}
@@ -63,7 +63,6 @@ function ResultsTable({
 
             {isOpen && (
               <>
-                {/* Invisible overlay to close dropdown when clicking outside */}
                 <div
                   className="fixed inset-0 z-10"
                   onClick={() => setOpenDropdownId(null)}
@@ -109,7 +108,7 @@ function ResultsTable({
           ) : null
         }
       >
-        <div className="max-h-[560px] overflow-auto">
+        <div className="h-fit max-h-[420px] overflow-auto">
           <div className={`${SCROLLBAR}`}>
             <DataTable
               columns={resultsColumns}

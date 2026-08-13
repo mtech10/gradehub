@@ -5,6 +5,7 @@ import Button from "../../components/ui/Button";
 import Card from "../../components/ui/Card";
 import NotificationList from "../../components/notifications/NotificationList";
 import NotificationSummary from "../../components/notifications/NotificationSummary";
+import NotificationsSkeleton from "../../components/ui/skeletons/NotificationsSkeleton";
 
 import { notificationService } from "../../services/notificationService";
 
@@ -39,7 +40,6 @@ function Notifications() {
   const handleMarkAsRead = async (id) => {
     try {
       await notificationService.markAsRead(id);
-      // Optimistically update just the one clicked notification
       setNotifications((prev) =>
         prev.map((n) => (n.id === id ? { ...n, isRead: true } : n)),
       );
@@ -49,11 +49,7 @@ function Notifications() {
   };
 
   if (loading) {
-    return (
-      <div className="p-10 text-center text-slate-500">
-        Loading notifications...
-      </div>
-    );
+    return <NotificationsSkeleton />;
   }
 
   return (
@@ -67,7 +63,7 @@ function Notifications() {
           variant="outline"
           className="shrink-0 bg-white"
           onClick={handleMarkAllAsRead}
-          disabled={!notifications.some((n) => !n.isRead)} // Disable if all are already read
+          disabled={!notifications.some((n) => !n.isRead)}
         >
           <CheckCircle2 size={18} />
           Mark all as read

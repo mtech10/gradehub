@@ -11,25 +11,23 @@ import {
 } from "../../components/profile/ProfileCards";
 
 import EditProfileModal from "../../components/profile/EditProfileModal";
+import ProfileSkeleton from "../../components/ui/skeletons/ProfileSkeleton";
 
-import {
-  initialStudentData,
-  generateProfileUI,
-} from "../../constants/profile/profileData";
+// ✅ Added back the missing import for generating the profile UI structure
+import { generateProfileUI } from "../../constants/profile/profileData";
+
 import { useEffect, useState } from "react";
-
 import profileService from "../../services/profileService";
 
 function Profile() {
-  // Backend-ready student model
   const [student, setStudent] = useState(null);
-
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         const data = await profileService.getStudentProfile();
-
         setStudent(data);
       } catch (error) {
         console.error(error);
@@ -41,16 +39,14 @@ function Profile() {
     fetchProfile();
   }, []);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
   const profileData = student ? generateProfileUI(student) : null;
+
   const handleProfileUpdate = async (updatedFields) => {
     try {
       const updatedProfile =
         await profileService.updateStudentProfile(updatedFields);
 
       setStudent(updatedProfile);
-
       setIsModalOpen(false);
     } catch (error) {
       console.error(error);
@@ -58,16 +54,20 @@ function Profile() {
   };
 
   if (loading) {
-    return <div className="p-10 text-center">Loading profile...</div>;
+    return <ProfileSkeleton />;
   }
+
   if (!profileData) {
-    return <div className="p-10 text-center">Unable to load profile.</div>;
+    return (
+      <div className="p-10 text-center text-red-500">
+        Unable to load profile.
+      </div>
+    );
   }
 
   return (
     <div className="space-y-8">
       {/* Header */}
-
       <div className="flex flex-col gap-4 border-b border-slate-200 pb-6 sm:flex-row sm:items-end sm:justify-between">
         <PageHeader
           title="My Profile"
@@ -85,7 +85,6 @@ function Profile() {
       </div>
 
       {/* Profile */}
-
       <ProfileMainCard data={profileData} />
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">

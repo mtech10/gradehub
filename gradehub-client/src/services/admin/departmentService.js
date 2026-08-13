@@ -15,9 +15,12 @@ export const getDepartments = async (params = {}) => {
 
   const response = await api.get(endpoint);
 
+  // Safely extract data and pagination regardless of how Axios wraps it
+  const payload = response.data?.pagination ? response.data : response;
+
   return {
-    data: response.data,
-    pagination: response.pagination,
+    data: payload.data || payload,
+    pagination: payload.pagination || { total: 0, totalPages: 1 },
   };
 };
 

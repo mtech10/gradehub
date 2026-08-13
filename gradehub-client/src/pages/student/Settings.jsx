@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Info, Check } from "lucide-react";
 import PageHeader from "../../components/common/PageHeader";
 import Button from "../../components/ui/Button";
-import AccountSettings from "../../components/settings/AccountSettings";
 import SecuritySettings from "../../components/settings/SecuritySettings";
 import PreferencesSettings from "../../components/settings/PreferencesSettings";
 import AppearanceSettings from "../../components/settings/AppearanceSettings";
@@ -14,10 +13,6 @@ function Settings() {
 
   // Master State for all Settings
   const [settingsState, setSettingsState] = useState({
-    account: {
-      fullName: "Ademola Oyelusi",
-      phone: "+234 801 234 5678",
-    },
     preferences: {
       language: "en",
       dateFormat: "ddmm",
@@ -47,7 +42,6 @@ function Settings() {
   };
 
   const tabs = [
-    { id: "account", label: "Account" },
     { id: "preferences", label: "Preferences" },
     { id: "notifications", label: "Notifications" },
     { id: "security", label: "Security" },
@@ -76,20 +70,6 @@ function Settings() {
 
   const renderActiveTab = () => {
     switch (activeTab) {
-      case "account":
-        return (
-          <AccountSettings
-            data={settingsState.account}
-            onChange={updateSectionState}
-          />
-        );
-      case "preferences":
-        return (
-          <PreferencesSettings
-            data={settingsState.preferences}
-            onChange={updateSectionState}
-          />
-        );
       case "notifications":
         return (
           <NotificationSettings
@@ -113,8 +93,8 @@ function Settings() {
         );
       default:
         return (
-          <AccountSettings
-            data={settingsState.account}
+          <PreferencesSettings
+            data={settingsState.preferences}
             onChange={updateSectionState}
           />
         );

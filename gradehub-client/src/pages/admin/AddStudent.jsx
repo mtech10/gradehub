@@ -22,7 +22,8 @@ function AddStudent() {
         </Button>
       </div>
 
-      <StudentForm />
+      {/* Renders the form wrapper immediately. The skeleton will show inside this component while options fetch */}
+      <StudentForm mode="create" />
     </div>
   );
 }

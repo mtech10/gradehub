@@ -13,6 +13,7 @@ import { getLevels } from "../../services/admin/levelService";
 import { courseColumns } from "../../constants/tables/courseColumns";
 
 import { BookOpen, CheckCircle, GraduationCap, Clock3 } from "lucide-react";
+import StatCardSkeleton from "../../components/ui/skeletons/StatCardSskeleton";
 
 function AllCourses() {
   const [courses, setCourses] = useState([]);
@@ -76,13 +77,11 @@ function AllCourses() {
   const [selectedRows, setSelectedRows] = useState([]);
 
   const [loading, setLoading] = useState(true);
+  const [loadingStats, setLoadingStats] = useState(true);
   const [error, setError] = useState("");
 
   const pageSize = 8;
 
-  /*
-   * Load filter options from the database.
-   */
   useEffect(() => {
     const loadFilterOptions = async () => {
       try {
@@ -93,7 +92,6 @@ function AllCourses() {
 
         setFilters((prev) => ({
           ...prev,
-
           departments: [
             { value: "", label: "All Departments" },
             ...(departmentsResponse.data || []).map((department) => ({
@@ -101,7 +99,6 @@ function AllCourses() {
               label: department.name,
             })),
           ],
-
           levels: [
             { value: "", label: "All Levels" },
             ...(levelsResponse.data || []).map((level) => ({
@@ -118,9 +115,6 @@ function AllCourses() {
     loadFilterOptions();
   }, []);
 
-  /*
-   * Fetch courses from the database.
-   */
   useEffect(() => {
     const fetchCourses = async () => {
       try {
@@ -137,7 +131,6 @@ function AllCourses() {
           sort: sortKey,
           order: sortDirection,
         });
-        console.log("Raw API Course Response:", response);
 
         setCourses(response.courses || []);
 
@@ -173,25 +166,21 @@ function AllCourses() {
                   ...stat,
                   value: statistics.totalCourses ?? 0,
                 };
-
               case "Active Courses":
                 return {
                   ...stat,
                   value: statistics.activeCourses ?? 0,
                 };
-
               case "Departments":
                 return {
                   ...stat,
                   value: statistics.departments ?? 0,
                 };
-
               case "Pending Approval":
                 return {
                   ...stat,
                   value: statistics.pendingApproval ?? 0,
                 };
-
               default:
                 return stat;
             }
@@ -199,6 +188,8 @@ function AllCourses() {
         );
       } catch (error) {
         console.error("Failed to fetch course statistics:", error);
+      } finally {
+        setLoadingStats(false);
       }
     };
 
@@ -252,7 +243,15 @@ function AllCourses() {
         </div>
       )}
 
-      <CourseStats stats={stats} />
+      {loadingStats ? (
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4 mb-8">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <StatCardSkeleton key={i} />
+          ))}
+        </div>
+      ) : (
+        <CourseStats stats={stats} />
+      )}
 
       <CourseToolbar
         search={search}

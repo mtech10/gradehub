@@ -1,32 +1,32 @@
 import api from "../api"; // Adjust the relative path to your api.js file if needed
 
 export const studentService = {
-  // Fetch paginated list of students
   async getStudents(params) {
     const queryString = new URLSearchParams(params).toString();
     const response = await api.get(`/students?${queryString}`);
-    return response; // Assumes backend returns { success: true, data: [...], pagination: {...} }
+    return response;
   },
 
-  // Fetch student statistics
   async getStudentStats() {
     const response = await api.get("/students/stats");
     return response;
   },
 
-  // Fetch a single student by ID
   async getStudentById(id) {
     const response = await api.get(`/students/${id}`);
-    // If your api.js already returns `data`, just return response.
-    // If api.js returns the full JSON object { success: true, data: {...} }, return response.data
     return response.data || response;
   },
 
-  // Create a new student
   async createStudent(studentData) {
     const response = await api.post("/students", studentData);
     return response;
   },
+
+  async deleteStudent(id) {
+    const response = await api.delete(`/students/${id}`);
+    return response.data || response;
+  },
+
   getDepartments: async () => {
     const response = await api.get("/departments");
     return response.data || response;

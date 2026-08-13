@@ -13,25 +13,24 @@ import { studentColumns } from "../../constants/tables/studentColumns";
 
 import { Users, UserCheck, UserMinus, Building } from "lucide-react";
 import { studentService } from "../../services/admin/studentService";
+import StatCardSkeleton from "../../components/ui/skeletons/StatCardSskeleton";
 
 function Students() {
-  // --- States ---
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingStats, setLoadingStats] = useState(true);
   const [pagination, setPagination] = useState({ total: 0, totalPages: 1 });
 
-  // --- Filter & Sort States ---
   const [search, setSearch] = useState("");
   const [department, setDepartment] = useState("");
   const [level, setLevel] = useState("");
   const [status, setStatus] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [sortKey, setSortKey] = useState("lastname"); // Matches your backend default
+  const [sortKey, setSortKey] = useState("lastname");
   const [sortDirection, setSortDirection] = useState("asc");
   const [selectedRows, setSelectedRows] = useState([]);
   const pageSize = 8;
 
-  // Update your stats state to this:
   const [stats, setStats] = useState([
     {
       title: "Total Students",
@@ -62,12 +61,11 @@ function Students() {
       color: "purple",
     },
   ]);
-  // --- Fetch Data from Express API ---
+
   useEffect(() => {
     const fetchStudents = async () => {
       setLoading(true);
       try {
-        // Build the query parameters exactly as your Express controller expects them
         const queryParams = {
           page: currentPage,
           limit: pageSize,
@@ -79,15 +77,15 @@ function Students() {
           order: sortDirection,
         };
 
-        // Remove undefined keys so they don't bloat the URL
         const cleanParams = Object.fromEntries(
           Object.entries(queryParams).filter(([_, v]) => v !== undefined),
         );
 
         const response = await studentService.getStudents(cleanParams);
+        const payload = response.data?.pagination ? response.data : response;
 
-        setStudents(response.data);
-        setPagination(response.pagination);
+        setStudents(payload.data || []);
+        setPagination(payload.pagination || { total: 0, totalPages: 1 });
       } catch (error) {
         console.error("Failed to fetch students:", error);
       } finally {
@@ -95,15 +93,13 @@ function Students() {
       }
     };
 
-    // Use a debounce for search if you type fast, otherwise standard timeout
     const delayDebounceFn = setTimeout(() => {
       fetchStudents();
-    }, 300); // 300ms delay prevents spamming the database on every keystroke
+    }, 300);
 
     return () => clearTimeout(delayDebounceFn);
   }, [search, department, level, status, currentPage, sortKey, sortDirection]);
 
-  // Reset to page 1 and clear selections when filters change
   useEffect(() => {
     setCurrentPage(1);
     setSelectedRows([]);
@@ -115,7 +111,6 @@ function Students() {
         const response = await studentService.getStudentStats();
         const dbStats = response.data;
 
-        // Map the database row to your AdminStatCard format
         const mappedStats = [
           {
             title: "Total Students",
@@ -150,6 +145,8 @@ function Students() {
         setStats(mappedStats);
       } catch (error) {
         console.error("Failed to fetch student stats:", error);
+      } finally {
+        setLoadingStats(false);
       }
     };
 
@@ -185,6 +182,45 @@ function Students() {
     setSelectedRows([]);
   };
 
+  const handleDelete = async (id) => {
+    if (
+      !window.confirm(
+        "Are you sure you want to delete/deactivate this student?",
+      )
+    )
+      return;
+    try {
+      await studentService.deleteStudent(id);
+      setStudents((prev) => prev.filter((student) => student.id !== id));
+    } catch (error) {
+      console.error("Failed to delete student:", error);
+      alert("Failed to delete student.");
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    if (
+      !window.confirm(
+        `Are you sure you want to delete ${selectedRows.length} students?`,
+      )
+    )
+      return;
+
+    try {
+      for (const studentId of selectedRows) {
+        await studentService.deleteStudent(studentId);
+      }
+
+      setStudents((prev) =>
+        prev.filter((student) => !selectedRows.includes(student.id)),
+      );
+      setSelectedRows([]);
+    } catch (error) {
+      console.error("Failed to bulk delete students:", error);
+      alert("Failed to delete selected students.");
+    }
+  };
+
   return (
     <div className="space-y-8">
       <PageHeader
@@ -192,8 +228,15 @@ function Students() {
         subtitle="Manage student records and academic information."
       />
 
-      {/* Note: If you want these stats to be dynamic, you will need a separate API call for them! */}
-      <StudentStats stats={stats} />
+      {loadingStats ? (
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <StatCardSkeleton key={i} />
+          ))}
+        </div>
+      ) : (
+        <StudentStats stats={stats} />
+      )}
 
       <StudentToolbar
         search={search}
@@ -214,22 +257,23 @@ function Students() {
           onClearSelection={clearSelection}
           onExport={() => console.log("Export")}
           onSuspend={() => console.log("Suspend")}
-          onDelete={() => console.log("Delete")}
+          onDelete={handleBulkDelete}
         />
       )}
 
       <StudentsTable
         columns={studentColumns}
         students={students}
-        loading={loading} // Pass the loading state so DataTable can show skeletons
+        loading={loading}
         currentPage={currentPage}
         onPageChange={setCurrentPage}
         pageSize={pageSize}
-        totalItems={pagination.total}
-        totalPages={pagination.totalPages}
+        totalItems={pagination?.total || 0}
+        totalPages={pagination?.totalPages || 1}
         sortKey={sortKey}
         sortDirection={sortDirection}
         onSort={handleSort}
+        onDelete={handleDelete}
         selectable
         selectedRows={selectedRows}
         onRowSelect={handleRowSelect}

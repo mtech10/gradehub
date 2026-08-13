@@ -46,7 +46,7 @@ function CurrentCourses({ courses = [] }) {
       title="Current Semester Courses"
       subtitle="Active registered courses"
       padding="none"
-      bodyClassName="max-h-[420px] overflow-y-auto"
+      bodyClassName="overflow-y-auto"
       headerAction={
         <button
           type="button"
@@ -56,7 +56,7 @@ function CurrentCourses({ courses = [] }) {
         </button>
       }
     >
-      <div className={`h-[420px] overflow-y-auto p-4 ${SCROLLBAR}`}>
+      <div className={`h-fit h-[420px] overflow-y-auto p-4 ${SCROLLBAR}`}>
         <DataTable
           columns={currentCoursesColumns}
           data={courses}

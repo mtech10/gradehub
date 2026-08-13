@@ -5,6 +5,7 @@ import TranscriptRecord from "../../components/transcript/TranscriptRecord";
 import OverallSummary from "../../components/transcript/OverallSummary";
 import CgpaProgress from "../../components/transcript/CgpaProgress";
 import TranscriptNotice from "../../components/transcript/TranscriptNotice";
+import TranscriptSkeleton from "../../components/ui/skeletons/TranscriptSkeleton";
 import transcriptService from "../../services/transcriptService";
 
 function Transcript() {
@@ -29,11 +30,7 @@ function Transcript() {
   }, []);
 
   if (loading) {
-    return (
-      <div className="p-10 text-center text-slate-500">
-        Loading academic transcript...
-      </div>
-    );
+    return <TranscriptSkeleton />;
   }
 
   if (error || !data) {

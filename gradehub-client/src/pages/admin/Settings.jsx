@@ -4,7 +4,6 @@ import { Check, Info } from "lucide-react";
 import PageHeader from "../../components/common/PageHeader";
 import Button from "../../components/ui/Button";
 
-import ProfileSettings from "../../components/admin/settings/ProfileSettings";
 import SystemPreferenceSettings from "../../components/admin/settings/SystemPreferenceSettings";
 import NotificationSettings from "../../components/admin/settings/NotificationSettings";
 import SecuritySettings from "../../components/admin/settings/SecuritySettings";
@@ -22,12 +21,6 @@ function Settings() {
   const [settings, setSettings] = useState(adminSettingsData);
 
   const settingTabs = [
-    {
-      id: "profile",
-      label: "Profile",
-      component: ProfileSettings,
-      section: "profile",
-    },
     {
       id: "preferences",
       label: "System Preferences",

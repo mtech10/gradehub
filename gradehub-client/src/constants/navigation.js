@@ -92,11 +92,6 @@ export const adminNavigation = [
   },
 
   {
-    title: "Analytics",
-    icon: BarChart3,
-    path: "/admin/analytics",
-  },
-  {
     title: "Profile",
     icon: User,
     path: "/admin/profile",

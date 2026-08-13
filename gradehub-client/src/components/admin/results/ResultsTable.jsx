@@ -6,12 +6,13 @@ import resultUploadService from "../../../services/admin/resultUploadService";
 function ResultsTable({
   columns,
   results,
-  onRefresh, // <--- We will use this consistently now
+  onRefresh,
   totalItems,
   totalPages,
   currentPage,
   onPageChange,
   pageSize,
+  loading,
   sortKey,
   sortDirection,
   onSort,
@@ -150,6 +151,7 @@ function ResultsTable({
       pageSize={pageSize}
       serverPagination
       sortKey={sortKey}
+      loading={loading}
       sortDirection={sortDirection}
       onSort={onSort}
       selectable={selectable}

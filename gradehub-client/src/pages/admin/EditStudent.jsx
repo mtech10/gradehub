@@ -7,6 +7,7 @@ import Button from "../../components/ui/Button";
 import StudentForm from "../../components/admin/studentForm/StudentForm";
 
 import { studentService } from "../../services/admin/studentService";
+import FormSkeleton from "../../components/ui/skeletons/FormSkeleton";
 
 function EditStudent() {
   const navigate = useNavigate();
@@ -22,7 +23,6 @@ function EditStudent() {
         const response = await studentService.getStudentById(id);
         const rawData = response.data || response;
 
-        // Map PostgreSQL columns to the camelCase format the form expects
         const normalizedStudent = {
           ...rawData,
           id: rawData.id,
@@ -32,8 +32,6 @@ function EditStudent() {
           matricNumber: rawData.matricNumber || rawData.matricnumber || "",
           dateOfBirth: rawData.dateOfBirth || rawData.dateofbirth || "",
           admissionYear: rawData.admissionYear || rawData.admission_year || "",
-
-          // CRITICAL: Map the raw ID columns so the Dropdowns can pre-select them!
           department:
             rawData.departmentId ||
             rawData.departmentid ||
@@ -58,15 +56,7 @@ function EditStudent() {
     }
   }, [id]);
 
-  if (loading) {
-    return (
-      <div className="p-8 text-center text-slate-500">
-        Loading student data...
-      </div>
-    );
-  }
-
-  if (!student) {
+  if (!student && !loading) {
     return (
       <div className="space-y-6">
         <PageHeader title="Edit Student" subtitle="Student not found." />
@@ -85,14 +75,19 @@ function EditStudent() {
       <div className="flex justify-end">
         <Button
           variant="secondary"
-          onClick={() => navigate(`/admin/students/${student.id}`)}
+          onClick={() => navigate(`/admin/students/${id}`)}
+          disabled={loading}
         >
           <ArrowLeft size={18} />
           Back to Details
         </Button>
       </div>
 
-      <StudentForm mode="edit" initialValues={student} />
+      {loading ? (
+        <FormSkeleton />
+      ) : (
+        <StudentForm mode="edit" initialValues={student} />
+      )}
     </div>
   );
 }

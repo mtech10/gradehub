@@ -12,6 +12,7 @@ import ResultsHeader from "../../components/results/ResultsHeader";
 import ResultsStats from "../../components/results/ResultsStats";
 import ResultsTable from "../../components/results/ResultsTable";
 import ReviewNotice from "../../components/results/ReviewNotice";
+import ResultsSkeleton from "../../components/ui/skeletons/ResultsSkeleton";
 
 import resultService from "../../services/resultService";
 
@@ -75,13 +76,17 @@ function Results() {
     setViewSessionId(newSessionId);
     setViewSemesterId(newSemesterId);
     setViewLabels({ semester: semName, session: sesName });
-    setCurrentPage(1); // Reset to page 1 on term change
+    setCurrentPage(1);
   };
 
-  if (isAcademicLoading) {
+  if (isAcademicLoading || loading) {
+    return <ResultsSkeleton />;
+  }
+
+  if (!data) {
     return (
-      <div className="p-10 text-center text-slate-500 font-medium">
-        Loading academic portal...
+      <div className="p-10 text-center text-red-500">
+        Unable to load results.
       </div>
     );
   }
@@ -89,13 +94,11 @@ function Results() {
   return (
     <div className="space-y-8">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        {/* Pass the state and handler to the Header */}
         <ResultsHeader
           selectedSemesterId={viewSemesterId}
           onTermChange={handleTermChange}
         />
 
-        {/* Dynamic badge showing the current scope */}
         {viewLabels.semester && (
           <div className="inline-flex rounded-full bg-blue-50 px-4 py-1.5 text-sm font-semibold text-blue-700 border border-blue-100">
             Viewing: {viewLabels.semester} ({viewLabels.session})
@@ -103,66 +106,54 @@ function Results() {
         )}
       </div>
 
-      {loading ? (
-        <div className="p-10 text-center text-slate-500">
-          Fetching records...
-        </div>
-      ) : !data ? (
-        <div className="p-10 text-center text-red-500">
-          Unable to load results.
-        </div>
-      ) : (
-        <>
-          <ResultsStats
-            stats={[
-              {
-                title: "Total Courses",
-                value: data.stats.totalCourses,
-                subtitle: "Completed",
-                icon: BookOpen,
-                color: "blue",
-              },
-              {
-                title: "Total Units",
-                value: data.stats.totalUnits,
-                subtitle: "Attempted",
-                icon: Layers3,
-                color: "purple",
-              },
-              {
-                title: "Highest Score",
-                value: `${data.stats.highestScore}%`,
-                subtitle: "Best Performance",
-                icon: TrendingUp,
-                color: "green",
-              },
-              {
-                title: "Lowest Score",
-                value: `${data.stats.lowestScore}%`,
-                subtitle: "Lowest Performance",
-                icon: TrendingDown,
-                color: "red",
-              },
-              {
-                title: "Average Grade",
-                value: data.stats.averageGrade,
-                subtitle: "Overall",
-                icon: GraduationCap,
-                color: "amber",
-              },
-            ]}
-          />
+      <ResultsStats
+        stats={[
+          {
+            title: "Total Courses",
+            value: data.stats.totalCourses,
+            subtitle: "Completed",
+            icon: BookOpen,
+            color: "blue",
+          },
+          {
+            title: "Total Units",
+            value: data.stats.totalUnits,
+            subtitle: "Attempted",
+            icon: Layers3,
+            color: "purple",
+          },
+          {
+            title: "Highest Score",
+            value: `${data.stats.highestScore}%`,
+            subtitle: "Best Performance",
+            icon: TrendingUp,
+            color: "green",
+          },
+          {
+            title: "Lowest Score",
+            value: `${data.stats.lowestScore}%`,
+            subtitle: "Lowest Performance",
+            icon: TrendingDown,
+            color: "red",
+          },
+          {
+            title: "Average Grade",
+            value: data.stats.averageGrade,
+            subtitle: "Overall",
+            icon: GraduationCap,
+            color: "amber",
+          },
+        ]}
+      />
 
-          <ResultsTable
-            title="Term Results"
-            subtitle={`Published course results for ${viewLabels.semester}`}
-            results={data.results}
-            pagination={data.pagination}
-            currentPage={currentPage}
-            onPageChange={setCurrentPage}
-          />
-        </>
-      )}
+      <ResultsTable
+        title="Term Results"
+        subtitle={`Published course results for ${viewLabels.semester}`}
+        results={data.results}
+        pagination={data.pagination}
+        currentPage={currentPage}
+        onPageChange={setCurrentPage}
+      />
 
       <ReviewNotice />
     </div>

@@ -1,11 +1,12 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import NotFound from "../pages/NotFound";
 
 const NotFoundRoute = () => {
-  return;
-  <Routes>
-    <Route path="*" element={<NotFound />} />;
-  </Routes>;
+  return (
+    <Routes>
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
 };
 
 export default NotFoundRoute;
