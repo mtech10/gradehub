@@ -12,8 +12,6 @@ import {
 
 import EditProfileModal from "../../components/profile/EditProfileModal";
 import ProfileSkeleton from "../../components/ui/skeletons/ProfileSkeleton";
-
-// ✅ Added back the missing import for generating the profile UI structure
 import { generateProfileUI } from "../../constants/profile/profileData";
 
 import { useEffect, useState } from "react";
@@ -43,13 +41,29 @@ function Profile() {
 
   const handleProfileUpdate = async (updatedFields) => {
     try {
+      // 1. Optimistic Update: Instantly update the UI and deeply merge the nested emergency object
+      setStudent((prev) => ({
+        ...prev,
+        ...updatedFields,
+        emergency: {
+          ...(prev?.emergency || {}),
+          ...(updatedFields.emergency || {}),
+        },
+      }));
+
+      setIsModalOpen(false);
+
+      // 2. Background API Update
       const updatedProfile =
         await profileService.updateStudentProfile(updatedFields);
 
-      setStudent(updatedProfile);
-      setIsModalOpen(false);
+      // 3. Sync with backend response, but protect the emergency object if the backend drops it
+      setStudent((prev) => ({
+        ...updatedProfile,
+        emergency: updatedProfile.emergency || prev.emergency,
+      }));
     } catch (error) {
-      console.error(error);
+      console.error("Failed to update profile:", error);
     }
   };
 

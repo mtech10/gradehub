@@ -4,6 +4,7 @@ import StudentStats from "../../components/admin/students/StudentStats";
 import StudentToolbar from "../../components/admin/students/StudentToolbar";
 import StudentsTable from "../../components/admin/students/StudentsTable";
 import BulkActionBar from "../../components/admin/common/BulkActionBar";
+import ConfirmModal from "../../components/ui/ConfirmModal"; // Added for bulk actions
 
 import {
   studentStatistics,
@@ -14,6 +15,7 @@ import { studentColumns } from "../../constants/tables/studentColumns";
 import { Users, UserCheck, UserMinus, Building } from "lucide-react";
 import { studentService } from "../../services/admin/studentService";
 import StatCardSkeleton from "../../components/ui/skeletons/StatCardSskeleton";
+import { useToast } from "../../context/ToastContext"; // Added for notifications
 
 function Students() {
   const [students, setStudents] = useState([]);
@@ -30,6 +32,10 @@ function Students() {
   const [sortDirection, setSortDirection] = useState("asc");
   const [selectedRows, setSelectedRows] = useState([]);
   const pageSize = 8;
+
+  // New state for Bulk Confirm Modal
+  const [showBulkDeleteModal, setShowBulkDeleteModal] = useState(false);
+  const { addToast } = useToast();
 
   const [stats, setStats] = useState([
     {
@@ -182,31 +188,35 @@ function Students() {
     setSelectedRows([]);
   };
 
+  // --- Single Row Deletion ---
+  // The UI confirmation is now handled by the Table's ConfirmModal.
+  // We just execute the backend deletion and toast notification here.
   const handleDelete = async (id) => {
-    if (
-      !window.confirm(
-        "Are you sure you want to delete/deactivate this student?",
-      )
-    )
-      return;
     try {
       await studentService.deleteStudent(id);
       setStudents((prev) => prev.filter((student) => student.id !== id));
+
+      addToast({
+        title: "Student Deleted",
+        message: "The student has been successfully removed.",
+        type: "success",
+      });
     } catch (error) {
       console.error("Failed to delete student:", error);
-      alert("Failed to delete student.");
+      addToast({
+        title: "Deletion Failed",
+        message: error.message || "Failed to delete the student.",
+        type: "error",
+      });
     }
   };
 
+  // --- Bulk Deletion ---
   const handleBulkDelete = async () => {
-    if (
-      !window.confirm(
-        `Are you sure you want to delete ${selectedRows.length} students?`,
-      )
-    )
-      return;
+    setShowBulkDeleteModal(false); // Close the modal immediately
 
     try {
+      // In a real app, you'd want a dedicated bulk-delete endpoint here
       for (const studentId of selectedRows) {
         await studentService.deleteStudent(studentId);
       }
@@ -214,10 +224,21 @@ function Students() {
       setStudents((prev) =>
         prev.filter((student) => !selectedRows.includes(student.id)),
       );
+
+      addToast({
+        title: "Bulk Delete Successful",
+        message: `${selectedRows.length} students have been removed.`,
+        type: "success",
+      });
+
       setSelectedRows([]);
     } catch (error) {
       console.error("Failed to bulk delete students:", error);
-      alert("Failed to delete selected students.");
+      addToast({
+        title: "Bulk Delete Failed",
+        message: error.message || "Failed to delete selected students.",
+        type: "error",
+      });
     }
   };
 
@@ -257,7 +278,7 @@ function Students() {
           onClearSelection={clearSelection}
           onExport={() => console.log("Export")}
           onSuspend={() => console.log("Suspend")}
-          onDelete={handleBulkDelete}
+          onDelete={() => setShowBulkDeleteModal(true)} // Open bulk delete modal
         />
       )}
 
@@ -278,6 +299,17 @@ function Students() {
         selectedRows={selectedRows}
         onRowSelect={handleRowSelect}
         onSelectAll={handleSelectAll}
+      />
+
+      {/* Bulk Action Confirmation Modal */}
+      <ConfirmModal
+        isOpen={showBulkDeleteModal}
+        onClose={() => setShowBulkDeleteModal(false)}
+        onConfirm={handleBulkDelete}
+        title="Delete Students"
+        message={`Are you sure you want to permanently delete ${selectedRows.length} students? This action cannot be undone.`}
+        confirmText="Delete All"
+        isDestructive={true}
       />
     </div>
   );

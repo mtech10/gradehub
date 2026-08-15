@@ -8,6 +8,7 @@ import { AuthProvider } from "./context/AuthContext";
 import "./index.css";
 import { LayoutProvider } from "./context/LayoutContext";
 import { AcademicProvider } from "./context/AcademicContext";
+import { ToastProvider } from "./context/ToastContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -15,7 +16,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <BrowserRouter>
         <AuthProvider>
           <AcademicProvider>
-            <App />
+            <ToastProvider>
+              <App />
+            </ToastProvider>
           </AcademicProvider>
         </AuthProvider>
       </BrowserRouter>

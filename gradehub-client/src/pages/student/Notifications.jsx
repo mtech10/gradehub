@@ -8,10 +8,12 @@ import NotificationSummary from "../../components/notifications/NotificationSumm
 import NotificationsSkeleton from "../../components/ui/skeletons/NotificationsSkeleton";
 
 import { notificationService } from "../../services/notificationService";
+import { useToast } from "../../context/ToastContext";
 
 function Notifications() {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { addToast } = useToast();
 
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -32,8 +34,20 @@ function Notifications() {
     try {
       await notificationService.markAllAsRead();
       setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
+
+      addToast({
+        title: "Caught up!",
+        message: "All notifications have been marked as read.",
+        type: "success",
+      });
     } catch (error) {
       console.error("Failed to mark all as read:", error);
+
+      addToast({
+        title: "Action Failed",
+        message: "Failed to mark notifications as read. Please try again.",
+        type: "error",
+      });
     }
   };
 

@@ -1,7 +1,13 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import Badge from "../../ui/Badge";
 import DataTable from "../../ui/DataTable";
 import DropdownMenu from "../../ui/DropdownMenu";
+import ConfirmModal from "../../ui/ConfirmModal";
+
 import resultUploadService from "../../../services/admin/resultUploadService";
+import { useToast } from "../../../context/ToastContext";
 
 function ResultsTable({
   columns,
@@ -21,39 +27,86 @@ function ResultsTable({
   onRowSelect,
   onSelectAll,
 }) {
+  const navigate = useNavigate();
+  const { addToast } = useToast();
+
+  // Modal State for row-level actions
+  const [confirmConfig, setConfirmConfig] = useState({
+    isOpen: false,
+    actionType: null,
+    resultId: null,
+  });
+
   // --- CONSISTENT ROW HANDLERS ---
-  const handleApprove = async (id) => {
+  const executeAction = async () => {
+    const { actionType, resultId } = confirmConfig;
+
+    // Close modal immediately for smooth UX
+    setConfirmConfig({ isOpen: false, actionType: null, resultId: null });
+
     try {
-      await resultUploadService.approveResult(id);
-      alert("Result approved successfully!");
-      onRefresh?.(); // Smooth React state refresh instead of window.reload()
+      if (actionType === "approve") {
+        await resultUploadService.approveResult(resultId);
+        addToast({
+          title: "Approved",
+          message: "Result approved successfully!",
+          type: "success",
+        });
+      } else if (actionType === "suspend") {
+        await resultUploadService.deactivateResult(resultId);
+        addToast({
+          title: "Suspended",
+          message: "Result suspended successfully!",
+          type: "warning",
+        });
+      } else if (actionType === "delete") {
+        await resultUploadService.deleteResult(resultId);
+        addToast({
+          title: "Deleted",
+          message: "Result deleted successfully!",
+          type: "success",
+        });
+      }
+
+      onRefresh?.(); // Refresh the table data silently
     } catch (error) {
-      alert(error.message || "Failed to approve result.");
+      addToast({
+        title: "Action Failed",
+        message: error.message || `Failed to ${actionType} result.`,
+        type: "error",
+      });
     }
   };
 
-  const handleSuspend = async (id) => {
-    if (!window.confirm("Are you sure you want to suspend this result?"))
-      return;
-    try {
-      await resultUploadService.deactivateResult(id);
-      alert("Result suspended successfully!");
-      onRefresh?.();
-    } catch (error) {
-      alert(error.message || "Failed to suspend result.");
+  const getModalText = () => {
+    switch (confirmConfig.actionType) {
+      case "approve":
+        return {
+          title: "Approve Result",
+          text: "Are you sure you want to approve this student's result?",
+          btn: "Approve",
+          isDestructive: false,
+        };
+      case "suspend":
+        return {
+          title: "Suspend Result",
+          text: "Are you sure you want to suspend this student's result? It will not be visible to them.",
+          btn: "Suspend",
+          isDestructive: true,
+        };
+      case "delete":
+        return {
+          title: "Delete Result",
+          text: "Are you sure you want to permanently delete this result? This action cannot be undone.",
+          btn: "Delete",
+          isDestructive: true,
+        };
+      default:
+        return { title: "", text: "", btn: "", isDestructive: false };
     }
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this result?")) return;
-    try {
-      await resultUploadService.deleteResult(id);
-      alert("Result deleted successfully!");
-      onRefresh?.();
-    } catch (error) {
-      alert(error.message || "Failed to delete result.");
-    }
-  };
+  const modalDetails = getModalText();
 
   const renderCell = (result, column) => {
     switch (column.key) {
@@ -63,7 +116,6 @@ function ResultsTable({
             <p className="font-semibold text-slate-900">
               {result.studentName || "Unknown"}
             </p>
-
             <p className="text-sm text-slate-500">
               {result.matricNumber || "-"}
             </p>
@@ -74,7 +126,6 @@ function ResultsTable({
         return (
           <div>
             <p className="font-medium text-blue-600">{result.code || "-"}</p>
-
             <p className="text-sm text-slate-500">{result.course || "-"}</p>
           </div>
         );
@@ -120,15 +171,30 @@ function ResultsTable({
               },
               {
                 label: "Approve Result",
-                onClick: () => handleApprove(result.id),
+                onClick: () =>
+                  setConfirmConfig({
+                    isOpen: true,
+                    actionType: "approve",
+                    resultId: result.id,
+                  }),
               },
               {
-                label: "Suspend Result", // <--- Added here
-                onClick: () => handleSuspend(result.id),
+                label: "Suspend Result",
+                onClick: () =>
+                  setConfirmConfig({
+                    isOpen: true,
+                    actionType: "suspend",
+                    resultId: result.id,
+                  }),
               },
               {
                 label: "Delete Result",
-                onClick: () => handleDelete(result.id),
+                onClick: () =>
+                  setConfirmConfig({
+                    isOpen: true,
+                    actionType: "delete",
+                    resultId: result.id,
+                  }),
               },
             ]}
           />
@@ -140,26 +206,41 @@ function ResultsTable({
   };
 
   return (
-    <DataTable
-      columns={columns}
-      data={results}
-      renderCell={renderCell}
-      totalItems={totalItems}
-      totalPages={totalPages}
-      currentPage={currentPage}
-      onPageChange={onPageChange}
-      pageSize={pageSize}
-      serverPagination
-      sortKey={sortKey}
-      loading={loading}
-      sortDirection={sortDirection}
-      onSort={onSort}
-      selectable={selectable}
-      selectedRows={selectedRows}
-      onRowSelect={onRowSelect}
-      onSelectAll={onSelectAll}
-      getRowId={(row) => row.id}
-    />
+    <>
+      <DataTable
+        columns={columns}
+        data={results}
+        renderCell={renderCell}
+        totalItems={totalItems}
+        totalPages={totalPages}
+        currentPage={currentPage}
+        onPageChange={onPageChange}
+        pageSize={pageSize}
+        serverPagination
+        sortKey={sortKey}
+        loading={loading}
+        sortDirection={sortDirection}
+        onSort={onSort}
+        selectable={selectable}
+        selectedRows={selectedRows}
+        onRowSelect={onRowSelect}
+        onSelectAll={onSelectAll}
+        getRowId={(row) => row.id}
+      />
+
+      {/* Row-Level Action Confirmation Modal */}
+      <ConfirmModal
+        isOpen={confirmConfig.isOpen}
+        onClose={() =>
+          setConfirmConfig({ isOpen: false, actionType: null, resultId: null })
+        }
+        onConfirm={executeAction}
+        title={modalDetails.title}
+        message={modalDetails.text}
+        confirmText={modalDetails.btn}
+        isDestructive={modalDetails.isDestructive}
+      />
+    </>
   );
 }
 

@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { X } from "lucide-react";
-
 import Button from "../ui/Button";
 import Input from "../ui/Input";
+import Modal from "../ui/Modal";
+import ConfirmModal from "../ui/ConfirmModal";
 import { profileFormConfig } from "../../constants/profile/profileFormConfig";
+import { useToast } from "../../context/ToastContext";
 
 function EditProfileModal({
   isOpen,
@@ -13,18 +14,31 @@ function EditProfileModal({
   type = "student",
 }) {
   const [form, setForm] = useState({});
+  const [showConfirm, setShowConfirm] = useState(false);
+  const { addToast } = useToast();
 
   useEffect(() => {
     setForm(currentData || {});
   }, [currentData]);
 
-  if (!isOpen) return null;
-
   const fields = profileFormConfig[type] || [];
 
+  // Intercept the form submission to show the ConfirmModal
   const handleSubmit = (e) => {
     e.preventDefault();
+    setShowConfirm(true);
+  };
+
+  // Execute the actual save and trigger the toast notification
+  const handleConfirmSave = () => {
+    setShowConfirm(false);
     onSave(form);
+
+    addToast({
+      title: "Profile Updated",
+      message: "Your profile information has been successfully saved.",
+      type: "success",
+    });
   };
 
   const modalTitle = {
@@ -37,141 +51,124 @@ function EditProfileModal({
     admin: "Save Administrator Profile",
   };
 
+  const modalFooter = (
+    <>
+      <Button type="button" variant="ghost" onClick={onClose}>
+        Cancel
+      </Button>
+      <Button type="submit" form="edit-profile-form">
+        {buttonText[type]}
+      </Button>
+    </>
+  );
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4 backdrop-blur-sm">
-      <div className="flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
-        {/* Header */}
-        <div className="flex items-center justify-between border-b border-slate-100 px-6 py-4">
-          <div>
-            <h2 className="text-xl font-semibold text-slate-900">
-              {modalTitle[type]}
-            </h2>
+    <>
+      {/* Main Edit Profile Modal */}
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        title={modalTitle[type]}
+        subtitle="Update your personal information."
+        footer={modalFooter}
+        maxWidth="max-w-2xl"
+      >
+        <form
+          id="edit-profile-form"
+          onSubmit={handleSubmit}
+          className="space-y-8 p-1"
+        >
+          <section>
+            <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-slate-400">
+              Personal Information
+            </h3>
+            <div className="grid gap-5 md:grid-cols-2">
+              {fields.map((field) => (
+                <Input
+                  key={field.key}
+                  label={field.label}
+                  type={field.type}
+                  required={field.required}
+                  value={form[field.key] || ""}
+                  disabled={field.key === "email" || field.type === "email"} // Locks the email field
+                  onChange={(e) =>
+                    setForm((prev) => ({
+                      ...prev,
+                      [field.key]: e.target.value,
+                    }))
+                  }
+                />
+              ))}
+            </div>
+          </section>
 
-            <p className="text-sm text-slate-500">
-              Update your personal information.
-            </p>
-          </div>
-
-          <button
-            type="button"
-            onClick={onClose}
-            className="rounded-lg p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
-          >
-            <X size={20} />
-          </button>
-        </div>
-
-        {/* Body */}
-        <div className="overflow-y-auto p-6">
-          <form
-            id="edit-profile-form"
-            onSubmit={handleSubmit}
-            className="space-y-8"
-          >
+          {type === "student" && form.emergency && (
             <section>
               <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-slate-400">
-                Personal Information
+                Emergency Contact
               </h3>
-
               <div className="grid gap-5 md:grid-cols-2">
-                {fields.map((field) => (
-                  <Input
-                    key={field.key}
-                    label={field.label}
-                    type={field.type}
-                    required={field.required}
-                    value={form[field.key] || ""}
-                    onChange={(e) =>
-                      setForm((prev) => ({
-                        ...prev,
-                        [field.key]: e.target.value,
-                      }))
-                    }
-                  />
-                ))}
+                <Input
+                  label="Contact Name"
+                  value={form.emergency.name || ""}
+                  onChange={(e) =>
+                    setForm((prev) => ({
+                      ...prev,
+                      emergency: { ...prev.emergency, name: e.target.value },
+                    }))
+                  }
+                />
+                <Input
+                  label="Relationship"
+                  value={form.emergency.relationship || ""}
+                  onChange={(e) =>
+                    setForm((prev) => ({
+                      ...prev,
+                      emergency: {
+                        ...prev.emergency,
+                        relationship: e.target.value,
+                      },
+                    }))
+                  }
+                />
+                <Input
+                  label="Phone Number"
+                  value={form.emergency.phone || ""}
+                  onChange={(e) =>
+                    setForm((prev) => ({
+                      ...prev,
+                      emergency: { ...prev.emergency, phone: e.target.value },
+                    }))
+                  }
+                />
+                <Input
+                  label="Address"
+                  value={form.emergency.address || ""}
+                  onChange={(e) =>
+                    setForm((prev) => ({
+                      ...prev,
+                      emergency: { ...prev.emergency, address: e.target.value },
+                    }))
+                  }
+                />
               </div>
             </section>
+          )}
+        </form>
+      </Modal>
 
-            {type === "student" && form.emergency && (
-              <section>
-                <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-slate-400">
-                  Emergency Contact
-                </h3>
-
-                <div className="grid gap-5 md:grid-cols-2">
-                  <Input
-                    label="Contact Name"
-                    value={form.emergency.name || ""}
-                    onChange={(e) =>
-                      setForm((prev) => ({
-                        ...prev,
-                        emergency: {
-                          ...prev.emergency,
-                          name: e.target.value,
-                        },
-                      }))
-                    }
-                  />
-
-                  <Input
-                    label="Relationship"
-                    value={form.emergency.relationship || ""}
-                    onChange={(e) =>
-                      setForm((prev) => ({
-                        ...prev,
-                        emergency: {
-                          ...prev.emergency,
-                          relationship: e.target.value,
-                        },
-                      }))
-                    }
-                  />
-
-                  <Input
-                    label="Phone Number"
-                    value={form.emergency.phone || ""}
-                    onChange={(e) =>
-                      setForm((prev) => ({
-                        ...prev,
-                        emergency: {
-                          ...prev.emergency,
-                          phone: e.target.value,
-                        },
-                      }))
-                    }
-                  />
-
-                  <Input
-                    label="Address"
-                    value={form.emergency.address || ""}
-                    onChange={(e) =>
-                      setForm((prev) => ({
-                        ...prev,
-                        emergency: {
-                          ...prev.emergency,
-                          address: e.target.value,
-                        },
-                      }))
-                    }
-                  />
-                </div>
-              </section>
-            )}
-          </form>
-        </div>
-
-        {/* Footer */}
-        <div className="flex justify-end gap-3 border-t border-slate-100 bg-slate-50 px-6 py-4">
-          <Button type="button" variant="ghost" onClick={onClose}>
-            Cancel
-          </Button>
-
-          <Button type="submit" form="edit-profile-form">
-            {buttonText[type]}
-          </Button>
-        </div>
-      </div>
-    </div>
+      {/* Confirmation Overlay */}
+      <ConfirmModal
+        isOpen={showConfirm}
+        onClose={() => setShowConfirm(false)}
+        onConfirm={handleConfirmSave}
+        title="Confirm Profile Update"
+        message="Are you sure you want to save these changes to your profile?"
+        confirmText="Yes, Save Changes"
+        cancelText="Review Changes"
+        isDestructive={false}
+      />
+    </>
   );
 }
 

@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { MoreHorizontal, FileText, X } from "lucide-react";
+import { MoreHorizontal, FileText } from "lucide-react";
 import { SCROLLBAR } from "../../constants/layout";
 import Card from "../ui/Card";
 import { THEME } from "../../constants/theme";
 import Badge from "../ui/Badge";
 import { resultsColumns } from "../../constants/tables/resultsColumns";
 import DataTable from "../ui/DataTable";
+import Modal from "../ui/Modal";
+import Button from "../ui/Button";
 
 function ResultsTable({
   title = "Results",
@@ -91,6 +93,15 @@ function ResultsTable({
     }
   };
 
+  const modalFooter = (
+    <Button
+      onClick={() => setSelectedResult(null)}
+      className="w-full justify-center bg-slate-900 hover:bg-slate-800"
+    >
+      Close Details
+    </Button>
+  );
+
   return (
     <>
       <Card
@@ -128,72 +139,51 @@ function ResultsTable({
       </Card>
 
       {/* --- RESULT DETAILS MODAL --- */}
-      {selectedResult && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4 backdrop-blur-sm">
-          <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl animate-in fade-in zoom-in-95 duration-200">
-            {/* Modal Header */}
-            <div className="mb-4 flex items-start justify-between">
-              <div>
-                <h3 className="text-lg font-bold text-slate-900">
-                  Result Details
-                </h3>
-                <p className="text-sm font-medium text-blue-600 mt-1">
-                  {selectedResult.code}
-                </p>
-                <p className="text-xs text-slate-500 line-clamp-1">
-                  {selectedResult.course}
-                </p>
-              </div>
-              <button
-                onClick={() => setSelectedResult(null)}
-                className="rounded-full p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors"
-              >
-                <X size={18} />
-              </button>
+      <Modal
+        isOpen={!!selectedResult}
+        onClose={() => setSelectedResult(null)}
+        title="Result Details"
+        subtitle={
+          <>
+            <span className="font-medium text-blue-600">
+              {selectedResult?.code}
+            </span>
+            <br />
+            <span className="text-slate-500">{selectedResult?.course}</span>
+          </>
+        }
+        footer={modalFooter}
+        maxWidth="max-w-sm"
+      >
+        {selectedResult && (
+          <div className="space-y-3 rounded-xl border border-slate-100 bg-slate-50 p-4 text-sm mt-2">
+            <div className="flex justify-between border-b border-slate-200 pb-2">
+              <span className="text-slate-600">Continuous Assessment (CA)</span>
+              <span className="font-medium text-slate-900">
+                {selectedResult.caScore ?? "-"}
+              </span>
             </div>
-
-            {/* Score Breakdown */}
-            <div className="space-y-3 rounded-xl border border-slate-100 bg-slate-50 p-4 text-sm mt-6">
-              <div className="flex justify-between border-b border-slate-200 pb-2">
-                <span className="text-slate-600">
-                  Continuous Assessment (CA)
-                </span>
-                <span className="font-medium text-slate-900">
-                  {selectedResult.caScore ?? "-"}
-                </span>
-              </div>
-              <div className="flex justify-between border-b border-slate-200 pb-2">
-                <span className="text-slate-600">Examination Score</span>
-                <span className="font-medium text-slate-900">
-                  {selectedResult.examScore ?? "-"}
-                </span>
-              </div>
-              <div className="flex justify-between pt-1">
-                <span className="font-bold text-slate-900">Total Score</span>
-                <span className="font-bold text-slate-900">
-                  {selectedResult.score ?? "-"}%
-                </span>
-              </div>
-              <div className="flex justify-between pt-1">
-                <span className="font-bold text-slate-900">Final Grade</span>
-                <span className="font-bold text-blue-600">
-                  {selectedResult.grade ?? "-"}
-                </span>
-              </div>
+            <div className="flex justify-between border-b border-slate-200 pb-2">
+              <span className="text-slate-600">Examination Score</span>
+              <span className="font-medium text-slate-900">
+                {selectedResult.examScore ?? "-"}
+              </span>
             </div>
-
-            {/* Modal Actions */}
-            <div className="mt-6 flex justify-end">
-              <button
-                onClick={() => setSelectedResult(null)}
-                className="w-full rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800 transition-colors"
-              >
-                Close Details
-              </button>
+            <div className="flex justify-between pt-1">
+              <span className="font-bold text-slate-900">Total Score</span>
+              <span className="font-bold text-slate-900">
+                {selectedResult.score ?? "-"}%
+              </span>
+            </div>
+            <div className="flex justify-between pt-1">
+              <span className="font-bold text-slate-900">Final Grade</span>
+              <span className="font-bold text-blue-600">
+                {selectedResult.grade ?? "-"}
+              </span>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </Modal>
     </>
   );
 }

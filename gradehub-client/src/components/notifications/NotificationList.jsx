@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ChevronDown, X } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import Card from "../ui/Card";
 import Badge from "../ui/Badge";
 import Button from "../ui/Button";
-import { notificationTabs } from "../../constants/notifications/notificationData";
+import Modal from "../ui/Modal";
 
 function NotificationList({ notifications, onMarkAsRead }) {
   const [activeTab, setActiveTab] = useState("all");
@@ -53,6 +53,22 @@ function NotificationList({ notifications, onMarkAsRead }) {
     setActiveTab(tabId);
     setVisibleCount(5);
   };
+
+  const modalFooter = selectedNotification && (
+    <>
+      <Button variant="ghost" onClick={() => setSelectedNotification(null)}>
+        Close
+      </Button>
+
+      {selectedNotification.action && (
+        <Button
+          onClick={() => handleActionClick(selectedNotification.action.path)}
+        >
+          {selectedNotification.action.label}
+        </Button>
+      )}
+    </>
+  );
 
   return (
     <>
@@ -157,7 +173,7 @@ function NotificationList({ notifications, onMarkAsRead }) {
           )}
         </div>
 
-        {/* Load More Footer - Only shows if there are more items to display */}
+        {/* Load More Footer */}
         {filteredNotifications.length > visibleCount && (
           <div className="flex justify-center border-t border-slate-100 bg-slate-50/50 p-4">
             <button
@@ -172,71 +188,47 @@ function NotificationList({ notifications, onMarkAsRead }) {
       </Card>
 
       {/* Notification Modal */}
-      {selectedNotification && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4 backdrop-blur-sm">
-          <div className="w-full max-w-lg overflow-hidden rounded-2xl bg-white shadow-2xl">
-            <div className="flex items-center justify-between border-b border-slate-100 px-6 py-4">
-              <div className="flex items-center gap-3">
-                <Badge
-                  variant={
-                    selectedNotification.color === "primary"
-                      ? "info"
-                      : selectedNotification.color
-                  }
-                  size="sm"
-                >
-                  {selectedNotification.category}
-                </Badge>
-                <span className="text-sm font-medium text-slate-500">
-                  {selectedNotification.time}
-                </span>
-              </div>
-              <button
-                onClick={() => setSelectedNotification(null)}
-                className="rounded-lg p-2 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600"
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            <div className="p-4">
-              <div className="mb-4 flex items-center gap-4">
-                <div
-                  className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-${selectedNotification.color}-100 text-${selectedNotification.color}-600`}
-                >
-                  <selectedNotification.icon size={24} />
-                </div>
-                <h3 className="text-xl font-bold text-slate-900">
-                  {selectedNotification.title}
-                </h3>
-              </div>
-              <p className="text-base leading-relaxed text-slate-600">
-                {selectedNotification.message}
-              </p>
-            </div>
-
-            {/* Modal Footer with Dynamic Action */}
-            <div className="flex justify-end gap-3 border-t border-slate-100 bg-slate-50 px-6 py-4">
-              <Button
-                variant="ghost"
-                onClick={() => setSelectedNotification(null)}
-              >
-                Close
-              </Button>
-
-              {selectedNotification.action && (
-                <Button
-                  onClick={() =>
-                    handleActionClick(selectedNotification.action.path)
-                  }
-                >
-                  {selectedNotification.action.label}
-                </Button>
-              )}
-            </div>
+      <Modal
+        isOpen={!!selectedNotification}
+        onClose={() => setSelectedNotification(null)}
+        title={
+          <div className="flex items-center gap-3">
+            <Badge
+              variant={
+                selectedNotification?.color === "primary"
+                  ? "info"
+                  : selectedNotification?.color || "info"
+              }
+              size="sm"
+            >
+              {selectedNotification?.category}
+            </Badge>
+            <span className="text-sm font-medium text-slate-500">
+              {selectedNotification?.time}
+            </span>
           </div>
-        </div>
-      )}
+        }
+        footer={modalFooter}
+        maxWidth="max-w-lg"
+      >
+        {selectedNotification && (
+          <div>
+            <div className="mb-4 flex items-center gap-4">
+              <div
+                className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-${selectedNotification.color}-100 text-${selectedNotification.color}-600`}
+              >
+                <selectedNotification.icon size={24} />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900">
+                {selectedNotification.title}
+              </h3>
+            </div>
+            <p className="text-base leading-relaxed text-slate-600">
+              {selectedNotification.message}
+            </p>
+          </div>
+        )}
+      </Modal>
     </>
   );
 }
