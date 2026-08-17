@@ -47,11 +47,6 @@ function StudentToolbar({
       rightActions={
         <>
           <Button variant="secondary">
-            <Upload size={18} />
-            Import
-          </Button>
-
-          <Button variant="secondary">
             <Download size={18} />
             Export
           </Button>

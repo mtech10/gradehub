@@ -45,4 +45,32 @@ export const studentService = {
     const response = await api.put(`/students/${id}`, studentData);
     return response.data || response;
   },
+
+  uploadStudents: async (file, contextData = {}) => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    // Explicitly append the context fields
+    if (contextData.departmentId) {
+      formData.append(
+        "departmentId",
+        contextData.contextData?.departmentId || contextData.departmentId,
+      );
+    }
+    if (contextData.levelId) {
+      formData.append(
+        "levelId",
+        contextData.contextData?.levelId || contextData.levelId,
+      );
+    }
+
+    const response = await api.post("/students/upload", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    const payload = response.data ?? response;
+    return payload.data ?? payload;
+  },
 };

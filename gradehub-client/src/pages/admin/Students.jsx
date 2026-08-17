@@ -4,7 +4,7 @@ import StudentStats from "../../components/admin/students/StudentStats";
 import StudentToolbar from "../../components/admin/students/StudentToolbar";
 import StudentsTable from "../../components/admin/students/StudentsTable";
 import BulkActionBar from "../../components/admin/common/BulkActionBar";
-import ConfirmModal from "../../components/ui/ConfirmModal"; // Added for bulk actions
+import ConfirmModal from "../../components/ui/ConfirmModal";
 
 import {
   studentStatistics,
@@ -15,7 +15,7 @@ import { studentColumns } from "../../constants/tables/studentColumns";
 import { Users, UserCheck, UserMinus, Building } from "lucide-react";
 import { studentService } from "../../services/admin/studentService";
 import StatCardSkeleton from "../../components/ui/skeletons/StatCardSskeleton";
-import { useToast } from "../../context/ToastContext"; // Added for notifications
+import { useToast } from "../../context/ToastContext";
 
 function Students() {
   const [students, setStudents] = useState([]);
@@ -33,7 +33,6 @@ function Students() {
   const [selectedRows, setSelectedRows] = useState([]);
   const pageSize = 8;
 
-  // New state for Bulk Confirm Modal
   const [showBulkDeleteModal, setShowBulkDeleteModal] = useState(false);
   const { addToast } = useToast();
 
@@ -188,9 +187,6 @@ function Students() {
     setSelectedRows([]);
   };
 
-  // --- Single Row Deletion ---
-  // The UI confirmation is now handled by the Table's ConfirmModal.
-  // We just execute the backend deletion and toast notification here.
   const handleDelete = async (id) => {
     try {
       await studentService.deleteStudent(id);
@@ -211,12 +207,10 @@ function Students() {
     }
   };
 
-  // --- Bulk Deletion ---
   const handleBulkDelete = async () => {
-    setShowBulkDeleteModal(false); // Close the modal immediately
+    setShowBulkDeleteModal(false);
 
     try {
-      // In a real app, you'd want a dedicated bulk-delete endpoint here
       for (const studentId of selectedRows) {
         await studentService.deleteStudent(studentId);
       }
@@ -278,7 +272,7 @@ function Students() {
           onClearSelection={clearSelection}
           onExport={() => console.log("Export")}
           onSuspend={() => console.log("Suspend")}
-          onDelete={() => setShowBulkDeleteModal(true)} // Open bulk delete modal
+          onDelete={() => setShowBulkDeleteModal(true)}
         />
       )}
 
@@ -301,7 +295,6 @@ function Students() {
         onSelectAll={handleSelectAll}
       />
 
-      {/* Bulk Action Confirmation Modal */}
       <ConfirmModal
         isOpen={showBulkDeleteModal}
         onClose={() => setShowBulkDeleteModal(false)}

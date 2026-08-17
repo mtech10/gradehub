@@ -4,47 +4,38 @@ import { CalendarDays, ChevronDown } from "lucide-react";
 import Button from "../ui/Button";
 import PageHeader from "../ui/PageHeader";
 
-import semesterService from "../../services/admin/semesterService";
+import sessionService from "../../services/admin/sessionService"; // Swapped to sessionService
 
-function ResultsHeader({ selectedSemesterId, onTermChange }) {
-  const [semesters, setSemesters] = useState([]);
+function ResultsHeader({ selectedSessionId, onTermChange }) {
+  const [sessions, setSessions] = useState([]);
 
   useEffect(() => {
-    const fetchAllTerms = async () => {
+    const fetchAllSessions = async () => {
       try {
-        const res = await semesterService.getSemesters({ status: "" });
-        setSemesters(res.data || []);
+        const res = await sessionService.getSessions({ status: "all" });
+        setSessions(res.data || []);
       } catch (error) {
-        console.error("Failed to load dropdown terms:", error);
+        console.error("Failed to load sessions for dropdown:", error);
       }
     };
-    fetchAllTerms();
+    fetchAllSessions();
   }, []);
 
   const handleSelectChange = (e) => {
-    const semId = e.target.value;
-    const selectedSem = semesters.find((s) => s.id === semId);
+    const sesId = e.target.value;
+    const selectedSes = sessions.find((s) => s.id === sesId);
 
-    if (selectedSem) {
-      const sesId =
-        selectedSem.sessionId ||
-        selectedSem.session_id ||
-        selectedSem.session?.id;
-      const sesName =
-        selectedSem.sessionName ||
-        selectedSem.session_name ||
-        selectedSem.session?.name ||
-        "Unknown Session";
-      const semName = selectedSem.name;
-
-      onTermChange(sesId, selectedSem.id, semName, sesName);
+    if (selectedSes) {
+      const sesName = selectedSes.name;
+      // Pass the session ID and name up to the parent component
+      onTermChange(sesId, null, null, sesName);
     }
   };
 
   return (
     <PageHeader
       title="My Results"
-      description="View your semester results and academic performance."
+      description="View your session results and academic performance."
       actions={
         <div className="flex gap-3">
           <div className="relative flex items-center">
@@ -53,28 +44,19 @@ function ResultsHeader({ selectedSemesterId, onTermChange }) {
               className="absolute left-3 text-slate-500 pointer-events-none"
             />
             <select
-              value={selectedSemesterId || ""}
+              value={selectedSessionId || ""}
               onChange={handleSelectChange}
               className="appearance-none rounded-xl border border-slate-200 bg-white py-2 pl-9 pr-10 text-sm font-semibold text-slate-700 hover:bg-slate-50 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 cursor-pointer shadow-sm transition-all h-[40px]"
             >
-              {semesters.length === 0 && (
-                <option value="">Loading terms...</option>
+              {sessions.length === 0 && (
+                <option value="">Loading sessions...</option>
               )}
 
-              {semesters.map((sem) => {
-                // Safely extract the session name for the dropdown display
-                const sesName =
-                  sem.sessionName ||
-                  sem.session_name ||
-                  sem.session?.name ||
-                  "Unknown Session";
-
-                return (
-                  <option key={sem.id} value={sem.id}>
-                    {sesName} — {sem.name}
-                  </option>
-                );
-              })}
+              {sessions.map((ses) => (
+                <option key={ses.id} value={ses.id}>
+                  {ses.name}
+                </option>
+              ))}
             </select>
             <ChevronDown
               size={16}

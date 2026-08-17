@@ -57,6 +57,23 @@ export const restoreCourse = async (id) => {
   return response.data;
 };
 
+export const uploadCourses = async (file, contextData = {}) => {
+  const formData = new FormData();
+
+  // Append context fields FIRST so multer reads them before parsing the file
+  formData.append("departmentId", contextData.departmentId || "");
+  formData.append("levelId", contextData.levelId || "");
+  formData.append("file", file); // File LAST
+
+  const response = await api.post("/courses/upload", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+  return response.data;
+};
+
 const courseService = {
   getCourses,
   getCourseStatistics,
@@ -65,6 +82,7 @@ const courseService = {
   updateCourse,
   deactivateCourse,
   restoreCourse,
+  uploadCourses,
 };
 
 export default courseService;

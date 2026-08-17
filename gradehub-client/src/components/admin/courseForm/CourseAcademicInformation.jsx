@@ -7,9 +7,14 @@ function CourseAcademicInformation({
   updateField,
   departments,
   levels,
-  sessions,
-  semesters,
+  semesters = [], // Added a fallback to an empty array just in case it loads slowly
 }) {
+  // Deduplicate the semesters array by name so we only see one of each
+  const uniqueSemesters = semesters.filter(
+    (semester, index, self) =>
+      index === self.findIndex((s) => s.name === semester.name),
+  );
+
   return (
     <Card>
       <div>
@@ -48,26 +53,15 @@ function CourseAcademicInformation({
         />
 
         <Select
-          label="Session"
-          placeholder="Select Session"
-          options={sessions.map((session) => ({
-            value: session.id,
-            label: session.name,
-          }))}
-          value={formData.sessionId}
-          onChange={(e) => updateField("sessionId", e.target.value)}
-          required
-        />
-
-        <Select
           label="Semester"
           placeholder="Select Semester"
-          options={semesters.map((semester) => ({
-            value: semester.id,
+          // Using the deduplicated array and mapping the value to the semester string
+          options={uniqueSemesters.map((semester) => ({
+            value: semester.name,
             label: semester.name,
           }))}
-          value={formData.semesterId}
-          onChange={(e) => updateField("semesterId", e.target.value)}
+          value={formData.semester}
+          onChange={(e) => updateField("semester", e.target.value)}
           required
         />
 

@@ -24,6 +24,8 @@ function CourseRegistrationTable({
   onClearSelection,
   filteredCourses,
   handleRowClick,
+  currentPage,
+  onPageChange,
 }) {
   const getRowClassName = (course) => {
     const checked = isCourseChecked(course, selectedCodes, droppedCodes);
@@ -56,14 +58,12 @@ function CourseRegistrationTable({
         return (
           <div>
             <p className="font-semibold text-slate-900">{course.code}</p>
-
             <p className="text-sm text-slate-500">{course.title}</p>
           </div>
         );
 
       case "semester": {
         const semester = getSemesterBadge(course.semester);
-
         return <Badge variant={semester.variant}>{semester.label}</Badge>;
       }
 
@@ -110,6 +110,12 @@ function CourseRegistrationTable({
           renderCell={renderCell}
           rowClassName={getRowClassName}
           onRowClick={handleRowClick}
+          pagination={true}
+          currentPage={currentPage}
+          onPageChange={onPageChange}
+          pageSize={10}
+          totalItems={filteredCourses.length}
+          totalPages={Math.ceil(filteredCourses.length / 10)}
         />
       </div>
     </div>

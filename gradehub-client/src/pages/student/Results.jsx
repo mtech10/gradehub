@@ -17,38 +17,26 @@ import ResultsSkeleton from "../../components/ui/skeletons/ResultsSkeleton";
 import resultService from "../../services/resultService";
 
 function Results() {
-  const {
-    currentSession,
-    currentSemester,
-    isLoading: isAcademicLoading,
-  } = useAcademic();
+  const { currentSession, isLoading: isAcademicLoading } = useAcademic();
 
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
 
   const [viewSessionId, setViewSessionId] = useState(null);
-  const [viewSemesterId, setViewSemesterId] = useState(null);
-  const [viewLabels, setViewLabels] = useState({ semester: "", session: "" });
+  const [viewSessionName, setViewSessionName] = useState("");
 
+  // Initialize view state when academic context loads
   useEffect(() => {
-    if (
-      !isAcademicLoading &&
-      currentSession &&
-      currentSemester &&
-      !viewSemesterId
-    ) {
+    if (!isAcademicLoading && currentSession && !viewSessionId) {
       setViewSessionId(currentSession.id);
-      setViewSemesterId(currentSemester.id);
-      setViewLabels({
-        semester: currentSemester.name,
-        session: currentSession.name,
-      });
+      setViewSessionName(currentSession.name);
     }
-  }, [isAcademicLoading, currentSession, currentSemester, viewSemesterId]);
+  }, [isAcademicLoading, currentSession, viewSessionId]);
 
+  // Fetch results based ONLY on session ID
   useEffect(() => {
-    if (!viewSessionId || !viewSemesterId) return;
+    if (!viewSessionId) return;
 
     const fetchResults = async () => {
       try {
@@ -57,30 +45,53 @@ function Results() {
         const response = await resultService.getMyResults({
           page: currentPage,
           limit: 10,
-          sessionId: viewSessionId,
-          semesterId: viewSemesterId,
+          sessionId: viewSessionId, // <-- Session-only filtering
         });
 
         setData(response);
       } catch (error) {
-        console.error("Error fetching results:", error);
+        console.error("Failed to fetch results:", error);
+        alert(
+          error.response?.data?.message ||
+            error.message ||
+            "Failed to load results.",
+        );
       } finally {
         setLoading(false);
       }
     };
 
     fetchResults();
-  }, [currentPage, viewSessionId, viewSemesterId]);
+  }, [currentPage, viewSessionId]);
 
-  const handleTermChange = (newSessionId, newSemesterId, semName, sesName) => {
+  const handleTermChange = (
+    newSessionId,
+    _newSemesterId,
+    _semName,
+    sesName,
+  ) => {
     setViewSessionId(newSessionId);
-    setViewSemesterId(newSemesterId);
-    setViewLabels({ semester: semName, session: sesName });
+    setViewSessionName(sesName);
     setCurrentPage(1);
   };
 
   if (isAcademicLoading || loading) {
     return <ResultsSkeleton />;
+  }
+
+  if (!viewSessionId) {
+    return (
+      <div className="flex flex-col items-center justify-center p-12 text-center">
+        <div className="rounded-xl border border-amber-200 bg-amber-50 p-6 max-w-md text-amber-800">
+          <h3 className="font-bold text-base mb-1">
+            No Active Session Configured
+          </h3>
+          <p className="text-sm">
+            Please set an active academic session under your settings.
+          </p>
+        </div>
+      </div>
+    );
   }
 
   if (!data) {
@@ -95,13 +106,13 @@ function Results() {
     <div className="space-y-8">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <ResultsHeader
-          selectedSemesterId={viewSemesterId}
+          selectedSessionId={viewSessionId}
           onTermChange={handleTermChange}
         />
 
-        {viewLabels.semester && (
+        {viewSessionName && (
           <div className="inline-flex rounded-full bg-blue-50 px-4 py-1.5 text-sm font-semibold text-blue-700 border border-blue-100">
-            Viewing: {viewLabels.semester} ({viewLabels.session})
+            Viewing Session: {viewSessionName}
           </div>
         )}
       </div>
@@ -147,8 +158,8 @@ function Results() {
       />
 
       <ResultsTable
-        title="Term Results"
-        subtitle={`Published course results for ${viewLabels.semester}`}
+        title="Session Results"
+        subtitle={`Published course results for the ${viewSessionName} session`}
         results={data.results}
         pagination={data.pagination}
         currentPage={currentPage}

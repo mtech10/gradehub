@@ -9,12 +9,17 @@ function CourseAccordion({ data }) {
 
   const headerAction = (
     <div className="flex items-center gap-4">
-      <span className="text-sm font-medium text-slate-600 hidden sm:block">
+      <span className="hidden text-sm font-medium text-slate-600 sm:block">
         Credit Load: {data.creditLoad}
       </span>
       {isCurrent && (
         <button
-          className={`${THEME.linkButton.base} ${THEME.linkButton.primary} hidden sm:flex items-center gap-2`}
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation(); // Stops the click from bubbling up and closing the accordion
+            // Add timetable routing logic here
+          }}
+          className={`${THEME.linkButton.base} ${THEME.linkButton.primary} hidden items-center gap-2 sm:flex`}
         >
           <Calendar size={16} />
           View Timetable
@@ -37,10 +42,13 @@ function CourseAccordion({ data }) {
       headerAction={headerAction}
     >
       <div className="flex flex-col">
-        {data.courses.length > 0 ? (
-          data.courses.map((course, index) => (
-            <CourseRow key={`${course.code}-${index}`} course={course} />
-          ))
+        {data.courses?.length > 0 ? (
+          data.courses.map((course, index) => {
+            // Generates a bulletproof unique key using parent ID + course code + loop index
+            const uniqueKey = `${data.id || "sem"}-${course.code || "course"}-${index}`;
+
+            return <CourseRow key={uniqueKey} course={course} />;
+          })
         ) : (
           <div className="py-8 text-center text-slate-500">
             No course records available for this semester.

@@ -2,6 +2,7 @@
 // import { useNavigate, useLocation } from "react-router-dom";
 
 // import { useAuth } from "../../context/AuthContext";
+// import { useToast } from "../../context/ToastContext";
 
 // import AuthLayout from "../../layouts/AuthLayout";
 
@@ -23,6 +24,7 @@
 //   const location = useLocation();
 
 //   const { login } = useAuth();
+//   const { addToast } = useToast();
 
 //   const [formData, setFormData] = useState({
 //     email: "",
@@ -49,6 +51,14 @@
 //       setSubmitting(true);
 
 //       const user = await login(formData);
+
+//       // Fire success toast notification
+//       addToast({
+//         title: "Login Successful",
+//         message: `Welcome back, ${user.name || "User"}!`,
+//         type: "success",
+//       });
+
 //       const redirectTo = location.state?.from?.pathname;
 
 //       if (redirectTo) {
@@ -62,7 +72,16 @@
 //         navigate("/student");
 //       }
 //     } catch (error) {
-//       setError(error.message);
+//       const errorMessage =
+//         error.message || "Failed to log in. Please check your credentials.";
+//       setError(errorMessage);
+
+//       // Fire error toast notification
+//       addToast({
+//         title: "Login Failed",
+//         message: errorMessage,
+//         type: "error",
+//       });
 //     } finally {
 //       setSubmitting(false);
 //     }
@@ -187,6 +206,17 @@ function Login() {
       const redirectTo = location.state?.from?.pathname;
 
       if (redirectTo) {
+        // SAFEGUARD: Prevent cross-role redirects from stale browser history
+        if (user.role === "admin" && redirectTo.startsWith("/student")) {
+          navigate("/admin", { replace: true });
+          return;
+        }
+
+        if (user.role === "student" && redirectTo.startsWith("/admin")) {
+          navigate("/student", { replace: true });
+          return;
+        }
+
         navigate(redirectTo, { replace: true });
         return;
       }
