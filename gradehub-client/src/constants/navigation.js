@@ -96,6 +96,11 @@ export const adminNavigation = [
     path: "/admin/profile",
   },
   {
+    title: "Notifications",
+    icon: Bell,
+    path: "/admin/notifications",
+  },
+  {
     title: "Settings",
     icon: Settings,
     path: "/admin/settings",

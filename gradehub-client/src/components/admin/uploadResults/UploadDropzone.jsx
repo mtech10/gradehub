@@ -51,10 +51,16 @@ function UploadDropzone({ formData, updateField }) {
       </div>
 
       <div className="mt-6">
-        <Button type="button" variant="secondary">
-          <Download size={18} />
-          Download Template
-        </Button>
+        <a
+          href="/templates/results_template.csv"
+          download
+          className="inline-block"
+        >
+          <Button type="button" variant="secondary">
+            <Download size={18} className="mr-2" />
+            Download Template
+          </Button>
+        </a>
       </div>
     </Card>
   );

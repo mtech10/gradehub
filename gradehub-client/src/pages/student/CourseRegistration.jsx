@@ -17,11 +17,13 @@ function CourseRegistration() {
   const { addToast } = useToast();
 
   const [courses, setCourses] = useState([]);
+  // Initial fallback rules (will be instantly overwritten by the backend's dynamic rules)
   const [rules, setRules] = useState({
     minUnits: 12,
     maxUnits: 48,
     status: "Open",
   });
+
   const [selectedCodes, setSelectedCodes] = useState([]);
   const [droppedCodes, setDroppedCodes] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -86,6 +88,8 @@ function CourseRegistration() {
         }));
 
         setCourses(mergedCourses);
+
+        // This is where the dynamic department/level rules replace the defaults!
         if (registrationRules) setRules(registrationRules);
       } catch (error) {
         console.error("Failed to load course registration details:", error);
@@ -246,8 +250,9 @@ function CourseRegistration() {
 
           <CourseRegistrationTable
             courses={courses}
-            filteredCourses={filteredCourses} // Send ALL items
+            filteredCourses={filteredCourses}
             summary={summary}
+            rules={rules} // <-- Passed the dynamic rules here!
             selectedCodes={selectedCodes}
             droppedCodes={droppedCodes}
             isEditing={isEditing}
@@ -259,7 +264,6 @@ function CourseRegistration() {
             onSelectAll={handleSelectAll}
             onClearSelection={handleClearSelection}
             handleRowClick={handleRowClick}
-            // Pass flat pagination props!
             currentPage={currentPage}
             onPageChange={setCurrentPage}
           />
@@ -269,7 +273,7 @@ function CourseRegistration() {
           <div className="sticky top-24">
             <RegistrationSummary
               summary={summary}
-              rules={rules}
+              rules={rules} // Registration summary handles the min/max math using these rules
               isEditing={isEditing}
               onEdit={() => setIsEditing(true)}
               onCancelEdit={() => {

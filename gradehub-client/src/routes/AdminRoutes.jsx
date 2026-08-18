@@ -18,6 +18,7 @@ import DepartmentDetails from "../pages/admin/DepartmentDetails";
 import AddDepartment from "../pages/admin/AddDepartment";
 import EditDepartment from "../pages/admin/EditDepartment";
 import Settings from "../pages/admin/Settings";
+import AdminNotifications from "../pages/admin/AdminNotifications";
 
 function AdminRoutes() {
   return (
@@ -37,12 +38,12 @@ function AdminRoutes() {
         <Route path="courses/:id/edit" element={<EditCourse />} />
         <Route path="profile" element={<AdminProfile />} />
 
-        {/* Removed leading slashes for consistency */}
         <Route path="departments" element={<Departments />} />
         <Route path="departments/add" element={<AddDepartment />} />
         <Route path="departments/:id" element={<DepartmentDetails />} />
         <Route path="departments/:id/edit" element={<EditDepartment />} />
         <Route path="settings" element={<Settings />} />
+        <Route path="notifications" element={<AdminNotifications />} />
       </Route>
     </Routes>
   );

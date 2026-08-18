@@ -80,7 +80,6 @@ function AddStudent() {
         </Button>
       </div>
 
-      {/* Renders the form wrapper immediately. The skeleton will show inside this component while its internal options fetch */}
       <StudentForm mode="create" />
 
       <BulkUploadModal

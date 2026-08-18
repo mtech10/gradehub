@@ -158,8 +158,8 @@ function AddCourse() {
         entityName="courses"
         templateUrl="/templates/courses_template.csv"
         requireContext={true}
-        departments={departments} // Pass your loaded state here
-        levels={levels} // Pass your loaded state here
+        departments={departments}
+        levels={levels}
       />
     </div>
   );

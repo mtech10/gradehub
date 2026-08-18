@@ -13,6 +13,7 @@ import { SCROLLBAR } from "../../constants/layout";
 function CourseRegistrationTable({
   courses,
   summary,
+  rules, // <-- Added rules prop
   selectedCodes,
   droppedCodes,
   searchQuery,
@@ -97,6 +98,7 @@ function CourseRegistrationTable({
               selected: selectedCodes.length,
             }}
             summary={summary}
+            rules={rules} // <-- Passed rules to the toolbar
             onSelectAll={onSelectAll}
             onClearSelection={onClearSelection}
           />

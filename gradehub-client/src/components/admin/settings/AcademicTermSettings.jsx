@@ -3,13 +3,31 @@ import { Edit2, Trash2, X, Loader2, TrendingUp } from "lucide-react";
 import sessionService from "../../../services/admin/sessionService";
 import semesterService from "../../../services/admin/semesterService";
 import Button from "../../ui/Button";
+import ConfirmModal from "../../ui/ConfirmModal"; // Assuming this is your modal component
 import { useAcademic } from "../../../context/AcademicContext";
+import { useToast } from "../../../context/ToastContext"; // Import Toast
 
 function AcademicTermSettings() {
   const { fetchActiveTerms } = useAcademic();
+  const { addToast } = useToast();
+
   const [sessions, setSessions] = useState([]);
   const [selectedSession, setSelectedSession] = useState(null);
   const [semesters, setSemesters] = useState([]);
+
+  // Modal States
+  const [deleteSessionModal, setDeleteSessionModal] = useState({
+    isOpen: false,
+    id: null,
+  });
+  const [deleteSemesterModal, setDeleteSemesterModal] = useState({
+    isOpen: false,
+    id: null,
+  });
+  const [promoteModal, setPromoteModal] = useState({
+    isOpen: false,
+    session: null,
+  });
 
   // Session Form State
   const [editingSessionId, setEditingSessionId] = useState(null);
@@ -66,20 +84,31 @@ function AcademicTermSettings() {
 
       if (editingSessionId) {
         await sessionService.updateSession(editingSessionId, payload);
-        alert("Session updated successfully!");
+        addToast({
+          title: "Success",
+          message: "Session updated successfully!",
+          type: "success",
+        });
       } else {
         await sessionService.createSession(payload);
-        alert("Session created successfully!");
+        addToast({
+          title: "Success",
+          message: "Session created successfully!",
+          type: "success",
+        });
       }
 
       resetSessionForm();
       fetchSessions();
     } catch (error) {
-      alert(
-        error.response?.data?.message ||
+      addToast({
+        title: "Error",
+        message:
+          error.response?.data?.message ||
           error.message ||
           "Failed to save session.",
-      );
+        type: "error",
+      });
     }
   };
 
@@ -98,19 +127,27 @@ function AcademicTermSettings() {
     setSessionEnd(formatDateForInput(session.endDate || session.enddate));
   };
 
-  const handleDeleteSession = async (id, e) => {
-    e.stopPropagation();
-    if (!window.confirm("Are you sure you want to deactivate this session?"))
-      return;
+  const executeDeleteSession = async () => {
     try {
-      await sessionService.deleteSession(id);
+      await sessionService.deleteSession(deleteSessionModal.id);
       fetchSessions();
-      if (selectedSession?.id === id) {
+      if (selectedSession?.id === deleteSessionModal.id) {
         setSelectedSession(null);
         setSemesters([]);
       }
+      addToast({
+        title: "Deleted",
+        message: "Session has been deactivated.",
+        type: "success",
+      });
     } catch (error) {
-      alert("Failed to delete session.");
+      addToast({
+        title: "Error",
+        message: "Failed to delete session.",
+        type: "error",
+      });
+    } finally {
+      setDeleteSessionModal({ isOpen: false, id: null });
     }
   };
 
@@ -119,36 +156,44 @@ function AcademicTermSettings() {
       await sessionService.makeSessionCurrent(id);
       fetchSessions();
       fetchActiveTerms();
+      addToast({
+        title: "Updated",
+        message: "Current session updated successfully.",
+        type: "success",
+      });
     } catch (error) {
-      alert("Failed to update current session.");
+      addToast({
+        title: "Error",
+        message: "Failed to update current session.",
+        type: "error",
+      });
     }
   };
 
   // --- PROMOTION HANDLER ---
-  const handlePromoteStudents = async (session) => {
-    const confirm = window.confirm(
-      `CRITICAL ACTION: Are you sure you want to run the batch promotion for ${session.name}?\n\nThis will evaluate all active students and move them to their next academic level based on department rules.`,
-    );
-
-    if (!confirm) return;
+  const executePromoteStudents = async () => {
+    const session = promoteModal.session;
+    setPromoteModal({ isOpen: false, session: null }); // Close modal immediately
+    setIsPromoting(true); // Trigger loading state on the button
 
     try {
-      setIsPromoting(true);
       const result = await sessionService.promoteStudents(session.id);
       const stats = result.data;
 
-      alert(
-        `Batch Promotion Complete!\n\n` +
-          `Total Evaluated: ${stats.totalEvaluated}\n` +
-          `Promoted: ${stats.promoted}\n` +
-          `Retained: ${stats.retained}`,
-      );
+      addToast({
+        title: "Promotion Complete!",
+        message: `Evaluated: ${stats.totalEvaluated} | Promoted: ${stats.promoted} | Retained: ${stats.retained}`,
+        type: "success",
+      });
     } catch (error) {
-      alert(
-        error.response?.data?.message ||
+      addToast({
+        title: "Promotion Failed",
+        message:
+          error.response?.data?.message ||
           error.message ||
           "Failed to run batch promotion.",
-      );
+        type: "error",
+      });
     } finally {
       setIsPromoting(false);
     }
@@ -168,20 +213,31 @@ function AcademicTermSettings() {
 
       if (editingSemesterId) {
         await semesterService.updateSemester(editingSemesterId, payload);
-        alert("Semester updated successfully!");
+        addToast({
+          title: "Success",
+          message: "Semester updated successfully!",
+          type: "success",
+        });
       } else {
         await semesterService.createSemester(payload);
-        alert("Semester created successfully!");
+        addToast({
+          title: "Success",
+          message: "Semester created successfully!",
+          type: "success",
+        });
       }
 
       resetSemesterForm();
       fetchSemesters(selectedSession.id);
     } catch (error) {
-      alert(
-        error.response?.data?.message ||
+      addToast({
+        title: "Error",
+        message:
+          error.response?.data?.message ||
           error.message ||
           "Failed to save semester.",
-      );
+        type: "error",
+      });
     }
   };
 
@@ -201,14 +257,23 @@ function AcademicTermSettings() {
     setSemesterEnd(formatDateForInput(semester.endDate || semester.enddate));
   };
 
-  const handleDeleteSemester = async (id) => {
-    if (!window.confirm("Are you sure you want to deactivate this semester?"))
-      return;
+  const executeDeleteSemester = async () => {
     try {
-      await semesterService.deleteSemester(id);
+      await semesterService.deleteSemester(deleteSemesterModal.id);
       fetchSemesters(selectedSession.id);
+      addToast({
+        title: "Deleted",
+        message: "Semester has been deactivated.",
+        type: "success",
+      });
     } catch (error) {
-      alert("Failed to delete semester.");
+      addToast({
+        title: "Error",
+        message: "Failed to delete semester.",
+        type: "error",
+      });
+    } finally {
+      setDeleteSemesterModal({ isOpen: false, id: null });
     }
   };
 
@@ -217,8 +282,17 @@ function AcademicTermSettings() {
       await semesterService.makeSemesterCurrent(id);
       fetchSemesters(selectedSession.id);
       fetchActiveTerms();
+      addToast({
+        title: "Updated",
+        message: "Current semester updated successfully.",
+        type: "success",
+      });
     } catch (error) {
-      alert("Failed to update current semester.");
+      addToast({
+        title: "Error",
+        message: "Failed to update current semester.",
+        type: "error",
+      });
     }
   };
 
@@ -231,7 +305,6 @@ function AcademicTermSettings() {
         </p>
       </div>
 
-      {/* CHANGED TO 3 COLUMNS HERE (lg:grid-cols-3) */}
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         {/* --- COLUMN 1: SESSIONS SECTION --- */}
         <div className="space-y-6 rounded-2xl border border-slate-200 bg-slate-50 p-6">
@@ -345,7 +418,13 @@ function AcademicTermSettings() {
                         <Edit2 size={14} />
                       </button>
                       <button
-                        onClick={(e) => handleDeleteSession(session.id, e)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setDeleteSessionModal({
+                            isOpen: true,
+                            id: session.id,
+                          });
+                        }}
                         className="p-1 hover:text-red-600"
                         title="Delete Session"
                       >
@@ -471,7 +550,12 @@ function AcademicTermSettings() {
                             <Edit2 size={14} />
                           </button>
                           <button
-                            onClick={() => handleDeleteSemester(semester.id)}
+                            onClick={() =>
+                              setDeleteSemesterModal({
+                                isOpen: true,
+                                id: semester.id,
+                              })
+                            }
                             className="p-1 hover:text-red-600"
                           >
                             <Trash2 size={14} />
@@ -517,7 +601,9 @@ function AcademicTermSettings() {
               </div>
 
               <Button
-                onClick={() => handlePromoteStudents(selectedSession)}
+                onClick={() =>
+                  setPromoteModal({ isOpen: true, session: selectedSession })
+                }
                 disabled={isPromoting}
                 className="flex w-full items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 py-3"
               >
@@ -532,6 +618,40 @@ function AcademicTermSettings() {
           )}
         </div>
       </div>
+
+      {/* --- MODALS --- */}
+      <ConfirmModal
+        isOpen={deleteSessionModal.isOpen}
+        onClose={() => setDeleteSessionModal({ isOpen: false, id: null })}
+        onConfirm={executeDeleteSession}
+        title="Deactivate Session"
+        message="Are you sure you want to deactivate this session? This action may hide related records from active views."
+        confirmText="Deactivate"
+        cancelText="Cancel"
+        isDestructive={true}
+      />
+
+      <ConfirmModal
+        isOpen={deleteSemesterModal.isOpen}
+        onClose={() => setDeleteSemesterModal({ isOpen: false, id: null })}
+        onConfirm={executeDeleteSemester}
+        title="Deactivate Semester"
+        message="Are you sure you want to deactivate this semester?"
+        confirmText="Deactivate"
+        cancelText="Cancel"
+        isDestructive={true}
+      />
+
+      <ConfirmModal
+        isOpen={promoteModal.isOpen}
+        onClose={() => setPromoteModal({ isOpen: false, session: null })}
+        onConfirm={executePromoteStudents}
+        title={`Batch Promote: ${promoteModal.session?.name}`}
+        message="CRITICAL ACTION: Are you sure you want to run the batch promotion? This will evaluate all active students and move them to their next academic level based on department rules."
+        confirmText="Run Promotion"
+        cancelText="Cancel"
+        isDestructive={false}
+      />
     </div>
   );
 }
