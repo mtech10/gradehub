@@ -1,8 +1,6 @@
 import { Upload, Download } from "lucide-react";
-
 import Button from "../../ui/Button";
 import AdminToolbar from "../common/AdminToolbar";
-
 import { useNavigate } from "react-router-dom";
 
 function ResultToolbar({
@@ -14,7 +12,10 @@ function ResultToolbar({
   setSemester,
   level,
   setLevel,
+  department, // <-- Add this prop
+  setDepartment, // <-- Add this prop
   filters,
+  onExport,
 }) {
   const navigate = useNavigate();
   return (
@@ -23,6 +24,14 @@ function ResultToolbar({
       setSearch={setSearch}
       searchPlaceholder="Search student or course..."
       filters={[
+        // Add the Department filter here
+        {
+          name: "department",
+          value: department,
+          onChange: setDepartment,
+          options: filters.departments,
+          width: "w-52",
+        },
         {
           name: "session",
           value: session,
@@ -47,17 +56,16 @@ function ResultToolbar({
       ]}
       rightActions={
         <>
+          <Button variant="secondary" onClick={onExport}>
+            <Download size={16} className="mr-2" />
+            Export CSV
+          </Button>
           <Button
             variant="secondary"
             onClick={() => navigate("/admin/results/upload")}
           >
             <Upload size={18} />
             Upload Results
-          </Button>
-
-          <Button variant="secondary">
-            <Download size={18} />
-            Export
           </Button>
         </>
       }

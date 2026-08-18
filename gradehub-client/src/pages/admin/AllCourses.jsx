@@ -14,8 +14,11 @@ import { courseColumns } from "../../constants/tables/courseColumns";
 
 import { BookOpen, CheckCircle, GraduationCap, Clock3 } from "lucide-react";
 import StatCardSkeleton from "../../components/ui/skeletons/StatCardSskeleton";
+import { useToast } from "../../context/ToastContext";
+import { exportToCSV } from "../../utils/exportCsv";
 
 function AllCourses() {
+  const { addToast } = useToast();
   const [courses, setCourses] = useState([]);
 
   const [stats, setStats] = useState([
@@ -81,6 +84,81 @@ function AllCourses() {
   const [error, setError] = useState("");
 
   const pageSize = 8;
+  console.log(courses);
+  const handleExport = async () => {
+    try {
+      addToast({
+        title: "Exporting...",
+        message: "Preparing your download, please wait.",
+        type: "info",
+      });
+
+      // 1. Build query params using the active filters with a massive limit
+      const queryParams = {
+        search: search || undefined,
+        status: status || undefined,
+        departmentId: department || undefined,
+        levelId: level || undefined,
+        // semesterId: semester || undefined, // Include semester if applicable
+        sort: sortKey,
+        order: sortDirection,
+        page: 1,
+        limit: 100000, // Fetch enough to cover the entire database
+      };
+
+      const cleanParams = Object.fromEntries(
+        Object.entries(queryParams).filter(([_, v]) => v !== undefined),
+      );
+
+      // 2. Fetch the full filtered data from the server
+      const response = await courseService.getCourses(cleanParams);
+      const payload = response.data?.pagination ? response.data : response;
+      let dataToExport = payload.data || payload.courses || [];
+
+      if (dataToExport.length === 0) {
+        addToast({
+          title: "Export Failed",
+          message: "No courses found to export matching the current filters.",
+          type: "error",
+        });
+        return;
+      }
+
+      // 3. Restrict export to ONLY selected rows if checkboxes are used
+      if (selectedRows.length > 0) {
+        dataToExport = dataToExport.filter((course) =>
+          selectedRows.includes(course.id),
+        );
+      }
+
+      // 4. Format the data cleanly for Excel/CSV
+      const exportData = dataToExport.map((c) => ({
+        "Course Code": c.code,
+        "Course Title": c.title,
+        Units: c.units,
+        Department: c.department?.name || "N/A",
+        Level: c.level?.name || "N/A",
+        Semester: c.semester?.name || "N/A",
+        Status: c.isActive ? "Active" : "Inactive",
+      }));
+
+      // 5. Trigger the download using the utility function
+      exportToCSV(exportData, "Courses_Record_Export");
+
+      addToast({
+        title: "Export Successful",
+        message: `Successfully exported ${exportData.length} course records.`,
+        type: "success",
+      });
+    } catch (error) {
+      console.error("Export error:", error);
+      addToast({
+        title: "Export Failed",
+        message: "An error occurred while generating the export.",
+        type: "error",
+      });
+    }
+  };
 
   useEffect(() => {
     const loadFilterOptions = async () => {
@@ -263,6 +341,7 @@ function AllCourses() {
         status={status}
         setStatus={setStatus}
         filters={filters}
+        onExport={handleExport}
       />
 
       {selectedRows.length > 0 && (
@@ -270,7 +349,7 @@ function AllCourses() {
           count={selectedRows.length}
           itemLabel="courses"
           onClearSelection={clearSelection}
-          onExport={() => console.log("Export")}
+          onExport={handleExport}
           onSuspend={() => console.log("Archive")}
           onDelete={() => console.log("Delete")}
         />

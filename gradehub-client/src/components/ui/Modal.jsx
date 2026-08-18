@@ -28,11 +28,10 @@ export default function Modal({
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
-
   // We wrap the modal UI in a variable to portal it
   const modalContent = (
-    // Boosted z-index to 9999 just to be absolutely safe
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-900/40 p-4 backdrop-blur-sm animate-in fade-in duration-200">
+    // Changed: bg-slate-900/40 -> bg-slate-900/20, and adjusted backdrop-blur
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-900/20 p-4 backdrop-blur-[2px] animate-in fade-in duration-200">
       {/* Clickable backdrop to close */}
       <div className="absolute inset-0" onClick={onClose} />
 
@@ -69,6 +68,5 @@ export default function Modal({
     </div>
   );
 
-  // Portal the modal to the document body to escape parent stacking contexts
   return createPortal(modalContent, document.body);
 }

@@ -12,7 +12,7 @@ import {
   Settings as SettingsIcon,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { notificationsList } from "../../constants/notifications/notificationData";
+import { notificationService } from "../../services/notificationService";
 import { useAuth } from "../../context/AuthContext";
 import { useLayout } from "../../context/LayoutContext";
 
@@ -34,6 +34,31 @@ function TopNavbar({ user, routes }) {
   const { logout } = useAuth();
   const { sidebarOpen, toggleSidebar } = useLayout();
   const { addToast } = useToast();
+
+  const [notifications, setNotifications] = useState([]);
+
+  // Fetch notifications on component mount
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const data = await notificationService.getNotifications();
+        setNotifications(data);
+      } catch (error) {
+        console.error("Failed to fetch notifications:", error);
+      }
+    };
+    fetchNotifications();
+  }, []);
+
+  const handleMarkAllRead = async () => {
+    try {
+      await notificationService.markAllAsRead();
+      // Optimistically update the UI to clear the unread badges instantly
+      setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
+    } catch (error) {
+      console.error("Failed to mark all as read:", error);
+    }
+  };
 
   const executeLogout = () => {
     setShowLogoutModal(false);
@@ -80,7 +105,7 @@ function TopNavbar({ user, routes }) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  const unreadNotifications = notificationsList.filter((n) => !n.isRead);
+  const unreadNotifications = notifications.filter((n) => !n.isRead);
   const dropdownNotifications = unreadNotifications.slice(0, 4);
 
   const handleSearchSubmit = (e) => {
@@ -145,7 +170,10 @@ function TopNavbar({ user, routes }) {
                   <h3 className="font-semibold text-slate-900">
                     Notifications
                   </h3>
-                  <button className="text-xs font-medium text-blue-600 hover:text-blue-700 flex items-center gap-1">
+                  <button
+                    onClick={handleMarkAllRead}
+                    className="text-xs font-medium text-blue-600 hover:text-blue-700 flex items-center gap-1"
+                  >
                     <Check size={14} /> Mark all read
                   </button>
                 </div>

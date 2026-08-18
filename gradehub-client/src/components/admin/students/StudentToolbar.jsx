@@ -14,6 +14,7 @@ function StudentToolbar({
   status,
   setStatus,
   filters,
+  onExport,
 }) {
   const navigate = useNavigate();
   return (
@@ -46,7 +47,7 @@ function StudentToolbar({
       ]}
       rightActions={
         <>
-          <Button variant="secondary">
+          <Button variant="secondary" onClick={onExport}>
             <Download size={18} />
             Export
           </Button>

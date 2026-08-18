@@ -6,16 +6,16 @@ import StudentsTable from "../../components/admin/students/StudentsTable";
 import BulkActionBar from "../../components/admin/common/BulkActionBar";
 import ConfirmModal from "../../components/ui/ConfirmModal";
 
-import {
-  studentStatistics,
-  studentFilters,
-} from "../../constants/admin/students";
+import { studentFilters } from "../../constants/admin/students";
 import { studentColumns } from "../../constants/tables/studentColumns";
 
 import { Users, UserCheck, UserMinus, Building } from "lucide-react";
 import { studentService } from "../../services/admin/studentService";
 import StatCardSkeleton from "../../components/ui/skeletons/StatCardSskeleton";
 import { useToast } from "../../context/ToastContext";
+import departmentService from "../../services/admin/departmentService";
+import levelService from "../../services/admin/levelService";
+import { exportToCSV } from "../../utils/exportCsv";
 
 function Students() {
   const [students, setStudents] = useState([]);
@@ -54,7 +54,7 @@ function Students() {
     {
       title: "Inactive Students",
       value: "0",
-      subtitle: "Graduated or deferred",
+      subtitle: "Suspended or deferred",
       icon: UserMinus,
       color: "amber",
     },
@@ -67,6 +67,113 @@ function Students() {
     },
   ]);
 
+  const [filterOptions, setFilterOptions] = useState({
+    departments: [],
+    levels: [],
+    statuses: studentFilters.statuses,
+  });
+
+  const handleExport = async () => {
+    try {
+      addToast({
+        title: "Exporting...",
+        message: "Preparing your download, please wait.",
+        type: "info",
+      });
+
+      const queryParams = {
+        search: search || undefined,
+        status: status || undefined,
+        departmentId: department || undefined,
+        levelId: level || undefined,
+        sort: sortKey,
+        order: sortDirection,
+        page: 1,
+        limit: 100000,
+      };
+
+      const cleanParams = Object.fromEntries(
+        Object.entries(queryParams).filter(([_, v]) => v !== undefined),
+      );
+
+      const response = await studentService.getStudents(cleanParams);
+      const payload = response.data?.pagination ? response.data : response;
+      let dataToExport = payload.data || payload.students || [];
+
+      if (dataToExport.length === 0) {
+        addToast({
+          title: "Export Failed",
+          message: "No students found to export matching the current filters.",
+          type: "error",
+        });
+        return;
+      }
+
+      if (selectedRows.length > 0) {
+        dataToExport = dataToExport.filter((student) =>
+          selectedRows.includes(student.id),
+        );
+      }
+
+      const exportData = dataToExport.map((s) => ({
+        "Matric No": s.matricNumber,
+        "First Name": s.firstName,
+        "Last Name": s.lastName,
+        Email: s.email,
+        Gender: s.gender || "N/A",
+        Department: s.department?.name || "N/A",
+        Level: s.level?.name || "N/A",
+        Status: s.isActive ? "Active" : "Inactive",
+        CGPA: s.cgpa || "0.00",
+      }));
+
+      exportToCSV(exportData, "Students_Record_Export");
+
+      addToast({
+        title: "Export Successful",
+        message: `Successfully exported ${exportData.length} student records.`,
+        type: "success",
+      });
+    } catch (error) {
+      console.error("Export error:", error);
+      addToast({
+        title: "Export Failed",
+        message: "An error occurred while generating the export.",
+        type: "error",
+      });
+    }
+  };
+
+  useEffect(() => {
+    const loadFilterOptions = async () => {
+      try {
+        const [deptRes, levelRes] = await Promise.all([
+          departmentService.getDepartments({ status: "active" }),
+          levelService.getLevels({ status: "active" }),
+        ]);
+
+        const depts = (deptRes.data || deptRes || []).map((d) => ({
+          value: d.id,
+          label: d.name,
+        }));
+
+        const lvls = (levelRes.data || levelRes || []).map((l) => ({
+          value: l.id,
+          label: l.name,
+        }));
+
+        setFilterOptions({
+          departments: [{ value: "", label: "All Departments" }, ...depts],
+          levels: [{ value: "", label: "All Levels" }, ...lvls],
+          statuses: studentFilters.statuses,
+        });
+      } catch (err) {
+        console.error("Failed to load filter dropdown data", err);
+      }
+    };
+
+    loadFilterOptions();
+  }, []);
   useEffect(() => {
     const fetchStudents = async () => {
       setLoading(true);
@@ -262,7 +369,8 @@ function Students() {
         setLevel={setLevel}
         status={status}
         setStatus={setStatus}
-        filters={studentFilters}
+        filters={filterOptions}
+        onExport={handleExport}
       />
 
       {selectedRows.length > 0 && (
@@ -270,7 +378,7 @@ function Students() {
           count={selectedRows.length}
           itemLabel="students"
           onClearSelection={clearSelection}
-          onExport={() => console.log("Export")}
+          onExport={handleExport}
           onSuspend={() => console.log("Suspend")}
           onDelete={() => setShowBulkDeleteModal(true)}
         />

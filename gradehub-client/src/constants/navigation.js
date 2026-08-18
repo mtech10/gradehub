@@ -45,7 +45,6 @@ export const studentNavigation = [
     title: "Notifications",
     icon: Bell,
     path: "/student/notifications",
-    badge: 3,
   },
   {
     title: "Profile",

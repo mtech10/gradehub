@@ -15,6 +15,7 @@ import ReviewNotice from "../../components/results/ReviewNotice";
 import ResultsSkeleton from "../../components/ui/skeletons/ResultsSkeleton";
 
 import resultService from "../../services/resultService";
+import sessionService from "../../services/admin/sessionService"; // <-- Added session service
 
 function Results() {
   const { currentSession, isLoading: isAcademicLoading } = useAcademic();
@@ -25,13 +26,38 @@ function Results() {
 
   const [viewSessionId, setViewSessionId] = useState(null);
   const [viewSessionName, setViewSessionName] = useState("");
+  const [noSessionsExist, setNoSessionsExist] = useState(false);
 
-  // Initialize view state when academic context loads
+  // Initialize view state: Use current session, or fallback to the latest available session
   useEffect(() => {
-    if (!isAcademicLoading && currentSession && !viewSessionId) {
-      setViewSessionId(currentSession.id);
-      setViewSessionName(currentSession.name);
-    }
+    const initializeView = async () => {
+      if (isAcademicLoading) return;
+
+      if (currentSession && !viewSessionId) {
+        setViewSessionId(currentSession.id);
+        setViewSessionName(currentSession.name);
+      } else if (!currentSession && !viewSessionId) {
+        try {
+          // Fallback: If no current session is active, fetch all sessions
+          const res = await sessionService.getSessions({ status: "all" });
+          const sessions = res.data || res || [];
+
+          if (sessions.length > 0) {
+            // Automatically select the first (most recent) session so the page isn't blocked
+            setViewSessionId(sessions[0].id);
+            setViewSessionName(sessions[0].name);
+          } else {
+            setNoSessionsExist(true);
+            setLoading(false);
+          }
+        } catch (error) {
+          console.error("Failed to load fallback session", error);
+          setLoading(false);
+        }
+      }
+    };
+
+    initializeView();
   }, [isAcademicLoading, currentSession, viewSessionId]);
 
   // Fetch results based ONLY on session ID
@@ -45,7 +71,7 @@ function Results() {
         const response = await resultService.getMyResults({
           page: currentPage,
           limit: 10,
-          sessionId: viewSessionId, // <-- Session-only filtering
+          sessionId: viewSessionId,
         });
 
         setData(response);
@@ -79,15 +105,16 @@ function Results() {
     return <ResultsSkeleton />;
   }
 
-  if (!viewSessionId) {
+  // Only show an error if there are literally zero sessions created in the entire system
+  if (noSessionsExist) {
     return (
       <div className="flex flex-col items-center justify-center p-12 text-center">
         <div className="rounded-xl border border-amber-200 bg-amber-50 p-6 max-w-md text-amber-800">
           <h3 className="font-bold text-base mb-1">
-            No Active Session Configured
+            No Academic Sessions Found
           </h3>
           <p className="text-sm">
-            Please set an active academic session under your settings.
+            There are currently no academic sessions recorded in the system.
           </p>
         </div>
       </div>
