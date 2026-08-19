@@ -1,11 +1,9 @@
 import { useNavigate } from "react-router-dom";
-
 import Card from "../../ui/Card";
 import Button from "../../ui/Button";
 import Badge from "../../ui/Badge";
 import DataTable from "../../ui/DataTable";
 import { pendingResultsColumns } from "../../../constants/tables/pendingResultsColumns";
-import { pendingResults } from "../../../constants/admin/dashboardData";
 
 function PendingResultsTable({ results }) {
   const navigate = useNavigate();
@@ -24,7 +22,6 @@ function PendingResultsTable({ results }) {
             {result.courseCode}
           </button>
         );
-
       case "status":
         return (
           <Badge
@@ -39,27 +36,29 @@ function PendingResultsTable({ results }) {
             {result.status}
           </Badge>
         );
-
       default:
         return result[column.key];
     }
   };
 
   return (
-    <div className="pt-5">
+    <div className="pt-0 lg:pt-5">
       <Card padding="none">
-        <div className="flex items-center justify-between border-b border-slate-200 px-6 py-5">
+        {/* Responsive Header */}
+        <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-slate-200 px-4 py-4 sm:px-6 sm:py-5">
           <div>
             <h3 className="text-lg font-semibold">
               Results Requiring Attention
             </h3>
-
             <p className="text-sm text-slate-500">
               Upload, approve or review academic results.
             </p>
           </div>
-
-          <Button size="sm" onClick={() => navigate("/admin/results")}>
+          <Button
+            size="sm"
+            onClick={() => navigate("/admin/results")}
+            className="w-full sm:w-auto"
+          >
             View All
           </Button>
         </div>

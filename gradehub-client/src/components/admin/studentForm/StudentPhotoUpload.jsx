@@ -1,24 +1,22 @@
 import { Camera } from "lucide-react";
 
 function StudentPhotoUpload({ formData, handleChange }) {
-  // ✅ ADD THIS SAFE PREVIEW LOGIC:
-  let preview = ""; // Add a default avatar path here if you have one
+  let preview = "";
 
   if (formData.photo) {
     if (typeof formData.photo === "string") {
-      // If it's a string, it's already a URL from the database!
       preview = formData.photo;
     } else if (
       formData.photo instanceof File ||
       formData.photo instanceof Blob
     ) {
-      // If it's a File object, the user just selected it from their computer
       preview = URL.createObjectURL(formData.photo);
     }
   }
+
   return (
-    <div className="flex flex-col items-center gap-5">
-      <div className="flex h-40 w-40 items-center justify-center overflow-hidden rounded-full border-2 border-dashed border-slate-300 bg-slate-50">
+    <div className="flex flex-col items-center gap-4 sm:gap-5">
+      <div className="flex h-32 w-32 sm:h-40 sm:w-40 items-center justify-center overflow-hidden rounded-full border-2 border-dashed border-slate-300 bg-slate-50">
         {preview ? (
           <img
             src={preview}
@@ -26,14 +24,14 @@ function StudentPhotoUpload({ formData, handleChange }) {
             className="h-full w-full object-cover"
           />
         ) : (
-          <Camera size={40} className="text-slate-400" />
+          <Camera size={36} className="text-slate-400 sm:w-10 sm:h-10" />
         )}
       </div>
 
       <div className="text-center">
         <label
           htmlFor="student-photo"
-          className="cursor-pointer rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700"
+          className="cursor-pointer inline-block rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700"
         >
           Upload Photo
         </label>

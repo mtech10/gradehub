@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { MoreHorizontal, FileText } from "lucide-react";
-import { SCROLLBAR } from "../../constants/layout";
 import Card from "../ui/Card";
 import { THEME } from "../../constants/theme";
 import Badge from "../ui/Badge";
@@ -25,9 +24,11 @@ function ResultsTable({
     switch (column.key) {
       case "course":
         return (
-          <div>
+          <div className="min-w-0 max-w-[200px] sm:max-w-none">
             <p className="font-semibold text-slate-900">{row.code}</p>
-            <p className="text-sm text-slate-500">{row.course}</p>
+            <p className="text-xs sm:text-sm text-slate-500 truncate">
+              {row.course}
+            </p>
           </div>
         );
 
@@ -112,29 +113,27 @@ function ResultsTable({
           showHeaderAction ? (
             <button
               type="button"
-              className={`${THEME.linkButton.base} ${THEME.linkButton.primary}`}
+              className={`${THEME.linkButton.base} ${THEME.linkButton.primary} text-xs sm:text-sm`}
             >
               View All Results
             </button>
           ) : null
         }
       >
-        <div className="h-fit max-h-[420px] overflow-auto">
-          <div className={`${SCROLLBAR}`}>
-            <DataTable
-              columns={resultsColumns}
-              data={results}
-              renderCell={renderCell}
-              pagination
-              currentPage={currentPage}
-              totalPages={pagination?.totalPages ?? 1}
-              totalItems={pagination?.total ?? results.length}
-              pageSize={pagination?.limit ?? 10}
-              serverPagination={true}
-              itemLabel="results"
-              onPageChange={onPageChange}
-            />
-          </div>
+        <div className="p-3 sm:p-5">
+          <DataTable
+            columns={resultsColumns}
+            data={results}
+            renderCell={renderCell}
+            pagination={Boolean(pagination)}
+            currentPage={currentPage}
+            totalPages={pagination?.totalPages ?? 1}
+            totalItems={pagination?.total ?? results.length}
+            pageSize={pagination?.limit ?? 10}
+            serverPagination={true}
+            itemLabel="results"
+            onPageChange={onPageChange}
+          />
         </div>
       </Card>
 
@@ -145,27 +144,28 @@ function ResultsTable({
         title="Result Details"
         subtitle={
           <>
-            <span className="font-medium text-blue-600">
+            <span className="font-semibold text-blue-600">
               {selectedResult?.code}
             </span>
-            <br />
-            <span className="text-slate-500">{selectedResult?.course}</span>
+            <span className="text-slate-500 ml-1.5">
+              — {selectedResult?.course}
+            </span>
           </>
         }
         footer={modalFooter}
         maxWidth="max-w-sm"
       >
         {selectedResult && (
-          <div className="space-y-3 rounded-xl border border-slate-100 bg-slate-50 p-4 text-sm mt-2">
+          <div className="space-y-3 rounded-xl border border-slate-100 bg-slate-50 p-4 text-xs sm:text-sm">
             <div className="flex justify-between border-b border-slate-200 pb-2">
               <span className="text-slate-600">Continuous Assessment (CA)</span>
-              <span className="font-medium text-slate-900">
+              <span className="font-semibold text-slate-900">
                 {selectedResult.caScore ?? "-"}
               </span>
             </div>
             <div className="flex justify-between border-b border-slate-200 pb-2">
               <span className="text-slate-600">Examination Score</span>
-              <span className="font-medium text-slate-900">
+              <span className="font-semibold text-slate-900">
                 {selectedResult.examScore ?? "-"}
               </span>
             </div>

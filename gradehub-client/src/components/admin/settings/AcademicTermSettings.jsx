@@ -3,9 +3,9 @@ import { Edit2, Trash2, X, Loader2, TrendingUp } from "lucide-react";
 import sessionService from "../../../services/admin/sessionService";
 import semesterService from "../../../services/admin/semesterService";
 import Button from "../../ui/Button";
-import ConfirmModal from "../../ui/ConfirmModal"; // Assuming this is your modal component
+import ConfirmModal from "../../ui/ConfirmModal";
 import { useAcademic } from "../../../context/AcademicContext";
-import { useToast } from "../../../context/ToastContext"; // Import Toast
+import { useToast } from "../../../context/ToastContext";
 
 function AcademicTermSettings() {
   const { fetchActiveTerms } = useAcademic();
@@ -170,11 +170,11 @@ function AcademicTermSettings() {
     }
   };
 
-  // --- PROMOTION HANDLER ---
+  // --- Promotion Handler ---
   const executePromoteStudents = async () => {
     const session = promoteModal.session;
-    setPromoteModal({ isOpen: false, session: null }); // Close modal immediately
-    setIsPromoting(true); // Trigger loading state on the button
+    setPromoteModal({ isOpen: false, session: null });
+    setIsPromoting(true);
 
     try {
       const result = await sessionService.promoteStudents(session.id);
@@ -297,23 +297,27 @@ function AcademicTermSettings() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       <div className="border-b border-slate-200 pb-4">
-        <h2 className="text-xl font-bold text-slate-900">Academic Terms</h2>
-        <p className="text-sm text-slate-500">
+        <h2 className="text-lg sm:text-xl font-bold text-slate-900">
+          Academic Terms
+        </h2>
+        <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
           Manage institution sessions, semesters, and active academic periods.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 sm:gap-8 lg:grid-cols-3">
         {/* --- COLUMN 1: SESSIONS SECTION --- */}
-        <div className="space-y-6 rounded-2xl border border-slate-200 bg-slate-50 p-6">
-          <h3 className="text-lg font-semibold text-slate-800">Sessions</h3>
+        <div className="space-y-4 sm:space-y-6 rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-6">
+          <h3 className="text-base sm:text-lg font-semibold text-slate-800">
+            Sessions
+          </h3>
 
           {/* SESSION FORM */}
           <form
             onSubmit={handleSessionSubmit}
-            className="space-y-3 rounded-xl bg-white p-4 shadow-sm border border-slate-100"
+            className="space-y-3 rounded-xl bg-white p-3.5 sm:p-4 shadow-sm border border-slate-100"
           >
             <div className="flex justify-between items-center">
               <h4 className="text-sm font-medium text-slate-700">
@@ -323,7 +327,7 @@ function AcademicTermSettings() {
                 <button
                   type="button"
                   onClick={resetSessionForm}
-                  className="text-slate-400 hover:text-slate-600"
+                  className="text-slate-400 hover:text-slate-600 p-1"
                 >
                   <X size={16} />
                 </button>
@@ -334,26 +338,30 @@ function AcademicTermSettings() {
               placeholder="Name (e.g. 2026/2027)"
               value={sessionName}
               onChange={(e) => setSessionName(e.target.value)}
-              className="w-full rounded-lg border px-3 py-2 text-sm"
+              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
               required
             />
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <input
                 type="date"
                 value={sessionStart}
                 onChange={(e) => setSessionStart(e.target.value)}
-                className="w-full rounded-lg border px-3 py-2 text-sm text-slate-600"
+                className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs sm:text-sm text-slate-600 focus:outline-none focus:ring-1 focus:ring-blue-500"
                 required
               />
               <input
                 type="date"
                 value={sessionEnd}
                 onChange={(e) => setSessionEnd(e.target.value)}
-                className="w-full rounded-lg border px-3 py-2 text-sm text-slate-600"
+                className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs sm:text-sm text-slate-600 focus:outline-none focus:ring-1 focus:ring-blue-500"
                 required
               />
             </div>
-            <Button type="submit" variant="primary" className="w-full">
+            <Button
+              type="submit"
+              variant="primary"
+              className="w-full justify-center text-sm py-2"
+            >
               {editingSessionId ? "Update Session" : "Create Session"}
             </Button>
           </form>
@@ -373,18 +381,18 @@ function AcademicTermSettings() {
                     fetchSemesters(session.id);
                     resetSemesterForm();
                   }}
-                  className={`flex cursor-pointer flex-col gap-2 rounded-xl border p-4 transition-colors ${
+                  className={`flex cursor-pointer flex-col gap-2 rounded-xl border p-3.5 sm:p-4 transition-colors ${
                     selectedSession?.id === session.id
                       ? "border-blue-500 bg-blue-50/50"
                       : "border-slate-200 bg-white hover:border-blue-300"
                   }`}
                 >
-                  <div className="flex items-center justify-between">
-                    <p className="font-semibold text-slate-900">
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="font-semibold text-slate-900 text-sm truncate">
                       {session.name}
                     </p>
                     {isCurrent ? (
-                      <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-bold text-green-700">
+                      <span className="shrink-0 rounded-full bg-green-100 px-2 py-0.5 text-[10px] sm:text-xs font-bold text-green-700">
                         CURRENT
                       </span>
                     ) : (
@@ -393,14 +401,14 @@ function AcademicTermSettings() {
                           e.stopPropagation();
                           handleMakeSessionCurrent(session.id);
                         }}
-                        className="text-xs font-semibold text-blue-600 hover:underline"
+                        className="shrink-0 text-xs font-semibold text-blue-600 hover:underline"
                       >
                         Set as Current
                       </button>
                     )}
                   </div>
-                  <div className="flex items-center justify-between text-xs text-slate-500">
-                    <div>
+                  <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500 pt-1">
+                    <div className="truncate">
                       {sessionStartVal
                         ? new Date(sessionStartVal).toLocaleDateString()
                         : "No Date"}{" "}
@@ -409,10 +417,10 @@ function AcademicTermSettings() {
                         ? new Date(sessionEndVal).toLocaleDateString()
                         : "No Date"}
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1.5 shrink-0">
                       <button
                         onClick={(e) => handleEditSession(session, e)}
-                        className="p-1 hover:text-blue-600"
+                        className="p-1 hover:text-blue-600 rounded"
                         title="Edit Session"
                       >
                         <Edit2 size={14} />
@@ -425,7 +433,7 @@ function AcademicTermSettings() {
                             id: session.id,
                           });
                         }}
-                        className="p-1 hover:text-red-600"
+                        className="p-1 hover:text-red-600 rounded"
                         title="Delete Session"
                       >
                         <Trash2 size={14} />
@@ -439,14 +447,14 @@ function AcademicTermSettings() {
         </div>
 
         {/* --- COLUMN 2: SEMESTERS SECTION --- */}
-        <div className="space-y-6 rounded-2xl border border-slate-200 bg-slate-50 p-6 h-fit">
-          <h3 className="text-lg font-semibold text-slate-800">
+        <div className="space-y-4 sm:space-y-6 rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-6 h-fit">
+          <h3 className="text-base sm:text-lg font-semibold text-slate-800 break-words">
             Semesters {selectedSession && `for ${selectedSession.name}`}
           </h3>
 
           {!selectedSession ? (
             <div className="flex h-32 items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50">
-              <p className="text-sm text-slate-500 text-center px-4">
+              <p className="text-xs sm:text-sm text-slate-500 text-center px-4">
                 Select a session to view/manage semesters.
               </p>
             </div>
@@ -455,7 +463,7 @@ function AcademicTermSettings() {
               {/* SEMESTER FORM */}
               <form
                 onSubmit={handleSemesterSubmit}
-                className="space-y-3 rounded-xl bg-white p-4 shadow-sm border border-slate-100"
+                className="space-y-3 rounded-xl bg-white p-3.5 sm:p-4 shadow-sm border border-slate-100"
               >
                 <div className="flex justify-between items-center">
                   <h4 className="text-sm font-medium text-slate-700">
@@ -465,7 +473,7 @@ function AcademicTermSettings() {
                     <button
                       type="button"
                       onClick={resetSemesterForm}
-                      className="text-slate-400 hover:text-slate-600"
+                      className="text-slate-400 hover:text-slate-600 p-1"
                     >
                       <X size={16} />
                     </button>
@@ -476,26 +484,30 @@ function AcademicTermSettings() {
                   placeholder="Name (e.g. First Semester)"
                   value={semesterName}
                   onChange={(e) => setSemesterName(e.target.value)}
-                  className="w-full rounded-lg border px-3 py-2 text-sm"
+                  className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
                   required
                 />
-                <div className="flex gap-2">
+                <div className="flex flex-col sm:flex-row gap-2">
                   <input
                     type="date"
                     value={semesterStart}
                     onChange={(e) => setSemesterStart(e.target.value)}
-                    className="w-full rounded-lg border px-3 py-2 text-sm text-slate-600"
+                    className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs sm:text-sm text-slate-600 focus:outline-none focus:ring-1 focus:ring-blue-500"
                     required
                   />
                   <input
                     type="date"
                     value={semesterEnd}
                     onChange={(e) => setSemesterEnd(e.target.value)}
-                    className="w-full rounded-lg border px-3 py-2 text-sm text-slate-600"
+                    className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs sm:text-sm text-slate-600 focus:outline-none focus:ring-1 focus:ring-blue-500"
                     required
                   />
                 </div>
-                <Button type="submit" variant="primary" className="w-full">
+                <Button
+                  type="submit"
+                  variant="primary"
+                  className="w-full justify-center text-sm py-2"
+                >
                   {editingSemesterId ? "Update Semester" : "Create Semester"}
                 </Button>
               </form>
@@ -511,14 +523,14 @@ function AcademicTermSettings() {
                   return (
                     <div
                       key={semester.id}
-                      className="flex flex-col gap-2 rounded-xl border border-slate-200 bg-white p-4"
+                      className="flex flex-col gap-2 rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-sm"
                     >
-                      <div className="flex items-center justify-between">
-                        <p className="font-semibold text-slate-900">
+                      <div className="flex items-center justify-between gap-2">
+                        <p className="font-semibold text-slate-900 text-sm truncate">
                           {semester.name}
                         </p>
                         {isCurrent ? (
-                          <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-bold text-green-700">
+                          <span className="shrink-0 rounded-full bg-green-100 px-2 py-0.5 text-[10px] sm:text-xs font-bold text-green-700">
                             CURRENT
                           </span>
                         ) : (
@@ -526,14 +538,14 @@ function AcademicTermSettings() {
                             onClick={() =>
                               handleMakeSemesterCurrent(semester.id)
                             }
-                            className="text-xs font-semibold text-blue-600 hover:underline"
+                            className="shrink-0 text-xs font-semibold text-blue-600 hover:underline"
                           >
                             Set as Current
                           </button>
                         )}
                       </div>
-                      <div className="flex items-center justify-between text-xs text-slate-500">
-                        <div>
+                      <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500 pt-1">
+                        <div className="truncate">
                           {semesterStartVal
                             ? new Date(semesterStartVal).toLocaleDateString()
                             : "No Date"}{" "}
@@ -542,10 +554,11 @@ function AcademicTermSettings() {
                             ? new Date(semesterEndVal).toLocaleDateString()
                             : "No Date"}
                         </div>
-                        <div className="flex gap-2">
+                        <div className="flex items-center gap-1.5 shrink-0">
                           <button
                             onClick={() => handleEditSemester(semester)}
-                            className="p-1 hover:text-blue-600"
+                            className="p-1 hover:text-blue-600 rounded"
+                            title="Edit Semester"
                           >
                             <Edit2 size={14} />
                           </button>
@@ -556,7 +569,8 @@ function AcademicTermSettings() {
                                 id: semester.id,
                               })
                             }
-                            className="p-1 hover:text-red-600"
+                            className="p-1 hover:text-red-600 rounded"
+                            title="Delete Semester"
                           >
                             <Trash2 size={14} />
                           </button>
@@ -566,7 +580,7 @@ function AcademicTermSettings() {
                   );
                 })}
                 {semesters.length === 0 && (
-                  <p className="py-4 text-center text-sm text-slate-500">
+                  <p className="py-4 text-center text-xs sm:text-sm text-slate-500">
                     No semesters configured for this session.
                   </p>
                 )}
@@ -576,26 +590,26 @@ function AcademicTermSettings() {
         </div>
 
         {/* --- COLUMN 3: BATCH PROMOTION SECTION --- */}
-        <div className="rounded-2xl border border-indigo-100 bg-indigo-50/50 p-6 shadow-sm h-fit">
+        <div className="rounded-2xl border border-indigo-100 bg-indigo-50/50 p-4 sm:p-6 shadow-sm h-fit">
           <div className="mb-4">
-            <h3 className="text-lg font-bold text-indigo-900">
+            <h3 className="text-base sm:text-lg font-bold text-indigo-900">
               Batch Promotion
             </h3>
-            <p className="mt-2 text-sm text-indigo-700/80 leading-relaxed">
+            <p className="mt-1.5 text-xs sm:text-sm text-indigo-700/80 leading-relaxed">
               Advance all eligible students in the selected session to their
               next academic level based on your configured department rules.
             </p>
           </div>
 
           {!selectedSession ? (
-            <div className="rounded-xl border border-dashed border-indigo-200 bg-white p-6 text-center text-sm text-indigo-400 mt-6">
+            <div className="rounded-xl border border-dashed border-indigo-200 bg-white p-4 sm:p-6 text-center text-xs sm:text-sm text-indigo-400 mt-4 sm:mt-6">
               Select a session from the left column to run promotions.
             </div>
           ) : (
-            <div className="flex flex-col items-center gap-5 rounded-xl border border-indigo-100 bg-white p-6 text-center shadow-sm mt-6">
-              <div className="text-sm text-slate-600">
+            <div className="flex flex-col items-center gap-4 sm:gap-5 rounded-xl border border-indigo-100 bg-white p-4 sm:p-6 text-center shadow-sm mt-4 sm:mt-6">
+              <div className="text-xs sm:text-sm text-slate-600">
                 Target Session: <br />
-                <span className="font-bold text-lg text-slate-900 mt-1 block">
+                <span className="font-bold text-base sm:text-lg text-slate-900 mt-1 block">
                   {selectedSession.name}
                 </span>
               </div>
@@ -605,7 +619,7 @@ function AcademicTermSettings() {
                   setPromoteModal({ isOpen: true, session: selectedSession })
                 }
                 disabled={isPromoting}
-                className="flex w-full items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 py-3"
+                className="flex w-full items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 py-2.5 sm:py-3 text-sm font-medium"
               >
                 {isPromoting ? (
                   <Loader2 size={18} className="animate-spin" />

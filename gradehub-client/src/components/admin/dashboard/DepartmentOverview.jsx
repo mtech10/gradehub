@@ -1,23 +1,25 @@
+import { useNavigate } from "react-router-dom";
 import Card from "../../ui/Card";
 import Button from "../../ui/Button";
 
-import { useNavigate } from "react-router-dom";
-
-function departments({ departments }) {
+function DepartmentOverview({ departments }) {
   const navigate = useNavigate();
   return (
-    <div className="pt-5">
-      <Card padding="md">
-        <div className="mb-6 flex items-center justify-between">
+    <div className="pt-0 lg:pt-5">
+      <Card padding="md" className="p-4 sm:p-6">
+        {/* Responsive Header */}
+        <div className="mb-6 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h3 className="text-lg font-semibold text-slate-900">
               Department Overview
             </h3>
-
             <p className="text-sm text-slate-500">Registration progress</p>
           </div>
-
-          <Button size="sm" onClick={() => navigate("/admin/departments")}>
+          <Button
+            size="sm"
+            onClick={() => navigate("/admin/departments")}
+            className="w-full sm:w-auto"
+          >
             View All
           </Button>
         </div>
@@ -32,35 +34,35 @@ function departments({ departments }) {
                 <h4 className="font-semibold text-slate-900">
                   {department.name}
                 </h4>
-
                 <span className="text-sm font-semibold text-blue-600">
                   {department.completion}%
                 </span>
               </div>
 
-              <div className="mt-3 grid grid-cols-3 gap-3 text-center">
+              <div className="mt-3 grid grid-cols-3 gap-2 sm:gap-3 text-center">
                 <div>
-                  <p className="text-lg font-bold text-slate-900">
+                  <p className="text-base sm:text-lg font-bold text-slate-900">
                     {department.students}
                   </p>
-
-                  <p className="text-xs text-slate-500">Students</p>
+                  <p className="text-[10px] sm:text-xs text-slate-500">
+                    Students
+                  </p>
                 </div>
-
                 <div>
-                  <p className="text-lg font-bold text-slate-900">
+                  <p className="text-base sm:text-lg font-bold text-slate-900">
                     {department.courses}
                   </p>
-
-                  <p className="text-xs text-slate-500">Courses</p>
+                  <p className="text-[10px] sm:text-xs text-slate-500">
+                    Courses
+                  </p>
                 </div>
-
                 <div>
-                  <p className="text-lg font-bold text-slate-900">
+                  <p className="text-base sm:text-lg font-bold text-slate-900">
                     {department.lecturers}
                   </p>
-
-                  <p className="text-xs text-slate-500">Lecturers</p>
+                  <p className="text-[10px] sm:text-xs text-slate-500">
+                    Lecturers
+                  </p>
                 </div>
               </div>
 
@@ -80,4 +82,4 @@ function departments({ departments }) {
   );
 }
 
-export default departments;
+export default DepartmentOverview;

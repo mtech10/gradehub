@@ -20,12 +20,13 @@ function CourseFilterBar({
 
   return (
     <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
-      <div className="flex flex-wrap gap-4 border-b border-slate-200">
+      {/* Tabs (Horizontal scroll on mobile) */}
+      <div className="flex gap-4 border-b border-slate-200 overflow-x-auto no-scrollbar">
         {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`border-b-2 pb-3 text-sm font-medium transition-colors ${
+            className={`whitespace-nowrap border-b-2 pb-3 text-xs sm:text-sm font-medium transition-colors ${
               activeTab === tab.id
                 ? "border-blue-600 text-blue-600"
                 : "border-transparent text-slate-500 hover:text-slate-800"
@@ -36,8 +37,9 @@ function CourseFilterBar({
         ))}
       </div>
 
-      <div className="flex flex-wrap gap-3">
-        <div className="relative">
+      {/* Search & Filter Actions */}
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+        <div className="relative w-full sm:w-auto">
           <Search
             size={18}
             className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
@@ -47,12 +49,16 @@ function CourseFilterBar({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search courses..."
-            className="h-11 w-72 rounded-xl border border-slate-200 bg-white pl-10 pr-4 text-sm outline-none transition-all focus:border-blue-500"
+            className="h-10 sm:h-11 w-full sm:w-72 rounded-xl border border-slate-200 bg-white pl-10 pr-4 text-xs sm:text-sm outline-none transition-all focus:border-blue-500"
           />
         </div>
 
-        <Button variant="outline" onClick={() => setOpenFilter(true)}>
-          <Filter size={18} />
+        <Button
+          variant="outline"
+          onClick={() => setOpenFilter(true)}
+          className="justify-center"
+        >
+          <Filter size={18} className="mr-2" />
           Filter
         </Button>
 

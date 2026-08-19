@@ -1,4 +1,3 @@
-import Input from "../../ui/Input";
 import Select from "../../ui/Select";
 
 function AcademicInformation({
@@ -12,16 +11,16 @@ function AcademicInformation({
   studentStatuses,
 }) {
   return (
-    <section className="space-y-6">
+    <section className="space-y-4 sm:space-y-6">
       <div>
-        <h2 className="text-xl font-semibold text-slate-900">
+        <h2 className="text-lg sm:text-xl font-semibold text-slate-900">
           Academic Information
         </h2>
 
-        <div className="mt-3 border-b border-slate-200" />
+        <div className="mt-2 sm:mt-3 border-b border-slate-200" />
       </div>
 
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <Select
           label="Department"
           required

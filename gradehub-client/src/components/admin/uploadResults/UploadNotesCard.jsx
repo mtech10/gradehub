@@ -4,14 +4,17 @@ import { CircleAlert, Info, TriangleAlert } from "lucide-react";
 function Note({ icon: Icon, title, description, color }) {
   return (
     <div className="flex gap-3">
-      <div className={`mt-1 rounded-lg p-2 ${color}`}>
+      <div className={`mt-0.5 rounded-lg p-2 shrink-0 ${color}`}>
         <Icon size={16} />
       </div>
 
-      <div>
-        <h4 className="font-semibold text-slate-900">{title}</h4>
-
-        <p className="mt-1 text-sm text-slate-500">{description}</p>
+      <div className="min-w-0">
+        <h4 className="font-semibold text-slate-900 text-sm sm:text-base">
+          {title}
+        </h4>
+        <p className="mt-0.5 text-xs sm:text-sm text-slate-500 leading-relaxed">
+          {description}
+        </p>
       </div>
     </div>
   );
@@ -19,12 +22,12 @@ function Note({ icon: Icon, title, description, color }) {
 
 function UploadNotesCard() {
   return (
-    <Card className="p-4">
-      <h3 className="mb-6 text-lg font-semibold text-slate-900">
+    <Card className="p-4 sm:p-6">
+      <h3 className="mb-4 sm:mb-6 text-base sm:text-lg font-semibold text-slate-900">
         Important Notes
       </h3>
 
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         <Note
           icon={Info}
           color="bg-blue-100 text-blue-600"

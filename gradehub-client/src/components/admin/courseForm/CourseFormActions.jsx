@@ -12,10 +12,9 @@ function CourseFormActions({ mode = "create", onSave, isSubmitting = false }) {
   const [showSaveModal, setShowSaveModal] = useState(false);
 
   const handleConfirmSave = async () => {
-    setShowSaveModal(false); // Close the modal immediately
+    setShowSaveModal(false);
 
     try {
-      // Execute the parent's save function
       if (onSave) {
         await onSave();
       }
@@ -39,21 +38,22 @@ function CourseFormActions({ mode = "create", onSave, isSubmitting = false }) {
 
   return (
     <>
-      <div className="flex flex-col-reverse gap-4 border-t border-slate-200 pt-6 sm:flex-row sm:justify-end">
+      <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 border-t border-slate-200 pt-6">
         <Button
           type="button"
           variant="secondary"
           onClick={() => setShowCancelModal(true)}
           disabled={isSubmitting}
+          className="w-full sm:w-auto justify-center"
         >
           Cancel
         </Button>
 
-        {/* Trigger the Save Confirmation Modal instead of standard submit */}
         <Button
           type="button"
           onClick={() => setShowSaveModal(true)}
           disabled={isSubmitting}
+          className="w-full sm:w-auto justify-center"
         >
           {isSubmitting
             ? mode === "edit"

@@ -23,7 +23,6 @@ function RecentStudentsTable({ students = [] }) {
             {student.matricNumber}
           </button>
         );
-
       case "fullName":
         return (
           <button
@@ -36,29 +35,31 @@ function RecentStudentsTable({ students = [] }) {
             {student.fullName}
           </button>
         );
-
       case "status":
         return (
           <Badge variant={student.status === "Active" ? "success" : "warning"}>
             {student.status}
           </Badge>
         );
-
       default:
         return student[column.key];
     }
   };
 
   return (
-    <div className="pt-5">
+    <div className="pt-0 lg:pt-5">
       <Card padding="none">
-        <div className="flex items-center justify-between border-b border-slate-200 px-6 py-5">
+        {/* Responsive Header */}
+        <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-slate-200 px-4 py-4 sm:px-6 sm:py-5">
           <div>
             <h3 className="text-lg font-semibold">Recent Students</h3>
             <p className="text-sm text-slate-500">Latest registered students</p>
           </div>
-
-          <Button size="sm" onClick={() => navigate("/admin/students")}>
+          <Button
+            size="sm"
+            onClick={() => navigate("/admin/students")}
+            className="w-full sm:w-auto"
+          >
             View All
           </Button>
         </div>
@@ -68,7 +69,6 @@ function RecentStudentsTable({ students = [] }) {
           data={students}
           renderCell={renderCell}
           onRowClick={(student) => navigate(`/admin/students/${student.id}`)}
-          // ✅ FIX IS HERE: Tell the DataTable how many items there are
           totalItems={students.length}
         />
       </Card>

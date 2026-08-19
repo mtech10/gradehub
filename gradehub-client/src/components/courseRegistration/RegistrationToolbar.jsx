@@ -19,7 +19,7 @@ function RegistrationToolbar({
   ];
 
   return (
-    <div className="sticky top-0 z-10 space-y-5 border-b border-slate-200 bg-white pb-5">
+    <div className="sticky top-0 z-10 space-y-4 sm:space-y-5 border-b border-slate-200 bg-slate-50 pb-4 sm:pb-5">
       <div className="relative">
         <SearchInput
           value={searchQuery}
@@ -28,23 +28,24 @@ function RegistrationToolbar({
         />
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         <div
           className="
-    flex
-    flex-col
-    gap-4
-    rounded-xl
-    border
-    border-slate-200
-    bg-slate-50
-    p-4
-    lg:flex-row
-    lg:items-center
-    lg:justify-between
-  "
+            flex
+            flex-col
+            gap-3 sm:gap-4
+            rounded-xl
+            border
+            border-slate-200
+            bg-white
+            p-3.5 sm:p-4
+            lg:flex-row
+            lg:items-center
+            lg:justify-between
+            shadow-sm
+          "
         >
-          <div className="flex flex-wrap gap-4 text-sm">
+          <div className="flex flex-wrap gap-3 sm:gap-4 text-xs sm:text-sm">
             <div>
               <span className="text-slate-500">Selected:</span>{" "}
               <span className="font-semibold text-slate-900">
@@ -69,33 +70,39 @@ function RegistrationToolbar({
 
           <div className="flex gap-2">
             <Button
+              variant="outline"
+              size="sm"
               onClick={onSelectAll}
-              className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium hover:bg-slate-100"
+              className="flex-1 sm:flex-none justify-center bg-white"
             >
               Select All
             </Button>
 
             <Button
+              variant="outline"
+              size="sm"
               onClick={onClearSelection}
-              className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium hover:bg-slate-100"
+              className="flex-1 sm:flex-none justify-center bg-white"
             >
               Clear
             </Button>
           </div>
         </div>
-        <div className="flex flex-wrap gap-2">
+
+        {/* Filter Tabs (Horizontal scroll on mobile) */}
+        <div className="flex gap-2 overflow-x-auto no-scrollbar">
           {tabs.map((tab) => (
-            <Button
+            <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
-              className={`rounded-lg px-4 py-2 text-sm font-medium transition ${
+              className={`whitespace-nowrap rounded-lg px-3.5 py-2 text-xs sm:text-sm font-medium transition ${
                 activeTab === tab.key
-                  ? "bg-blue-600 text-white"
-                  : "bg-slate-400 text-slate-700 hover:bg-slate-500"
+                  ? "bg-blue-600 text-white shadow-sm"
+                  : "bg-slate-200 text-slate-700 hover:bg-slate-300"
               }`}
             >
               {tab.label} ({tab.count})
-            </Button>
+            </button>
           ))}
         </div>
       </div>

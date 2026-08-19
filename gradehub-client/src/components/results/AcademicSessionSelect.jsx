@@ -12,21 +12,23 @@ function AcademicSessionSelect({ value = "2023/2024", onChange }) {
   };
 
   return (
-    <div className="relative">
+    <div className="relative w-full sm:w-auto">
       <button
         type="button"
         onClick={() => setOpen(!open)}
         className="
           flex
+          w-full sm:w-auto
           items-center
+          justify-between sm:justify-start
           gap-3
           rounded-xl
           border
           border-slate-200
           bg-white
-          px-5
-          py-3
-          text-sm
+          px-4 sm:px-5
+          py-2.5 sm:py-3
+          text-xs sm:text-sm
           font-medium
           text-slate-700
           shadow-sm
@@ -34,13 +36,14 @@ function AcademicSessionSelect({ value = "2023/2024", onChange }) {
           hover:border-blue-500
         "
       >
-        <CalendarDays size={18} />
-
-        <span>{value} Academic Session</span>
+        <div className="flex items-center gap-2.5">
+          <CalendarDays size={16} className="text-slate-500 shrink-0" />
+          <span>{value} Academic Session</span>
+        </div>
 
         <ChevronDown
-          size={18}
-          className={`transition ${open ? "rotate-180" : ""}`}
+          size={16}
+          className={`transition-transform duration-200 shrink-0 ${open ? "rotate-180" : ""}`}
         />
       </button>
 
@@ -51,13 +54,14 @@ function AcademicSessionSelect({ value = "2023/2024", onChange }) {
             right-0
             z-50
             mt-2
-            w-64
+            w-full sm:w-64
             overflow-hidden
             rounded-2xl
             border
             border-slate-200
             bg-white
             shadow-xl
+            animate-in fade-in zoom-in-95 duration-100
           "
         >
           {sessions.map((session) => (
@@ -69,16 +73,18 @@ function AcademicSessionSelect({ value = "2023/2024", onChange }) {
                 w-full
                 items-center
                 justify-between
-                px-5
-                py-3
+                px-4 sm:px-5
+                py-2.5 sm:py-3
                 text-left
+                text-xs sm:text-sm
                 hover:bg-slate-50
+                transition-colors
               "
             >
-              {session}
+              <span>{session}</span>
 
               {value === session && (
-                <Check size={18} className="text-blue-600" />
+                <Check size={16} className="text-blue-600" />
               )}
             </button>
           ))}

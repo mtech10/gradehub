@@ -55,40 +55,45 @@ function NotificationList({ notifications, onMarkAsRead }) {
   };
 
   const modalFooter = selectedNotification && (
-    <>
-      <Button variant="ghost" onClick={() => setSelectedNotification(null)}>
+    <div className="flex flex-col-reverse sm:flex-row gap-2 w-full sm:w-auto">
+      <Button
+        variant="ghost"
+        onClick={() => setSelectedNotification(null)}
+        className="w-full sm:w-auto justify-center"
+      >
         Close
       </Button>
 
       {selectedNotification.action && (
         <Button
           onClick={() => handleActionClick(selectedNotification.action.path)}
+          className="w-full sm:w-auto justify-center"
         >
           {selectedNotification.action.label}
         </Button>
       )}
-    </>
+    </div>
   );
 
   return (
     <>
       <Card padding="none" className="overflow-hidden">
-        {/* Tabs */}
-        <div className="flex items-center gap-4 overflow-x-auto border-b border-slate-200 px-6 pt-4">
+        {/* Tabs (Horizontal scroll on mobile) */}
+        <div className="flex items-center gap-3 sm:gap-4 overflow-x-auto border-b border-slate-200 px-4 sm:px-6 pt-4 no-scrollbar">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => handleTabChange(tab.id)}
-              className={`flex items-center gap-2 whitespace-nowrap border-b-2 pb-4 text-sm font-semibold transition-colors ${
+              className={`flex items-center gap-1.5 sm:gap-2 whitespace-nowrap border-b-2 pb-3 sm:pb-4 text-xs sm:text-sm font-semibold transition-colors ${
                 activeTab === tab.id
                   ? "border-blue-600 text-blue-600"
                   : "border-transparent text-slate-500 hover:text-slate-800"
               }`}
             >
-              {tab.label}
+              <span>{tab.label}</span>
               {tab.count !== undefined && (
                 <span
-                  className={`flex h-5 min-w-[20px] items-center justify-center rounded-full px-1.5 text-xs font-bold ${
+                  className={`flex h-5 min-w-[20px] items-center justify-center rounded-full px-1.5 text-[10px] sm:text-xs font-bold ${
                     activeTab === tab.id ||
                     (tab.id === "unread" && unreadCount > 0)
                       ? "bg-blue-600 text-white"
@@ -120,34 +125,34 @@ function NotificationList({ notifications, onMarkAsRead }) {
                 <div
                   key={notification.id}
                   onClick={() => handleNotificationClick(notification)}
-                  className={`flex cursor-pointer items-start gap-4 border-b border-slate-100 p-4 transition-colors last:border-0 hover:bg-slate-50 ${
+                  className={`flex cursor-pointer items-start gap-3 sm:gap-4 border-b border-slate-100 p-4 sm:p-5 transition-colors last:border-0 hover:bg-slate-50 ${
                     !notification.isRead ? "bg-white" : "bg-slate-50/50"
                   }`}
                 >
                   <div
-                    className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${bgColors[notification.color]}`}
+                    className={`flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-xl ${bgColors[notification.color]}`}
                   >
-                    <Icon size={24} />
+                    <Icon size={20} className="sm:w-6 sm:h-6" />
                   </div>
 
                   <div className="min-w-0 flex-1">
-                    <div className="mb-1 flex flex-col justify-between gap-1 sm:flex-row sm:items-center sm:gap-4">
+                    <div className="mb-1 flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-4">
                       <h4
-                        className={`truncate text-base ${!notification.isRead ? "font-bold text-slate-900" : "font-semibold text-slate-700"}`}
+                        className={`truncate text-sm sm:text-base ${!notification.isRead ? "font-bold text-slate-900" : "font-semibold text-slate-700"}`}
                       >
                         {notification.title}
                       </h4>
-                      <div className="flex shrink-0 items-center gap-3">
-                        <span className="text-sm font-medium text-slate-500">
+                      <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+                        <span className="text-xs sm:text-sm font-medium text-slate-500">
                           {notification.time}
                         </span>
                         {!notification.isRead && (
-                          <span className="h-2.5 w-2.5 rounded-full bg-blue-600" />
+                          <span className="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-blue-600 shrink-0" />
                         )}
                       </div>
                     </div>
 
-                    <p className="mb-3 text-sm text-slate-600 line-clamp-1">
+                    <p className="mb-2.5 text-xs sm:text-sm text-slate-600 line-clamp-1">
                       {notification.message}
                     </p>
 
@@ -167,7 +172,7 @@ function NotificationList({ notifications, onMarkAsRead }) {
               );
             })
           ) : (
-            <div className="p-12 text-center text-slate-500">
+            <div className="p-8 sm:p-12 text-center text-xs sm:text-sm text-slate-500">
               No notifications found in this category.
             </div>
           )}
@@ -178,7 +183,7 @@ function NotificationList({ notifications, onMarkAsRead }) {
           <div className="flex justify-center border-t border-slate-100 bg-slate-50/50 p-4">
             <button
               onClick={handleLoadMore}
-              className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-blue-600 shadow-sm transition-colors hover:shadow hover:text-blue-700"
+              className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs sm:text-sm font-semibold text-blue-600 shadow-sm transition-colors hover:shadow hover:text-blue-700"
             >
               Load more
               <ChevronDown size={16} />
@@ -192,7 +197,7 @@ function NotificationList({ notifications, onMarkAsRead }) {
         isOpen={!!selectedNotification}
         onClose={() => setSelectedNotification(null)}
         title={
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
             <Badge
               variant={
                 selectedNotification?.color === "primary"
@@ -203,7 +208,7 @@ function NotificationList({ notifications, onMarkAsRead }) {
             >
               {selectedNotification?.category}
             </Badge>
-            <span className="text-sm font-medium text-slate-500">
+            <span className="text-xs sm:text-sm font-medium text-slate-500">
               {selectedNotification?.time}
             </span>
           </div>
@@ -212,18 +217,18 @@ function NotificationList({ notifications, onMarkAsRead }) {
         maxWidth="max-w-lg"
       >
         {selectedNotification && (
-          <div>
-            <div className="mb-4 flex items-center gap-4">
+          <div className="space-y-4">
+            <div className="flex items-center gap-3 sm:gap-4">
               <div
-                className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-${selectedNotification.color}-100 text-${selectedNotification.color}-600`}
+                className={`flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-xl bg-${selectedNotification.color}-100 text-${selectedNotification.color}-600`}
               >
-                <selectedNotification.icon size={24} />
+                <selectedNotification.icon size={22} />
               </div>
-              <h3 className="text-xl font-bold text-slate-900">
+              <h3 className="text-lg sm:text-xl font-bold text-slate-900 break-words">
                 {selectedNotification.title}
               </h3>
             </div>
-            <p className="text-base leading-relaxed text-slate-600">
+            <p className="text-sm sm:text-base leading-relaxed text-slate-600">
               {selectedNotification.message}
             </p>
           </div>

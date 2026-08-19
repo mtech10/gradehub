@@ -1,22 +1,21 @@
 import { ShieldCheck, CalendarDays } from "lucide-react";
-
 import Card from "../ui/Card";
 import { student } from "../../constants/studentInformation";
 
 function TranscriptNotice() {
   return (
-    <Card padding="lg">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
-        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-100">
-          <ShieldCheck className="text-blue-600" size={28} />
+    <Card padding="lg" className="p-4 sm:p-6">
+      <div className="flex flex-col lg:flex-row items-start gap-4">
+        <div className="flex h-12 w-12 sm:h-14 sm:w-14 shrink-0 items-center justify-center rounded-2xl bg-blue-100 text-blue-600">
+          <ShieldCheck size={24} className="sm:w-7 sm:h-7" />
         </div>
 
-        <div className="flex-1">
-          <h3 className="text-lg font-semibold text-slate-900">
+        <div className="min-w-0 flex-1">
+          <h3 className="text-base sm:text-lg font-semibold text-slate-900">
             Official Transcript Notice
           </h3>
 
-          <p className="mt-3 leading-7 text-slate-600">
+          <p className="mt-2 text-xs sm:text-sm leading-relaxed text-slate-600">
             This transcript is generated electronically by GradeHub and
             summarizes the student's academic performance based on the
             institution's academic records. It is intended for informational
@@ -24,8 +23,8 @@ function TranscriptNotice() {
             employment, or scholarship applications.
           </p>
 
-          <div className="mt-6 flex flex-wrap items-center gap-3 text-sm text-slate-500">
-            <CalendarDays size={16} />
+          <div className="mt-4 sm:mt-6 flex flex-wrap items-center gap-2 text-xs sm:text-sm text-slate-500">
+            <CalendarDays size={16} className="shrink-0" />
 
             <span>
               Generated on{" "}

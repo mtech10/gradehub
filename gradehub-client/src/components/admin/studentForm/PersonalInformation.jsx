@@ -3,16 +3,16 @@ import Select from "../../ui/Select";
 
 function PersonalInformation({ formData, handleChange, genders, states }) {
   return (
-    <section className="space-y-6">
+    <section className="space-y-4 sm:space-y-6">
       <div>
-        <h2 className="text-xl font-semibold text-slate-900">
+        <h2 className="text-lg sm:text-xl font-semibold text-slate-900">
           Personal Information
         </h2>
 
         <div className="mt-2 h-px bg-slate-200" />
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         <Input
           label="Matric Number"
           required

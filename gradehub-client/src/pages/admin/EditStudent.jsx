@@ -60,8 +60,12 @@ function EditStudent() {
     return (
       <div className="space-y-6">
         <PageHeader title="Edit Student" subtitle="Student not found." />
-        <Button variant="secondary" onClick={() => navigate("/admin/students")}>
-          <ArrowLeft size={18} />
+        <Button
+          variant="secondary"
+          onClick={() => navigate("/admin/students")}
+          className="w-full sm:w-auto justify-center"
+        >
+          <ArrowLeft size={18} className="mr-1.5" />
           Back to Students
         </Button>
       </div>
@@ -69,16 +73,17 @@ function EditStudent() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       <PageHeader title="Edit Student" subtitle="Update student information." />
 
-      <div className="flex justify-end">
+      <div className="flex flex-col sm:flex-row sm:justify-end">
         <Button
           variant="secondary"
           onClick={() => navigate(`/admin/students/${id}`)}
           disabled={loading}
+          className="w-full sm:w-auto justify-center"
         >
-          <ArrowLeft size={18} />
+          <ArrowLeft size={18} className="mr-1.5" />
           Back to Details
         </Button>
       </div>

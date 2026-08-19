@@ -1,4 +1,3 @@
-import Button from "../ui/Button"; // Or your standard button path
 import { Printer } from "lucide-react";
 
 function TranscriptHeader() {
@@ -7,19 +6,19 @@ function TranscriptHeader() {
   };
 
   return (
-    <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center print:hidden">
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 print:hidden">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">
+        <h1 className="text-xl sm:text-2xl font-bold text-slate-900">
           Official Transcript
         </h1>
-        <p className="text-slate-500">
+        <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
           Comprehensive chronological record of academic performance.
         </p>
       </div>
 
       <button
         onClick={handlePrint}
-        className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 transition"
+        className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-xs sm:text-sm font-semibold text-white shadow-sm hover:bg-blue-700 transition w-full sm:w-auto"
       >
         <Printer size={18} />
         Print / Download Transcript

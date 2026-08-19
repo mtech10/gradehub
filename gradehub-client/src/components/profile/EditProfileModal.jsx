@@ -23,13 +23,11 @@ function EditProfileModal({
 
   const fields = profileFormConfig[type] || [];
 
-  // Intercept the form submission to show the ConfirmModal
   const handleSubmit = (e) => {
     e.preventDefault();
     setShowConfirm(true);
   };
 
-  // Execute the actual save and trigger the toast notification
   const handleConfirmSave = () => {
     setShowConfirm(false);
     onSave(form);
@@ -52,19 +50,27 @@ function EditProfileModal({
   };
 
   const modalFooter = (
-    <>
-      <Button type="button" variant="ghost" onClick={onClose}>
+    <div className="flex flex-col-reverse sm:flex-row gap-2 w-full sm:w-auto">
+      <Button
+        type="button"
+        variant="ghost"
+        onClick={onClose}
+        className="w-full sm:w-auto justify-center"
+      >
         Cancel
       </Button>
-      <Button type="submit" form="edit-profile-form">
+      <Button
+        type="submit"
+        form="edit-profile-form"
+        className="w-full sm:w-auto justify-center"
+      >
         {buttonText[type]}
       </Button>
-    </>
+    </div>
   );
 
   return (
     <>
-      {/* Main Edit Profile Modal */}
       <Modal
         isOpen={isOpen}
         onClose={onClose}
@@ -76,13 +82,13 @@ function EditProfileModal({
         <form
           id="edit-profile-form"
           onSubmit={handleSubmit}
-          className="space-y-8 p-1"
+          className="space-y-6 sm:space-y-8 p-1"
         >
           <section>
-            <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-slate-400">
+            <h3 className="mb-3 sm:mb-4 text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-400">
               Personal Information
             </h3>
-            <div className="grid gap-5 md:grid-cols-2">
+            <div className="grid gap-4 sm:gap-5 grid-cols-1 sm:grid-cols-2">
               {fields.map((field) => (
                 <Input
                   key={field.key}
@@ -90,7 +96,7 @@ function EditProfileModal({
                   type={field.type}
                   required={field.required}
                   value={form[field.key] || ""}
-                  disabled={field.key === "email" || field.type === "email"} // Locks the email field
+                  disabled={field.key === "email" || field.type === "email"}
                   onChange={(e) =>
                     setForm((prev) => ({
                       ...prev,
@@ -104,10 +110,10 @@ function EditProfileModal({
 
           {type === "student" && form.emergency && (
             <section>
-              <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-slate-400">
+              <h3 className="mb-3 sm:mb-4 text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-400">
                 Emergency Contact
               </h3>
-              <div className="grid gap-5 md:grid-cols-2">
+              <div className="grid gap-4 sm:gap-5 grid-cols-1 sm:grid-cols-2">
                 <Input
                   label="Contact Name"
                   value={form.emergency.name || ""}
@@ -157,7 +163,6 @@ function EditProfileModal({
         </form>
       </Modal>
 
-      {/* Confirmation Overlay */}
       <ConfirmModal
         isOpen={showConfirm}
         onClose={() => setShowConfirm(false)}

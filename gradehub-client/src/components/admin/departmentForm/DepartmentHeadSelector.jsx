@@ -1,7 +1,6 @@
 import Select from "../../ui/Select";
 
 function DepartmentHeadSelector({ formData, onChange }) {
-  // Replace these with actual lecturers from your lecturers constants later.
   const hodOptions = [
     { value: "", label: "Select Head of Department" },
     { value: "Prof. A. Adeyemi", label: "Prof. A. Adeyemi" },
@@ -17,7 +16,7 @@ function DepartmentHeadSelector({ formData, onChange }) {
   ];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <div>
         <h3 className="text-lg font-semibold text-slate-900">
           Department Administration
@@ -28,7 +27,7 @@ function DepartmentHeadSelector({ formData, onChange }) {
         </p>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2">
         <Select
           label="Head of Department"
           value={formData.hod}

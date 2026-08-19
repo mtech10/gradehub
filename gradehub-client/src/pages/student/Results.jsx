@@ -15,7 +15,7 @@ import ReviewNotice from "../../components/results/ReviewNotice";
 import ResultsSkeleton from "../../components/ui/skeletons/ResultsSkeleton";
 
 import resultService from "../../services/resultService";
-import sessionService from "../../services/admin/sessionService"; // <-- Added session service
+import sessionService from "../../services/admin/sessionService";
 
 function Results() {
   const { currentSession, isLoading: isAcademicLoading } = useAcademic();
@@ -28,7 +28,6 @@ function Results() {
   const [viewSessionName, setViewSessionName] = useState("");
   const [noSessionsExist, setNoSessionsExist] = useState(false);
 
-  // Initialize view state: Use current session, or fallback to the latest available session
   useEffect(() => {
     const initializeView = async () => {
       if (isAcademicLoading) return;
@@ -38,12 +37,10 @@ function Results() {
         setViewSessionName(currentSession.name);
       } else if (!currentSession && !viewSessionId) {
         try {
-          // Fallback: If no current session is active, fetch all sessions
           const res = await sessionService.getSessions({ status: "all" });
           const sessions = res.data || res || [];
 
           if (sessions.length > 0) {
-            // Automatically select the first (most recent) session so the page isn't blocked
             setViewSessionId(sessions[0].id);
             setViewSessionName(sessions[0].name);
           } else {
@@ -60,7 +57,6 @@ function Results() {
     initializeView();
   }, [isAcademicLoading, currentSession, viewSessionId]);
 
-  // Fetch results based ONLY on session ID
   useEffect(() => {
     if (!viewSessionId) return;
 
@@ -105,11 +101,10 @@ function Results() {
     return <ResultsSkeleton />;
   }
 
-  // Only show an error if there are literally zero sessions created in the entire system
   if (noSessionsExist) {
     return (
-      <div className="flex flex-col items-center justify-center p-12 text-center">
-        <div className="rounded-xl border border-amber-200 bg-amber-50 p-6 max-w-md text-amber-800">
+      <div className="flex flex-col items-center justify-center p-6 sm:p-12 text-center">
+        <div className="rounded-2xl border border-amber-200 bg-amber-50 p-6 max-w-md text-amber-800 shadow-sm">
           <h3 className="font-bold text-base mb-1">
             No Academic Sessions Found
           </h3>
@@ -123,22 +118,22 @@ function Results() {
 
   if (!data) {
     return (
-      <div className="p-10 text-center text-red-500">
+      <div className="p-8 text-center text-red-500 font-medium">
         Unable to load results.
       </div>
     );
   }
 
   return (
-    <div className="space-y-8">
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+    <div className="space-y-6 sm:space-y-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
         <ResultsHeader
           selectedSessionId={viewSessionId}
           onTermChange={handleTermChange}
         />
 
         {viewSessionName && (
-          <div className="inline-flex rounded-full bg-blue-50 px-4 py-1.5 text-sm font-semibold text-blue-700 border border-blue-100">
+          <div className="inline-flex self-start sm:self-auto rounded-full bg-blue-50 px-3.5 py-1 text-xs sm:text-sm font-semibold text-blue-700 border border-blue-100 shadow-sm">
             Viewing Session: {viewSessionName}
           </div>
         )}

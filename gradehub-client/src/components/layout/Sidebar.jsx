@@ -15,7 +15,8 @@ function Sidebar({ navigation, user, variant = "light" }) {
 
   const { logout } = useAuth();
   const navigate = useNavigate();
-  const { sidebarOpen } = useLayout();
+  // We bring in toggleSidebar to allow clicking the mobile backdrop to close the drawer
+  const { sidebarOpen, toggleSidebar } = useLayout();
   const { addToast } = useToast();
 
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -34,21 +35,23 @@ function Sidebar({ navigation, user, variant = "light" }) {
 
   return (
     <>
+      {/* Mobile Overlay Backdrop */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-slate-900/50 backdrop-blur-sm lg:hidden transition-opacity"
+          onClick={toggleSidebar}
+          aria-hidden="true"
+        />
+      )}
+
       <aside
         className={`
-        fixed
-        top-0
-        left-0
-        z-40
-        h-screen
-        flex
-        flex-col
-        overflow-hidden
-        transition-all
-        duration-300
-        border-r
-        print:hidden
-        ${sidebarOpen ? "w-80" : "w-30"}
+        fixed top-0 left-0 z-50 h-screen flex flex-col overflow-hidden transition-all duration-300 border-r print:hidden
+        ${
+          sidebarOpen
+            ? "translate-x-0 w-[280px] sm:w-80" // Open state (Mobile & Desktop)
+            : "-translate-x-full lg:translate-x-0 lg:w-24" // Closed state (Hidden on mobile, collapsed on desktop)
+        }
         ${isDark ? "bg-slate-800 border-slate-800" : "bg-white border-slate-200"}
         `}
       >
@@ -56,7 +59,7 @@ function Sidebar({ navigation, user, variant = "light" }) {
           <Logo variant={variant} compact={!sidebarOpen} />
         </div>
 
-        <nav className="flex-1 space-y-2 px-4">
+        <nav className="flex-1 space-y-2 px-4 overflow-y-auto">
           {navigation.map((item) => (
             <NavItem key={item.title} {...item} variant={variant} />
           ))}
@@ -75,23 +78,27 @@ function Sidebar({ navigation, user, variant = "light" }) {
             <img
               src={user?.avatar}
               alt={user?.name}
-              className="h-12 w-12 rounded-full"
+              className="h-12 w-12 shrink-0 rounded-full object-cover"
             />
             {sidebarOpen && (
-              <div>
+              <div className="min-w-0 flex-1">
                 <p
-                  className={`font-semibold ${
+                  className={`truncate font-semibold ${
                     isDark ? "text-white" : "text-slate-900"
                   }`}
                 >
                   {user?.name}
                 </p>
 
-                <p className={isDark ? "text-slate-400" : "text-slate-500"}>
+                <p
+                  className={`truncate text-sm ${isDark ? "text-slate-400" : "text-slate-500"}`}
+                >
                   {user?.department}
                 </p>
 
-                <p className={isDark ? "text-slate-400" : "text-slate-500"}>
+                <p
+                  className={`truncate text-xs ${isDark ? "text-slate-400" : "text-slate-500"}`}
+                >
                   {user?.level}
                 </p>
               </div>
@@ -101,22 +108,15 @@ function Sidebar({ navigation, user, variant = "light" }) {
           <button
             onClick={() => setShowLogoutModal(true)}
             className={`
-            mt-6
-            flex
-            w-full
-            items-center
-            py-3
-            font-semibold
-            text-red-600
-            rounded-lg
-            transition-colors
+            mt-6 flex w-full items-center py-3 font-semibold text-red-600 rounded-lg transition-colors shrink-0
             ${sidebarOpen ? "justify-start gap-3 px-4" : "justify-center px-0"}
             ${isDark ? "hover:bg-slate-800" : "hover:bg-red-50"}
             `}
           >
-            <LogoutIcon size={20} />
-
-            {sidebarOpen && logoutItem.title}
+            <LogoutIcon size={20} className="shrink-0" />
+            {sidebarOpen && (
+              <span className="truncate">{logoutItem.title}</span>
+            )}
           </button>
         </div>
       </aside>

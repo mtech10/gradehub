@@ -112,7 +112,7 @@ function Dashboard() {
       <div className="space-y-8">
         <PageHeader title="Dashboard" subtitle="Overview and summaries." />
 
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+        <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
           {Array.from({ length: 4 }).map((_, i) => (
             <StatCardSkeleton key={`stat-skeleton-${i}`} />
           ))}
@@ -130,7 +130,16 @@ function Dashboard() {
           </div>
         </section>
 
-        <div className="h-64 w-full animate-pulse rounded-2xl bg-slate-200"></div>
+        {/* Responsive Skeleton Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2 space-y-8">
+            <div className="h-64 w-full animate-pulse rounded-2xl bg-slate-200"></div>
+            <div className="h-64 w-full animate-pulse rounded-2xl bg-slate-200"></div>
+          </div>
+          <div className="space-y-8">
+            <div className="h-96 w-full animate-pulse rounded-2xl bg-slate-200"></div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -148,12 +157,23 @@ function Dashboard() {
       <PageHeader title="Dashboard" subtitle="Overview and summaries." />
       <DashboardStats stats={dashboardData.stats} />
       <DashboardQuickActions actions={dashboardData.quickActions} />
-      <RecentStudentsTable students={dashboardData.recentStudents} />
-      <PendingResultsTable results={dashboardData.pendingResults} />
-      <DepartmentOverview departments={dashboardData.departments} />
-      {dashboardData.activities.length > 0 && (
-        <UpcomingActivities activities={dashboardData.activities} />
-      )}
+
+      {/* Main Responsive Grid Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Left Column (Takes up 2/3 of space on desktop) */}
+        <div className="lg:col-span-2 space-y-8">
+          <RecentStudentsTable students={dashboardData.recentStudents} />
+          <PendingResultsTable results={dashboardData.pendingResults} />
+        </div>
+
+        {/* Right Column (Takes up 1/3 of space on desktop) */}
+        <div className="space-y-8">
+          <DepartmentOverview departments={dashboardData.departments} />
+          {dashboardData.activities.length > 0 && (
+            <UpcomingActivities activities={dashboardData.activities} />
+          )}
+        </div>
+      </div>
     </div>
   );
 }

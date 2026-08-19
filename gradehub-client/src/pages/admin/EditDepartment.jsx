@@ -69,8 +69,9 @@ function EditDepartment() {
         <Button
           variant="secondary"
           onClick={() => navigate("/admin/departments")}
+          className="w-full sm:w-auto justify-center"
         >
-          <ArrowLeft size={18} />
+          <ArrowLeft size={18} className="mr-1.5" />
           Back to Departments
         </Button>
       </div>
@@ -78,19 +79,20 @@ function EditDepartment() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       <PageHeader
         title="Edit Department"
         subtitle="Update the academic department details."
       />
 
-      <div className="flex justify-end">
+      <div className="flex flex-col sm:flex-row sm:justify-end">
         <Button
           variant="secondary"
           onClick={() => navigate(`/admin/departments/${id}`)}
           disabled={isLoading}
+          className="w-full sm:w-auto justify-center"
         >
-          <ArrowLeft size={18} />
+          <ArrowLeft size={18} className="mr-1.5" />
           Back to Details
         </Button>
       </div>

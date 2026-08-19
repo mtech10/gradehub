@@ -19,21 +19,22 @@ function DashboardHeader() {
   });
 
   return (
-    <div className="mb-8 flex items-start justify-between">
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
-        <h1 className="text-4xl font-bold text-slate-900">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900">
           {greeting}, Ademola! 👋
         </h1>
 
-        <p className="mt-2 text-lg text-slate-500">
+        <p className="mt-1 sm:mt-2 text-sm sm:text-base lg:text-lg text-slate-500">
           Here's an overview of your academic performance.
         </p>
       </div>
 
-      <div className="text-right">
-        <p className="text-lg font-medium text-slate-700">{today}</p>
-
-        <p className="mt-2 text-slate-500">☀️ 25°C</p>
+      <div className="flex sm:flex-col items-center sm:items-end justify-between border-t sm:border-t-0 pt-3 sm:pt-0 border-slate-200">
+        <p className="text-xs sm:text-sm lg:text-base font-medium text-slate-700">
+          {today}
+        </p>
+        <p className="text-xs sm:text-sm text-slate-500 sm:mt-1">☀️ 25°C</p>
       </div>
     </div>
   );

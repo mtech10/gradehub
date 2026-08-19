@@ -41,7 +41,7 @@ function AppearanceSettings({ data, onChange }) {
         title="Theme"
         description="Choose your preferred application theme."
       >
-        <div className="max-w-sm">
+        <div className="w-full sm:max-w-sm">
           <Select
             value={data.theme}
             options={themeOptions}
@@ -55,7 +55,7 @@ function AppearanceSettings({ data, onChange }) {
         description="Adjust spacing throughout the interface."
         bordered={false}
       >
-        <div className="max-w-sm">
+        <div className="w-full sm:max-w-sm">
           <Select
             value={data.density}
             options={densityOptions}

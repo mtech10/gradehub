@@ -162,35 +162,37 @@ function UploadResults() {
   }, [formData.departmentId, formData.levelId, formData.semesterId]);
 
   return (
-    <div>
+    <div className="space-y-6 sm:space-y-8">
       <PageHeader
         title="Upload Results"
         description="Upload and validate student results."
       />
 
       {optionsError && (
-        <div className="mb-6 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+        <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
           {optionsError}
         </div>
       )}
 
-      <div className="grid gap-6 xl:grid-cols-[2fr_1fr]">
+      <div className="grid gap-6 grid-cols-1 xl:grid-cols-[1fr_380px]">
         {/* Left Column: Form */}
-        {loadingOptions ? (
-          <FormSkeleton />
-        ) : (
-          <UploadResultForm
-            formData={formData}
-            updateField={updateField}
-            sessions={sessionOptions}
-            semesters={semesterOptions}
-            departments={departmentOptions}
-            levels={levelOptions}
-            courseOptions={courseOptions}
-            loadingOptions={loadingOptions}
-            onValidationComplete={setValidation}
-          />
-        )}
+        <div>
+          {loadingOptions ? (
+            <FormSkeleton />
+          ) : (
+            <UploadResultForm
+              formData={formData}
+              updateField={updateField}
+              sessions={sessionOptions}
+              semesters={semesterOptions}
+              departments={departmentOptions}
+              levels={levelOptions}
+              courseOptions={courseOptions}
+              loadingOptions={loadingOptions}
+              onValidationComplete={setValidation}
+            />
+          )}
+        </div>
 
         {/* Right Column: Skeletons or Cards */}
         <div className="space-y-6">

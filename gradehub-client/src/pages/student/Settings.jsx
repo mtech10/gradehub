@@ -10,7 +10,6 @@ import ConfirmModal from "../../components/ui/ConfirmModal";
 import { notificationSettings as initialNotifSettings } from "../../constants/notifications/notificationData";
 import { useToast } from "../../context/ToastContext";
 
-// Define default settings outside to use for both initialization and resetting
 const defaultSettingsState = {
   preferences: {
     language: "en",
@@ -32,18 +31,14 @@ const defaultSettingsState = {
 };
 
 function Settings() {
-  const [activeTab, setActiveTab] = useState("preferences");
+  const [activeTab, setActiveTab] = useState("notifications");
   const { addToast } = useToast();
 
-  // Modal States
   const [showResetModal, setShowResetModal] = useState(false);
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
-  // Master State for all Settings
   const [settingsState, setSettingsState] = useState(defaultSettingsState);
-
-  // Reusing the notification settings array state
   const [notifSettings, setNotifSettings] = useState(initialNotifSettings);
 
   const handleNotifToggle = (id) => {
@@ -68,23 +63,15 @@ function Settings() {
     }));
   };
 
-  // 1. Intercept the save click
   const handleSaveClick = () => {
     setShowSaveModal(true);
   };
 
-  // 2. Execute the actual save when confirmed
   const executeSave = async () => {
-    setShowSaveModal(false); // Close modal immediately
+    setShowSaveModal(false);
     setIsSaving(true);
 
     try {
-      const payload = {
-        ...settingsState,
-        notifications: notifSettings,
-      };
-
-      // Simulated API call (replace with your actual service)
       await new Promise((resolve) => setTimeout(resolve, 1200));
 
       addToast({
@@ -106,15 +93,11 @@ function Settings() {
     }
   };
 
-  // 3. Reset settings to default without reloading the page
   const confirmResetToDefault = () => {
     setShowResetModal(false);
-
-    // Reset local states to their defaults
     setSettingsState(defaultSettingsState);
     setNotifSettings(initialNotifSettings);
 
-    // Fire the toast
     addToast({
       title: "Settings Reset",
       message: "All settings have been restored to their default values.",
@@ -150,17 +133,17 @@ function Settings() {
 
   return (
     <>
-      <div className="space-y-8">
-        <div className="flex flex-col gap-4 border-b border-slate-200 pb-6 lg:flex-row lg:items-end lg:justify-between">
+      <div className="space-y-6 sm:space-y-8">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-200 pb-6">
           <PageHeader
             title="Settings"
             subtitle="Manage your account, preferences and security settings."
           />
 
-          <div className="flex shrink-0 items-center gap-3">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto shrink-0">
             <Button
               variant="outline"
-              className="bg-white"
+              className="bg-white w-full sm:w-auto justify-center"
               onClick={() => setShowResetModal(true)}
               disabled={isSaving}
             >
@@ -168,23 +151,24 @@ function Settings() {
             </Button>
 
             <Button
-              className="gap-2"
+              className="w-full sm:w-auto justify-center"
               onClick={handleSaveClick}
               loading={isSaving}
               disabled={isSaving}
             >
-              {!isSaving && <Check size={16} />}
+              {!isSaving && <Check size={16} className="mr-1.5" />}
               {isSaving ? "Saving..." : "Save Changes"}
             </Button>
           </div>
         </div>
 
-        <div className="flex items-center gap-8 overflow-x-auto border-b border-slate-200">
+        {/* Tabs (Horizontal scroll on mobile) */}
+        <div className="flex gap-4 sm:gap-8 overflow-x-auto border-b border-slate-200 no-scrollbar">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`whitespace-nowrap border-b-2 pb-4 text-sm font-semibold transition-colors ${
+              className={`whitespace-nowrap border-b-2 pb-3 sm:pb-4 text-sm font-semibold transition-colors ${
                 activeTab === tab.id
                   ? "border-blue-600 text-blue-600"
                   : "border-transparent text-slate-500 hover:text-slate-800"
@@ -195,20 +179,19 @@ function Settings() {
           ))}
         </div>
 
-        <div className="max-w-3xl">{renderActiveTab()}</div>
+        <div className="w-full max-w-3xl">{renderActiveTab()}</div>
 
-        <div className="flex max-w-3xl items-center gap-3 rounded-xl border border-blue-100 bg-blue-50/50 p-4">
-          <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-600 text-white">
+        <div className="flex max-w-3xl items-start sm:items-center gap-3 rounded-xl border border-blue-100 bg-blue-50/50 p-4">
+          <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-600 text-white mt-0.5 sm:mt-0">
             <Info size={14} />
           </div>
-          <p className="text-sm font-medium text-blue-900">
+          <p className="text-xs sm:text-sm font-medium text-blue-900 leading-relaxed">
             Changes you make will be compiled and applied globally once you
             click Save Changes.
           </p>
         </div>
       </div>
 
-      {/* Save Settings Confirmation Modal */}
       <ConfirmModal
         isOpen={showSaveModal}
         onClose={() => setShowSaveModal(false)}
@@ -220,7 +203,6 @@ function Settings() {
         isDestructive={false}
       />
 
-      {/* Reset Settings Confirmation Modal */}
       <ConfirmModal
         isOpen={showResetModal}
         onClose={() => setShowResetModal(false)}

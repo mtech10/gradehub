@@ -4,7 +4,7 @@ import Select from "../../ui/Select";
 
 function CourseAssignment({ formData, updateField, courseStatuses }) {
   return (
-    <Card className="p-4">
+    <Card className="p-4 sm:p-6">
       <div className="mb-6">
         <h2 className="text-lg font-semibold text-slate-900">
           Course Assignment
@@ -15,7 +15,7 @@ function CourseAssignment({ formData, updateField, courseStatuses }) {
         </p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
         <Input
           label="Course Lecturer"
           placeholder="e.g. Dr. Adebisi"

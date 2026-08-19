@@ -1,13 +1,11 @@
 import { useState } from "react";
 import { PieChart, Pie, Cell } from "recharts";
-
 import Card from "../ui/Card";
 
 function CourseStatistics({ statistics = {} }) {
   const [timeframe, setTimeframe] = useState("this-session");
   const currentData = statistics[timeframe];
 
-  // Safety fallback if data is still loading or undefined
   if (!currentData) return null;
 
   return (
@@ -17,14 +15,16 @@ function CourseStatistics({ statistics = {} }) {
         <select
           value={timeframe}
           onChange={(e) => setTimeframe(e.target.value)}
-          className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm font-medium text-slate-700 outline-none transition-colors hover:border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+          value={timeframe}
+          onChange={(e) => setTimeframe(e.target.value)}
+          className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs sm:text-sm font-medium text-slate-700 outline-none transition-colors hover:border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
         >
           <option value="this-session">This Session</option>
           <option value="all-time">All Time</option>
         </select>
       }
     >
-      <div className="mb-8 flex items-center gap-4">
+      <div className="mb-6 sm:mb-8 flex flex-col sm:flex-row items-center sm:items-start gap-4">
         <div className="relative flex h-[100px] w-[100px] shrink-0 items-center justify-center">
           <PieChart width={100} height={100}>
             <Pie
@@ -44,8 +44,8 @@ function CourseStatistics({ statistics = {} }) {
             </Pie>
           </PieChart>
 
-          <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-xl font-bold text-slate-900">
+          <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+            <span className="text-lg sm:text-xl font-bold text-slate-900">
               {currentData.total}
             </span>
             <span className="text-[10px] font-medium uppercase tracking-wider text-slate-500">
@@ -54,9 +54,8 @@ function CourseStatistics({ statistics = {} }) {
           </div>
         </div>
 
-        <div className="flex-1 space-y-2">
+        <div className="flex-1 space-y-2 w-full">
           {currentData.chart.map((item) => {
-            // FIX: Prevent dividing by zero to avoid NaN%
             const percentage =
               currentData.total > 0
                 ? Math.round((item.value / currentData.total) * 100)
@@ -65,16 +64,16 @@ function CourseStatistics({ statistics = {} }) {
             return (
               <div
                 key={item.name}
-                className="flex items-center justify-between text-sm"
+                className="flex items-center justify-between text-xs sm:text-sm"
               >
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 min-w-0">
                   <span
-                    className="h-2.5 w-2.5 rounded-full"
+                    className="h-2.5 w-2.5 rounded-full shrink-0"
                     style={{ backgroundColor: item.color }}
                   />
-                  <span className="text-slate-600">{item.name}</span>
+                  <span className="text-slate-600 truncate">{item.name}</span>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2 shrink-0">
                   <span className="font-semibold text-slate-900">
                     {item.value}
                   </span>
@@ -88,21 +87,25 @@ function CourseStatistics({ statistics = {} }) {
         </div>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         {currentData.list.map((stat) => {
           const Icon = stat.icon;
           return (
             <div
               key={stat.label}
-              className="flex items-center justify-between border-b border-slate-100 pb-3 last:border-0 last:pb-0"
+              className="flex items-center justify-between border-b border-slate-100 pb-3 last:border-0 last:pb-0 gap-2"
             >
-              <div className="flex items-center gap-3">
-                <div className="flex h-7 w-7 items-center justify-center rounded bg-blue-50">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded bg-blue-50">
                   <Icon size={14} className="text-blue-600" />
                 </div>
-                <span className="text-sm text-slate-600">{stat.label}</span>
+                <span className="text-xs sm:text-sm text-slate-600 truncate">
+                  {stat.label}
+                </span>
               </div>
-              <span className="font-semibold text-slate-900">{stat.value}</span>
+              <span className="font-semibold text-slate-900 text-xs sm:text-sm shrink-0">
+                {stat.value}
+              </span>
             </div>
           );
         })}

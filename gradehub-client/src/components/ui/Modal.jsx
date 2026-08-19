@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { createPortal } from "react-dom"; // Added createPortal
+import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 
 export default function Modal({
@@ -11,14 +11,12 @@ export default function Modal({
   footer,
   maxWidth = "max-w-2xl",
 }) {
-  // Close modal on Escape key press
   useEffect(() => {
     const handleEsc = (e) => {
       if (e.key === "Escape") onClose();
     };
     if (isOpen) {
       document.addEventListener("keydown", handleEsc);
-      // Prevent background scrolling
       document.body.style.overflow = "hidden";
     }
     return () => {
@@ -28,22 +26,24 @@ export default function Modal({
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
-  // We wrap the modal UI in a variable to portal it
+
   const modalContent = (
-    // Changed: bg-slate-900/40 -> bg-slate-900/20, and adjusted backdrop-blur
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-900/20 p-4 backdrop-blur-[2px] animate-in fade-in duration-200">
-      {/* Clickable backdrop to close */}
       <div className="absolute inset-0" onClick={onClose} />
 
       <div
-        className={`relative flex max-h-[90vh] w-full ${maxWidth} flex-col overflow-hidden rounded-2xl bg-white shadow-2xl animate-in zoom-in-95 duration-200`}
+        className={`relative flex max-h-[95vh] sm:max-h-[90vh] w-full ${maxWidth} flex-col overflow-hidden rounded-2xl bg-white shadow-2xl animate-in zoom-in-95 duration-200`}
       >
         {/* Header */}
-        <div className="flex shrink-0 items-center justify-between border-b border-slate-100 px-6 py-4">
+        <div className="flex shrink-0 items-center justify-between border-b border-slate-100 px-4 py-3 sm:px-6 sm:py-4">
           <div>
-            <h2 className="text-xl font-semibold text-slate-900">{title}</h2>
+            <h2 className="text-lg sm:text-xl font-semibold text-slate-900">
+              {title}
+            </h2>
             {subtitle && (
-              <p className="mt-1 text-md text-slate-500">{subtitle}</p>
+              <p className="mt-1 text-sm sm:text-md text-slate-500">
+                {subtitle}
+              </p>
             )}
           </div>
           <button
@@ -56,11 +56,11 @@ export default function Modal({
         </div>
 
         {/* Scrollable Body */}
-        <div className="overflow-y-auto p-6">{children}</div>
+        <div className="overflow-y-auto p-4 sm:p-6">{children}</div>
 
-        {/* Optional Footer */}
+        {/* Footer */}
         {footer && (
-          <div className="flex shrink-0 justify-end gap-3 border-t border-slate-100 bg-slate-50 px-6 py-4">
+          <div className="flex shrink-0 flex-col-reverse sm:flex-row sm:justify-end gap-2 sm:gap-3 border-t border-slate-100 bg-slate-50 px-4 py-4 sm:px-6">
             {footer}
           </div>
         )}

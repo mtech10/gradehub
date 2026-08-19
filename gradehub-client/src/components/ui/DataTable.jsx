@@ -62,7 +62,9 @@ function DataTable({
     !allCurrentPageSelected;
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <div
+      className={`overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm ${className}`}
+    >
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead className="sticky top-0 z-10 border-b border-slate-200 bg-white">
@@ -70,7 +72,7 @@ function DataTable({
               {selectable && (
                 <th
                   key="select-all-header"
-                  className="w-14 px-4 py-4 text-center"
+                  className="w-10 sm:w-14 px-3 py-3 sm:px-4 sm:py-4 text-center"
                 >
                   <Checkbox
                     checked={allCurrentPageSelected}
@@ -85,12 +87,12 @@ function DataTable({
 
                 return (
                   <th
-                    key={`th-${colIdx}-${colKey}`} // <-- ADDED colIdx prefix here!
+                    key={`th-${colIdx}-${colKey}`}
                     style={{
                       width: column.width,
                       minWidth: column.minWidth,
                     }}
-                    className={`px-6 py-4 text-sm font-semibold text-slate-600 whitespace-nowrap ${
+                    className={`px-4 py-3 sm:px-6 sm:py-4 text-xs sm:text-sm font-semibold text-slate-600 whitespace-nowrap ${
                       column.align === "center" ? "text-center" : ""
                     } ${column.align === "right" ? "text-right" : "text-left"} ${
                       column.className ?? ""
@@ -110,11 +112,20 @@ function DataTable({
                       {column.sortable &&
                         (sortKey !== column.key &&
                         sortKey !== column.accessor ? (
-                          <ArrowUpDown size={16} className="text-slate-400" />
+                          <ArrowUpDown
+                            size={14}
+                            className="text-slate-400 sm:w-4 sm:h-4"
+                          />
                         ) : sortDirection === "asc" ? (
-                          <ArrowUp size={16} className="text-blue-600" />
+                          <ArrowUp
+                            size={14}
+                            className="text-blue-600 sm:w-4 sm:h-4"
+                          />
                         ) : (
-                          <ArrowDown size={16} className="text-blue-600" />
+                          <ArrowDown
+                            size={14}
+                            className="text-blue-600 sm:w-4 sm:h-4"
+                          />
                         ))}
                     </div>
                   </th>
@@ -164,7 +175,7 @@ function DataTable({
                     {selectable && (
                       <td
                         key={`select-${row.id || rowIndex}`}
-                        className="px-4 text-center"
+                        className="px-3 sm:px-4 text-center"
                       >
                         <Checkbox
                           checked={selectedRows.includes(row.id)}
@@ -190,7 +201,7 @@ function DataTable({
                             width: column.width,
                             minWidth: column.minWidth,
                           }}
-                          className={`px-6 py-5 whitespace-nowrap ${
+                          className={`px-4 py-4 sm:px-6 sm:py-5 text-sm whitespace-nowrap ${
                             column.align === "center" ? "text-center" : ""
                           } ${column.align === "right" ? "text-right" : ""} ${
                             column.cellClassName ?? ""

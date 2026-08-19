@@ -6,28 +6,28 @@ function StudentQuickStats({ student }) {
   const stats = [
     {
       title: "CGPA",
-      value: student.cgpa,
+      value: student.cgpa || "0.00",
       subtitle: "Current cumulative GPA",
       icon: GraduationCap,
       color: "blue",
     },
     {
       title: "Credits Earned",
-      value: student.creditsEarned,
+      value: student.creditsEarned || 0,
       subtitle: "Completed credits",
       icon: BookOpen,
       color: "green",
     },
     {
       title: "Courses Taken",
-      value: student.coursesTaken,
+      value: student.coursesTaken || 0,
       subtitle: "Total registered",
       icon: Award,
       color: "purple",
     },
     {
       title: "Outstanding",
-      value: student.outstandingCourses,
+      value: student.outstandingCourses || 0,
       subtitle: "Courses remaining",
       icon: AlertCircle,
       color: "amber",
@@ -35,7 +35,7 @@ function StudentQuickStats({ student }) {
   ];
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+    <div className="grid gap-4 sm:gap-6 sm:grid-cols-2 xl:grid-cols-4">
       {stats.map((stat) => (
         <AdminStatCard key={stat.title} {...stat} />
       ))}

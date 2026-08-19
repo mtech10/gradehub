@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import DashboardHeader from "../../components/dashboard/DashboardHeader";
 import StatCard from "../../components/dashboard/DashboardStats";
 import ResultsTable from "../../components/results/ResultsTable";
@@ -5,7 +6,6 @@ import CGPAChart from "../../components/dashboard/CGPAChart";
 import CurrentCourses from "../../components/dashboard/CurrentCourses";
 import UpcomingActivities from "../../components/dashboard/UpcomingActivities";
 import DashboardSkeleton from "../../components/ui/skeletons/DashboardSkeleton";
-import { useEffect, useState } from "react";
 import dashboardService from "../../services/dashboardService";
 
 function Dashboard() {
@@ -18,8 +18,8 @@ function Dashboard() {
       try {
         const data = await dashboardService.getStudentDashboard();
         setDashboard(data);
-      } catch (error) {
-        console.error(error);
+      } catch (err) {
+        console.error(err);
         setError("Failed to load dashboard data. Please try again later.");
       } finally {
         setLoading(false);
@@ -42,16 +42,18 @@ function Dashboard() {
   }
 
   return (
-    <>
+    <div className="space-y-6 sm:space-y-8">
       <DashboardHeader />
 
-      <section className="grid gap-4 xl:grid-cols-5 mt-8">
+      {/* Top Metrics Grid */}
+      <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
         {dashboard?.stats?.map((stat) => (
           <StatCard key={stat.title} {...stat} />
         ))}
       </section>
 
-      <section className="mt-8">
+      {/* CGPA Chart & Current Courses */}
+      <section className="space-y-6 sm:space-y-8">
         {dashboard?.cgpaTrend && dashboard.cgpaTrend.length > 0 && (
           <CGPAChart
             title="CGPA Trend"
@@ -59,13 +61,12 @@ function Dashboard() {
             data={dashboard.cgpaTrend}
           />
         )}
-        <div className="mt-8 ">
-          <CurrentCourses courses={dashboard?.currentCourses || []} />
-        </div>
+        <CurrentCourses courses={dashboard?.currentCourses || []} />
       </section>
 
-      <section className="mt-8 grid grid-cols-6 gap-4">
-        <div className="col-span-4">
+      {/* Recent Results & Activities */}
+      <section className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        <div className="lg:col-span-2">
           <ResultsTable
             title="Recent Results"
             subtitle="Latest published course results"
@@ -74,11 +75,11 @@ function Dashboard() {
           />
         </div>
 
-        <div className="col-span-2">
+        <div className="lg:col-span-1">
           <UpcomingActivities activities={dashboard?.activities || []} />
         </div>
       </section>
-    </>
+    </div>
   );
 }
 

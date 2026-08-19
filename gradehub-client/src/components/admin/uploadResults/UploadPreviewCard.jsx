@@ -16,21 +16,22 @@ function UploadPreviewCard({
   };
 
   return (
-    <Card>
+    <Card className="p-4 sm:p-6">
       <div className="mb-6">
-        <h3 className="text-lg font-semibold text-slate-900">Upload Preview</h3>
-
+        <h3 className="text-base sm:text-lg font-semibold text-slate-900">
+          Upload Preview
+        </h3>
         <p className="mt-1 text-sm text-slate-500">
-          Review the selected upload.
+          Review the selected upload details.
         </p>
       </div>
 
       {!hasFile ? (
-        <div className="rounded-xl border border-dashed border-slate-300 py-12 text-center">
+        <div className="rounded-xl border border-dashed border-slate-300 py-10 text-center">
           <p className="text-sm text-slate-500">No file selected yet.</p>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <PreviewRow label="File Name" value={formData.file.name} />
 
           <PreviewRow
@@ -74,7 +75,7 @@ function UploadPreviewCard({
 
           {validation?.academic && (
             <>
-              <div className="my-4 border-t border-slate-200" />
+              <div className="my-3 border-t border-slate-200" />
 
               <PreviewRow
                 label="Validation Status"
@@ -90,10 +91,11 @@ function UploadPreviewCard({
 
 function PreviewRow({ label, value }) {
   return (
-    <div className="flex items-center justify-between gap-4">
-      <span className="text-sm text-slate-500">{label}</span>
-
-      <span className="text-sm font-semibold text-slate-900">{value}</span>
+    <div className="flex items-center justify-between gap-3 text-xs sm:text-sm">
+      <span className="text-slate-500">{label}</span>
+      <span className="font-semibold text-slate-900 truncate text-right max-w-[60%]">
+        {value}
+      </span>
     </div>
   );
 }

@@ -4,7 +4,7 @@ import AdminStatCard from "../dashboard/AdminStatCard";
 
 function ResultStats({ stats }) {
   return (
-    <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+    <section className="grid gap-4 sm:gap-6 sm:grid-cols-2 xl:grid-cols-4">
       <AdminStatCard
         title="Total Results"
         value={stats.totalResults}

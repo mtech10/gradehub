@@ -2,10 +2,11 @@ import Card from "../../ui/Card";
 
 function SummaryRow({ label, value, color = "text-slate-900" }) {
   return (
-    <div className="flex items-center justify-between border-b border-slate-100 py-3 last:border-0">
-      <span className="text-sm text-slate-600">{label}</span>
-
-      <span className={`font-semibold ${color}`}>{value}</span>
+    <div className="flex items-center justify-between border-b border-slate-100 py-3 last:border-0 gap-2">
+      <span className="text-xs sm:text-sm text-slate-600">{label}</span>
+      <span className={`font-semibold text-xs sm:text-sm ${color}`}>
+        {value}
+      </span>
     </div>
   );
 }
@@ -14,11 +15,13 @@ function UploadSummaryCard({ validation }) {
   const summary = validation?.summary;
 
   return (
-    <Card>
-      <div className="mb-6">
-        <h3 className="text-lg font-semibold text-slate-900">Upload Summary</h3>
+    <Card className="p-4 sm:p-6">
+      <div className="mb-4 sm:mb-6">
+        <h3 className="text-base sm:text-lg font-semibold text-slate-900">
+          Upload Summary
+        </h3>
 
-        <p className="mt-1 text-sm text-slate-500">
+        <p className="mt-1 text-xs sm:text-sm text-slate-500">
           Results will appear here after validation.
         </p>
       </div>

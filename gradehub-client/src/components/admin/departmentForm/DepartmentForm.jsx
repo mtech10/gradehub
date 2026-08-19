@@ -6,7 +6,6 @@ import DepartmentHeadSelector from "./DepartmentHeadSelector";
 import DepartmentActions from "./DepartmentActions";
 import FormSkeleton from "../../ui/skeletons/FormSkeleton";
 
-// Assuming you have a facultyService to fetch the faculties dropdown options
 import facultyService from "../../../services/admin/facultyService";
 
 function DepartmentForm({
@@ -36,14 +35,13 @@ function DepartmentForm({
         const facultyRes = await facultyService.getFaculties();
         const data = facultyRes.data || facultyRes;
 
-        // Map the backend data into { label, value } for your select dropdown
         if (Array.isArray(data)) {
           setFaculties(data.map((f) => ({ label: f.name, value: f.id })));
         }
       } catch (error) {
         console.error("Failed to load faculties:", error);
       } finally {
-        setIsLoadingOptions(false); // ✅ Turns off the skeleton!
+        setIsLoadingOptions(false);
       }
     };
 
@@ -78,20 +76,24 @@ function DepartmentForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-8">
-      <Card className="p-8">
+    <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
+      <Card className="p-4 sm:p-6 lg:p-8">
         <DepartmentInformation
           formData={formData}
           onChange={handleChange}
-          faculties={faculties} // ✅ Pass the fetched faculties down to the child
+          faculties={faculties}
         />
       </Card>
 
-      <Card className="p-8">
+      <Card className="p-4 sm:p-6 lg:p-8">
         <DepartmentHeadSelector formData={formData} onChange={handleChange} />
       </Card>
 
-      <DepartmentActions mode={mode} isSubmitting={isSubmitting} />
+      <DepartmentActions
+        mode={mode}
+        isSubmitting={isSubmitting}
+        onSave={handleSubmit}
+      />
     </form>
   );
 }

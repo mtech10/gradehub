@@ -1,36 +1,11 @@
-import { useState, useEffect } from "react";
 import Input from "../../ui/Input";
 import Select from "../../ui/Select";
-import facultyService from "../../../services/admin/facultyService";
 
-function DepartmentInformation({ formData, onChange }) {
-  const [faculties, setFaculties] = useState([
-    { value: "", label: "Loading faculties..." },
-  ]);
-
-  useEffect(() => {
-    const fetchFaculties = async () => {
-      try {
-        const response = await facultyService.getFaculties();
-
-        // Extract the array safely, accommodating different possible backend structures
-        const data = response.data || response.faculties || response;
-
-        if (Array.isArray(data)) {
-          const options = data.map((f) => ({ value: f.id, label: f.name }));
-          setFaculties([{ value: "", label: "Select Faculty" }, ...options]);
-        }
-      } catch (error) {
-        console.error("Failed to load faculties:", error);
-        setFaculties([{ value: "", label: "Failed to load faculties" }]);
-      }
-    };
-
-    fetchFaculties();
-  }, []);
+function DepartmentInformation({ formData, onChange, faculties = [] }) {
+  const facultyOptions = [{ value: "", label: "Select Faculty" }, ...faculties];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <div>
         <h3 className="text-lg font-semibold text-slate-900">
           Department Information
@@ -40,7 +15,7 @@ function DepartmentInformation({ formData, onChange }) {
         </p>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2">
         <Input
           label="Department Name"
           placeholder="Agricultural Engineering"
@@ -57,11 +32,10 @@ function DepartmentInformation({ formData, onChange }) {
           required
         />
 
-        {/* Dynamic Faculty Dropdown */}
         <Select
           label="Faculty"
           value={formData.facultyId || formData.faculty || ""}
-          options={faculties}
+          options={facultyOptions}
           onChange={(e) => onChange("facultyId", e.target.value)}
           required
         />

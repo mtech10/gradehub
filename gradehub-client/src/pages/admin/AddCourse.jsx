@@ -123,8 +123,12 @@ function AddCourse() {
         description="Create a new course and assign its academic information."
       />
 
-      <div className="flex justify-end gap-3">
-        <Button onClick={() => setIsUploadModalOpen(true)} disabled={loading}>
+      <div className="flex flex-col sm:flex-row sm:justify-end gap-3">
+        <Button
+          onClick={() => setIsUploadModalOpen(true)}
+          disabled={loading}
+          className="w-full sm:w-auto justify-center"
+        >
           <UploadCloud size={18} className="mr-2" />
           Import Bulk Courses
         </Button>
@@ -132,8 +136,9 @@ function AddCourse() {
           variant="secondary"
           onClick={() => navigate("/admin/courses")}
           disabled={loading}
+          className="w-full sm:w-auto justify-center"
         >
-          <ArrowLeft size={18} />
+          <ArrowLeft size={18} className="mr-1.5" />
           Back to Courses
         </Button>
       </div>

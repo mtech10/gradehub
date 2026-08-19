@@ -28,35 +28,42 @@ function StudentToolbar({
           value: department,
           onChange: setDepartment,
           options: filters.departments,
-          width: "w-60",
+          width: "w-full sm:w-60",
         },
         {
           name: "level",
           value: level,
           onChange: setLevel,
           options: filters.levels,
-          width: "w-40",
+          width: "w-full sm:w-40",
         },
         {
           name: "status",
           value: status,
           onChange: setStatus,
           options: filters.statuses,
-          width: "w-44",
+          width: "w-full sm:w-44",
         },
       ]}
       rightActions={
-        <>
-          <Button variant="secondary" onClick={onExport}>
-            <Download size={18} />
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
+          <Button
+            variant="secondary"
+            onClick={onExport}
+            className="w-full sm:w-auto justify-center"
+          >
+            <Download size={18} className="mr-2" />
             Export
           </Button>
 
-          <Button onClick={() => navigate("/admin/students/new")}>
-            <Plus size={18} />
+          <Button
+            onClick={() => navigate("/admin/students/new")}
+            className="w-full sm:w-auto justify-center"
+          >
+            <Plus size={18} className="mr-2" />
             Add Student
           </Button>
-        </>
+        </div>
       }
     />
   );

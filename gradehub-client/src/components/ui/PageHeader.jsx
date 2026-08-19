@@ -5,9 +5,9 @@ function PageHeader({ title, description, actions, className = "" }) {
     <div
       className={`
         flex flex-col gap-4
-        lg:flex-row
-        lg:items-end
-        lg:justify-between
+        sm:flex-row
+        sm:items-end
+        sm:justify-between
         ${className}
       `}
     >
@@ -21,7 +21,11 @@ function PageHeader({ title, description, actions, className = "" }) {
       </div>
 
       {/* Right */}
-      {actions && <div className="flex flex-wrap gap-3">{actions}</div>}
+      {actions && (
+        <div className="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-3 w-full sm:w-auto">
+          {actions}
+        </div>
+      )}
     </div>
   );
 }

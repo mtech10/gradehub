@@ -52,7 +52,7 @@ function SecuritySettings({ data, onChange }) {
         title="Password Expiry"
         description="Choose how often administrators should update their passwords."
       >
-        <div className="max-w-sm">
+        <div className="w-full sm:max-w-sm">
           <Select
             value={data.passwordExpiry}
             options={passwordExpiryOptions}
@@ -65,7 +65,7 @@ function SecuritySettings({ data, onChange }) {
         title="Session Timeout"
         description="Automatically sign out inactive administrators."
       >
-        <div className="max-w-sm">
+        <div className="w-full sm:max-w-sm">
           <Select
             value={data.sessionTimeout}
             options={sessionTimeoutOptions}
@@ -79,12 +79,16 @@ function SecuritySettings({ data, onChange }) {
         description="Manage your administrator account."
         bordered={false}
       >
-        <div className="flex flex-wrap gap-3">
-          <Button variant="outline">Change Password</Button>
-
-          <Button variant="outline">View Active Sessions</Button>
-
-          <Button variant="outline">Audit Logs</Button>
+        <div className="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-3">
+          <Button variant="outline" className="w-full sm:w-auto justify-center">
+            Change Password
+          </Button>
+          <Button variant="outline" className="w-full sm:w-auto justify-center">
+            View Active Sessions
+          </Button>
+          <Button variant="outline" className="w-full sm:w-auto justify-center">
+            Audit Logs
+          </Button>
         </div>
       </SettingRow>
     </SettingsSection>

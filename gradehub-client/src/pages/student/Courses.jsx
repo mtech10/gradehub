@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAcademic } from "../../context/AcademicContext";
 
 import CourseHeader from "../../components/courses/CourseHeader";
@@ -50,7 +50,7 @@ function Courses() {
 
   if (!data) {
     return (
-      <div className="p-10 text-center text-red-500">
+      <div className="p-8 text-center text-red-500 font-medium">
         Unable to load course details.
       </div>
     );
@@ -77,7 +77,7 @@ function Courses() {
     .filter((session) => session.courses.length > 0);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       <CourseHeader />
 
       <CourseFilterBar
@@ -89,14 +89,14 @@ function Courses() {
 
       <CourseStats stats={data.stats} />
 
-      <section className="grid gap-8 xl:grid-cols-12">
+      <section className="grid gap-6 sm:gap-8 grid-cols-1 xl:grid-cols-12">
         <div className="xl:col-span-8 space-y-6">
           {filteredSemesters.length > 0 ? (
             filteredSemesters.map((sessionData) => (
               <CourseAccordion key={sessionData.id} data={sessionData} />
             ))
           ) : (
-            <div className="rounded-2xl border border-slate-200 bg-white p-12 text-center text-slate-500">
+            <div className="rounded-2xl border border-slate-200 bg-white p-8 sm:p-12 text-center text-slate-500 text-sm sm:text-base">
               No courses found matching your criteria.
             </div>
           )}

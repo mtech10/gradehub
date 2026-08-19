@@ -5,11 +5,8 @@ function AdminToolbar({
   search,
   setSearch,
   searchPlaceholder = "Search...",
-
   filters = [],
-
   leftActions,
-
   rightActions,
 }) {
   return (
@@ -19,31 +16,32 @@ function AdminToolbar({
         border
         border-slate-200
         bg-white
-        p-5
+        p-4 sm:p-5
         shadow-sm
 
         flex
         flex-col
-        gap-5
+        gap-4 sm:gap-5
 
         xl:flex-row
         xl:items-center
         xl:justify-between
       "
     >
-      {/* Left */}
-      <div className="flex flex-1 flex-wrap items-center gap-4">
+      {/* Left (Search & Filters) */}
+      <div className="flex flex-1 flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-3 sm:gap-4">
         <SearchInput
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder={searchPlaceholder}
-          className="w-80"
+          className="w-full xl:w-80"
         />
 
         {filters.map((filter) => (
           <Select
             key={filter.name}
-            className={filter.width || "w-48"}
+            // Overrides fixed widths on mobile to be full-width
+            className={`w-full sm:${filter.width || "w-48"}`}
             value={filter.value}
             onChange={(e) => filter.onChange(e.target.value)}
             options={filter.options}
@@ -53,8 +51,10 @@ function AdminToolbar({
         {leftActions}
       </div>
 
-      {/* Right */}
-      <div className="flex items-center gap-3">{rightActions}</div>
+      {/* Right (Action Buttons) */}
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
+        {rightActions}
+      </div>
     </div>
   );
 }

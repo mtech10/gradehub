@@ -10,14 +10,13 @@ import SecuritySettings from "../../components/admin/settings/SecuritySettings";
 import AppearanceSettings from "../../components/admin/settings/AppearanceSettings";
 import UserManagementSettings from "../../components/admin/settings/UserManagementSettings";
 import BackupSettings from "../../components/admin/settings/BackupSettings";
-
 import AcademicTermSettings from "../../components/admin/settings/AcademicTermSettings";
-
-import { adminSettingsData } from "../../constants/admin/adminSettingsData";
 import PromotionManager from "../../components/admin/settings/PromotionManager";
 
+import { adminSettingsData } from "../../constants/admin/adminSettingsData";
+
 function Settings() {
-  const [activeTab, setActiveTab] = useState("profile");
+  const [activeTab, setActiveTab] = useState("preferences");
   const [settings, setSettings] = useState(adminSettingsData);
 
   const settingTabs = [
@@ -98,32 +97,40 @@ function Settings() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {/* Header */}
-      <div className="flex flex-col gap-4 border-b border-slate-200 pb-6 lg:flex-row lg:items-end lg:justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-200 pb-6">
         <PageHeader
           title="Settings"
           subtitle="Configure your administrator account and system preferences."
         />
 
-        <div className="flex gap-3">
-          <Button variant="outline" className="bg-white" onClick={handleReset}>
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto shrink-0">
+          <Button
+            variant="outline"
+            className="bg-white w-full sm:w-auto justify-center"
+            onClick={handleReset}
+          >
             Reset
           </Button>
 
-          <Button onClick={handleSave}>
-            <Check size={16} />
+          <Button
+            onClick={handleSave}
+            className="w-full sm:w-auto justify-center"
+          >
+            <Check size={16} className="mr-1.5" />
             Save Changes
           </Button>
         </div>
       </div>
 
-      <div className="flex gap-8 overflow-x-auto border-b border-slate-200">
+      {/* Tabs (Horizontal scroll on mobile) */}
+      <div className="flex gap-4 sm:gap-8 overflow-x-auto border-b border-slate-200 no-scrollbar">
         {settingTabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`whitespace-nowrap border-b-2 pb-4 text-sm font-semibold transition-colors ${
+            className={`whitespace-nowrap border-b-2 pb-3 sm:pb-4 text-sm font-semibold transition-colors ${
               activeTab === tab.id
                 ? "border-blue-600 text-blue-600"
                 : "border-transparent text-slate-500 hover:text-slate-900"
@@ -134,6 +141,7 @@ function Settings() {
         ))}
       </div>
 
+      {/* Active Content */}
       <div className="max-w-full">
         <ActiveComponent
           data={settings[activeSetting.section] || {}}
@@ -141,12 +149,13 @@ function Settings() {
         />
       </div>
 
-      <div className="flex max-w-4xl items-center gap-3 rounded-xl border border-blue-100 bg-blue-50 p-4">
-        <div className="flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 text-white">
+      {/* Information Banner */}
+      <div className="flex max-w-4xl items-start sm:items-center gap-3 rounded-xl border border-blue-100 bg-blue-50 p-4">
+        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-blue-600 text-white">
           <Info size={15} />
         </div>
 
-        <p className="text-sm font-medium text-blue-900">
+        <p className="text-xs sm:text-sm font-medium text-blue-900 leading-relaxed">
           Changes made here affect the administrator workspace and system
           behaviour. Remember to save your changes before leaving this page.
         </p>

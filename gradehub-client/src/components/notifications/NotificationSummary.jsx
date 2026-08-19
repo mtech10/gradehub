@@ -5,12 +5,10 @@ function NotificationSummary({ notifications = [] }) {
   const total = notifications.length;
   const unread = notifications.filter((n) => !n.isRead).length;
 
-  // Calculate dates for filtering
   const now = new Date();
   const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
   const oneMonthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
 
-  // Safely parse the 'time' string or fallback to raw date if you added it to the service
   const thisWeek = notifications.filter((n) => {
     const notifDate = new Date(n.rawDate || n.time);
     return !isNaN(notifDate) && notifDate >= oneWeekAgo;
@@ -53,23 +51,28 @@ function NotificationSummary({ notifications = [] }) {
   ];
 
   return (
-    <Card title="Notification Summary">
+    <Card title="Notification Summary" className="p-4 sm:p-6">
       <div className="space-y-4">
         {dynamicSummary.map((item) => {
           const Icon = item.icon;
           return (
-            <div key={item.label} className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
+            <div
+              key={item.label}
+              className="flex items-center justify-between gap-3"
+            >
+              <div className="flex items-center gap-3 min-w-0">
                 <div
-                  className={`flex h-8 w-8 items-center justify-center rounded-lg ${item.bg} ${item.color}`}
+                  className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${item.bg} ${item.color}`}
                 >
                   <Icon size={16} />
                 </div>
-                <span className="text-sm font-medium text-slate-600">
+                <span className="text-xs sm:text-sm font-medium text-slate-600 truncate">
                   {item.label}
                 </span>
               </div>
-              <span className="font-bold text-slate-900">{item.value}</span>
+              <span className="font-bold text-slate-900 text-sm sm:text-base shrink-0">
+                {item.value}
+              </span>
             </div>
           );
         })}

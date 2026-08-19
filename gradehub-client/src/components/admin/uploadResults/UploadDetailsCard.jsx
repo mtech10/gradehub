@@ -11,9 +11,9 @@ function UploadDetailsCard({
   courseOptions,
 }) {
   return (
-    <Card>
+    <Card className="p-4 sm:p-6">
       <div className="mb-6">
-        <h3 className="text-sm font-semibold text-slate-900">
+        <h3 className="text-base sm:text-lg font-semibold text-slate-900">
           1. Select Details
         </h3>
 
@@ -22,7 +22,7 @@ function UploadDetailsCard({
         </p>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         <Select
           label="Academic Session"
           required
@@ -72,12 +72,12 @@ function UploadDetailsCard({
         />
 
         <div>
-          <label className="mb-3 block text-sm font-semibold text-slate-700">
+          <label className="mb-2 block text-sm font-semibold text-slate-700">
             Upload Type
             <span className="ml-1 text-red-500">*</span>
           </label>
 
-          <div className="space-y-3">
+          <div className="space-y-2 pt-1">
             <label className="flex cursor-pointer items-center gap-3">
               <input
                 type="radio"
@@ -85,9 +85,9 @@ function UploadDetailsCard({
                 value="new"
                 checked={formData.uploadType === "new"}
                 onChange={(e) => updateField("uploadType", e.target.value)}
+                className="text-blue-600 focus:ring-blue-500"
               />
-
-              <span>New Results</span>
+              <span className="text-sm text-slate-700">New Results</span>
             </label>
 
             <label className="flex cursor-pointer items-center gap-3">
@@ -97,9 +97,11 @@ function UploadDetailsCard({
                 value="supplementary"
                 checked={formData.uploadType === "supplementary"}
                 onChange={(e) => updateField("uploadType", e.target.value)}
+                className="text-blue-600 focus:ring-blue-500"
               />
-
-              <span>Supplementary Results</span>
+              <span className="text-sm text-slate-700">
+                Supplementary Results
+              </span>
             </label>
           </div>
         </div>

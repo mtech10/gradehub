@@ -30,7 +30,7 @@ function BackupSettings({ data, onChange }) {
         title="Backup Frequency"
         description="Choose how often backups are performed."
       >
-        <div className="max-w-sm">
+        <div className="w-full sm:max-w-sm">
           <Select
             value={data.frequency}
             options={frequencyOptions}
@@ -44,7 +44,9 @@ function BackupSettings({ data, onChange }) {
         description="Create a backup immediately."
         bordered={false}
       >
-        <Button>Create Backup</Button>
+        <Button className="w-full sm:w-auto justify-center">
+          Create Backup
+        </Button>
       </SettingRow>
     </SettingsSection>
   );

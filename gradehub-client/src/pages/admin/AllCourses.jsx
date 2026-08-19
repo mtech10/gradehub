@@ -84,7 +84,7 @@ function AllCourses() {
   const [error, setError] = useState("");
 
   const pageSize = 8;
-  console.log(courses);
+
   const handleExport = async () => {
     try {
       addToast({
@@ -93,24 +93,21 @@ function AllCourses() {
         type: "info",
       });
 
-      // 1. Build query params using the active filters with a massive limit
       const queryParams = {
         search: search || undefined,
         status: status || undefined,
         departmentId: department || undefined,
         levelId: level || undefined,
-        // semesterId: semester || undefined, // Include semester if applicable
         sort: sortKey,
         order: sortDirection,
         page: 1,
-        limit: 100000, // Fetch enough to cover the entire database
+        limit: 100000,
       };
 
       const cleanParams = Object.fromEntries(
         Object.entries(queryParams).filter(([_, v]) => v !== undefined),
       );
 
-      // 2. Fetch the full filtered data from the server
       const response = await courseService.getCourses(cleanParams);
       const payload = response.data?.pagination ? response.data : response;
       let dataToExport = payload.data || payload.courses || [];
@@ -124,14 +121,12 @@ function AllCourses() {
         return;
       }
 
-      // 3. Restrict export to ONLY selected rows if checkboxes are used
       if (selectedRows.length > 0) {
         dataToExport = dataToExport.filter((course) =>
           selectedRows.includes(course.id),
         );
       }
 
-      // 4. Format the data cleanly for Excel/CSV
       const exportData = dataToExport.map((c) => ({
         "Course Code": c.code,
         "Course Title": c.title,
@@ -142,7 +137,6 @@ function AllCourses() {
         Status: c.isActive ? "Active" : "Inactive",
       }));
 
-      // 5. Trigger the download using the utility function
       exportToCSV(exportData, "Courses_Record_Export");
 
       addToast({
@@ -309,20 +303,20 @@ function AllCourses() {
   };
 
   return (
-    <div>
+    <div className="space-y-6 sm:space-y-8">
       <PageHeader
         title="Courses"
         description="Manage courses and course assignments."
       />
 
       {error && (
-        <div className="mb-6 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+        <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
           {error}
         </div>
       )}
 
       {loadingStats ? (
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4 mb-8">
+        <div className="grid gap-4 sm:gap-6 sm:grid-cols-2 xl:grid-cols-4">
           {Array.from({ length: 4 }).map((_, i) => (
             <StatCardSkeleton key={i} />
           ))}

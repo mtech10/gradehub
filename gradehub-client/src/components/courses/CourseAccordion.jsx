@@ -8,20 +8,19 @@ function CourseAccordion({ data }) {
   const isCurrent = data.status === "Current";
 
   const headerAction = (
-    <div className="flex items-center gap-4">
-      <span className="hidden text-sm font-medium text-slate-600 sm:block">
+    <div className="flex items-center gap-3 sm:gap-4">
+      <span className="text-xs sm:text-sm font-medium text-slate-600">
         Credit Load: {data.creditLoad}
       </span>
       {isCurrent && (
         <button
           type="button"
           onClick={(e) => {
-            e.stopPropagation(); // Stops the click from bubbling up and closing the accordion
-            // Add timetable routing logic here
+            e.stopPropagation();
           }}
-          className={`${THEME.linkButton.base} ${THEME.linkButton.primary} hidden items-center gap-2 sm:flex`}
+          className={`${THEME.linkButton.base} ${THEME.linkButton.primary} hidden sm:flex items-center gap-1.5 text-xs sm:text-sm`}
         >
-          <Calendar size={16} />
+          <Calendar size={15} />
           View Timetable
         </button>
       )}
@@ -31,8 +30,10 @@ function CourseAccordion({ data }) {
   return (
     <Accordion
       title={
-        <div className="flex items-center gap-3">
-          <span className="text-lg font-bold text-slate-900">{data.title}</span>
+        <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+          <span className="text-base sm:text-lg font-bold text-slate-900">
+            {data.title}
+          </span>
           <Badge variant={isCurrent ? "primary" : "success"} size="sm">
             {data.status}
           </Badge>
@@ -44,13 +45,11 @@ function CourseAccordion({ data }) {
       <div className="flex flex-col">
         {data.courses?.length > 0 ? (
           data.courses.map((course, index) => {
-            // Generates a bulletproof unique key using parent ID + course code + loop index
             const uniqueKey = `${data.id || "sem"}-${course.code || "course"}-${index}`;
-
             return <CourseRow key={uniqueKey} course={course} />;
           })
         ) : (
-          <div className="py-8 text-center text-slate-500">
+          <div className="py-8 text-center text-slate-500 text-sm">
             No course records available for this semester.
           </div>
         )}

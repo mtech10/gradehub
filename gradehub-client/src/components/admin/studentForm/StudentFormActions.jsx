@@ -12,10 +12,9 @@ function StudentFormActions({ mode = "create", onSave, isSubmitting }) {
   const [showSaveModal, setShowSaveModal] = useState(false);
 
   const handleConfirmSave = async () => {
-    setShowSaveModal(false); // Close the modal immediately for smooth UX
+    setShowSaveModal(false);
 
     try {
-      // Execute the parent's save function
       await onSave();
 
       addToast({
@@ -38,17 +37,21 @@ function StudentFormActions({ mode = "create", onSave, isSubmitting }) {
 
   return (
     <>
-      <div className="flex flex-col-reverse gap-4 border-t border-slate-200 pt-6 sm:flex-row sm:justify-end">
+      <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 border-t border-slate-200 pt-6">
         <Button
           variant="secondary"
           onClick={() => setShowCancelModal(true)}
           disabled={isSubmitting}
+          className="w-full sm:w-auto justify-center"
         >
           Cancel
         </Button>
 
-        {/* Trigger the Save Confirmation Modal instead of saving directly */}
-        <Button onClick={() => setShowSaveModal(true)} disabled={isSubmitting}>
+        <Button
+          onClick={() => setShowSaveModal(true)}
+          disabled={isSubmitting}
+          className="w-full sm:w-auto justify-center"
+        >
           {isSubmitting
             ? mode === "edit"
               ? "Updating Student..."

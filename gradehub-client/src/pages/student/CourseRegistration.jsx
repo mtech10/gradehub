@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAcademic } from "../../context/AcademicContext";
 import { useToast } from "../../context/ToastContext";
 
@@ -17,7 +17,6 @@ function CourseRegistration() {
   const { addToast } = useToast();
 
   const [courses, setCourses] = useState([]);
-  // Initial fallback rules (will be instantly overwritten by the backend's dynamic rules)
   const [rules, setRules] = useState({
     minUnits: 12,
     maxUnits: 48,
@@ -34,8 +33,6 @@ function CourseRegistration() {
 
   const [showAllCourses, setShowAllCourses] = useState(false);
   const [studentLevelId, setStudentLevelId] = useState(null);
-
-  // Keep track of the current page
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
@@ -89,7 +86,6 @@ function CourseRegistration() {
 
         setCourses(mergedCourses);
 
-        // This is where the dynamic department/level rules replace the defaults!
         if (registrationRules) setRules(registrationRules);
       } catch (error) {
         console.error("Failed to load course registration details:", error);
@@ -101,7 +97,6 @@ function CourseRegistration() {
     fetchRegistrationInfo();
   }, [isAcademicLoading, currentSession, showAllCourses]);
 
-  // FULL untouched array of filtered courses
   const filteredCourses = courses.filter((course) => {
     const matchesSearch =
       searchQuery === "" ||
@@ -119,7 +114,6 @@ function CourseRegistration() {
     return matchesSearch && matchesTab;
   });
 
-  // Reset to page 1 if search, tabs, or view toggle changes
   useEffect(() => {
     setCurrentPage(1);
   }, [searchQuery, activeTab, showAllCourses]);
@@ -224,25 +218,26 @@ function CourseRegistration() {
 
   if (!currentSession)
     return (
-      <div className="p-10 text-center text-red-500">
+      <div className="p-8 text-center text-red-500 font-medium">
         Registration is closed. No active session.
       </div>
     );
 
   return (
-    <div>
+    <div className="space-y-6 sm:space-y-8">
       <PageHeader
         title="Course Registration"
         subtitle={`Register and manage your courses for the ${currentSession.name} academic session.`}
       />
 
-      <div className="grid gap-8 xl:grid-cols-12">
-        <div className="xl:col-span-8">
-          <div className="mb-4 flex justify-end">
+      <div className="grid gap-6 sm:gap-8 grid-cols-1 xl:grid-cols-12">
+        <div className="xl:col-span-8 space-y-4">
+          <div className="flex justify-end">
             <Button
               type="button"
               variant="secondary"
               onClick={() => setShowAllCourses(!showAllCourses)}
+              className="w-full sm:w-auto justify-center"
             >
               {showAllCourses ? "Show My Level Only" : "Register Other Courses"}
             </Button>
@@ -252,7 +247,7 @@ function CourseRegistration() {
             courses={courses}
             filteredCourses={filteredCourses}
             summary={summary}
-            rules={rules} // <-- Passed the dynamic rules here!
+            rules={rules}
             selectedCodes={selectedCodes}
             droppedCodes={droppedCodes}
             isEditing={isEditing}
@@ -273,7 +268,7 @@ function CourseRegistration() {
           <div className="sticky top-24">
             <RegistrationSummary
               summary={summary}
-              rules={rules} // Registration summary handles the min/max math using these rules
+              rules={rules}
               isEditing={isEditing}
               onEdit={() => setIsEditing(true)}
               onCancelEdit={() => {

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { CheckCircle2, Headphones } from "lucide-react";
 import PageHeader from "../../components/common/PageHeader";
 import Button from "../../components/ui/Button";
@@ -67,24 +67,24 @@ function AdminNotifications() {
   }
 
   return (
-    <div className="space-y-8">
-      <div className="flex flex-col gap-4 border-b border-slate-200 pb-6 sm:flex-row sm:items-end sm:justify-between">
+    <div className="space-y-6 sm:space-y-8">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-200 pb-6">
         <PageHeader
           title="Notifications"
-          subtitle="Stay updated with system alerts, results processing, and administrative activities."
+          subtitle="Stay updated with your academic activities and important announcements."
         />
         <Button
           variant="outline"
-          className="shrink-0 bg-white"
+          className="shrink-0 bg-white w-full sm:w-auto justify-center"
           onClick={handleMarkAllAsRead}
           disabled={!notifications.some((n) => !n.isRead)}
         >
-          <CheckCircle2 size={18} />
+          <CheckCircle2 size={18} className="mr-2" />
           Mark all as read
         </Button>
       </div>
 
-      <div className="grid gap-8 xl:grid-cols-12">
+      <div className="grid gap-6 sm:gap-8 grid-cols-1 xl:grid-cols-12">
         <div className="xl:col-span-8">
           <NotificationList
             notifications={notifications}
@@ -95,21 +95,21 @@ function AdminNotifications() {
         <div className="space-y-6 xl:col-span-4">
           <NotificationSummary notifications={notifications} />
 
-          <Card padding="lg">
-            <h3 className="mb-2 text-lg font-semibold text-slate-900">
+          <Card padding="lg" className="p-4 sm:p-6">
+            <h3 className="mb-2 text-base sm:text-lg font-semibold text-slate-900">
               Need Help?
             </h3>
-            <p className="mb-6 text-sm leading-6 text-slate-600">
-              If you are not receiving important system alerts, check your
-              notification settings or contact IT support.
+            <p className="mb-5 sm:mb-6 text-xs sm:text-sm leading-relaxed text-slate-600">
+              If you are not receiving important notifications, check your
+              notification settings or contact support.
             </p>
             <Button
               variant="outline"
               fullWidth
               className="justify-center border-blue-200 text-blue-600 hover:bg-blue-50"
             >
-              <Headphones size={18} className="text-blue-600" />
-              <span className="font-medium">Contact IT Support</span>
+              <Headphones size={18} className="text-blue-600 mr-2" />
+              <span className="font-medium">Contact Support</span>
             </Button>
           </Card>
         </div>

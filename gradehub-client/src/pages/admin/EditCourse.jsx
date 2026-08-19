@@ -52,8 +52,12 @@ function EditCourse() {
       <div className="space-y-6">
         <PageHeader title="Edit Course" subtitle="Course not found." />
 
-        <Button variant="secondary" onClick={() => navigate("/admin/courses")}>
-          <ArrowLeft size={18} />
+        <Button
+          variant="secondary"
+          onClick={() => navigate("/admin/courses")}
+          className="w-full sm:w-auto justify-center"
+        >
+          <ArrowLeft size={18} className="mr-1.5" />
           Back to Courses
         </Button>
       </div>
@@ -61,16 +65,17 @@ function EditCourse() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       <PageHeader title="Edit Course" subtitle="Update course information." />
 
-      <div className="flex justify-end">
+      <div className="flex flex-col sm:flex-row sm:justify-end">
         <Button
           variant="secondary"
           onClick={() => navigate(`/admin/courses/${id}`)}
           disabled={loading}
+          className="w-full sm:w-auto justify-center"
         >
-          <ArrowLeft size={18} />
+          <ArrowLeft size={18} className="mr-1.5" />
           Back to Details
         </Button>
       </div>

@@ -20,7 +20,7 @@ import {
 function GPACalculator() {
   const [courses, setCourses] = useState(initialCourses);
   const [results, setResults] = useState(() => calculateGPA(initialCourses));
-  const [loading, setLoading] = useState(false); // Toggle to true if fetching initial preset data asynchronously
+  const [loading, setLoading] = useState(false);
 
   const totalUnits = useMemo(
     () => courses.reduce((sum, course) => sum + Number(course.units || 0), 0),
@@ -51,14 +51,14 @@ function GPACalculator() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       <PageHeader
         title="GPA Calculator"
         description="Calculate your GPA for a semester or estimate your CGPA based on your courses."
       />
 
-      <div className="grid gap-8 xl:grid-cols-3">
-        <div className="space-y-8 xl:col-span-2">
+      <div className="grid gap-6 sm:gap-8 grid-cols-1 xl:grid-cols-3">
+        <div className="space-y-6 sm:space-y-8 xl:col-span-2">
           <CourseInputTable
             courses={courses}
             onChange={setCourses}
@@ -82,7 +82,7 @@ function GPACalculator() {
           <GPANote />
         </div>
 
-        <div className="space-y-8">
+        <div className="space-y-6 sm:space-y-8">
           <GPATipsCard tips={gpaTips} />
           <GradingScaleCard gradingScale={gradingScale} />
         </div>

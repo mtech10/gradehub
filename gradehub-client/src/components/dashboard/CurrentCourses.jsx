@@ -3,10 +3,7 @@ import Badge from "../ui/Badge";
 import DataTable from "../ui/DataTable";
 
 import { currentCoursesColumns } from "../../constants/tables/currentCoursesColumns";
-
-import { SCROLLBAR } from "../../constants/layout";
 import { THEME } from "../../constants/theme";
-
 import { getProgressStatus } from "../../utils/progressUtils";
 
 function CurrentCourses({ courses = [] }) {
@@ -21,8 +18,8 @@ function CurrentCourses({ courses = [] }) {
         const status = getProgressStatus(course.progress);
 
         return (
-          <div className="flex items-center gap-3">
-            <div className="h-3 w-36 rounded-full bg-slate-200">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-[140px]">
+            <div className="h-2.5 sm:h-3 flex-1 rounded-full bg-slate-200 overflow-hidden">
               <div
                 className={`h-full rounded-full ${status.color}`}
                 style={{
@@ -46,21 +43,21 @@ function CurrentCourses({ courses = [] }) {
       title="Current Semester Courses"
       subtitle="Active registered courses"
       padding="none"
-      bodyClassName="overflow-y-auto"
       headerAction={
         <button
           type="button"
-          className={`${THEME.linkButton.base} ${THEME.linkButton.primary}`}
+          className={`${THEME.linkButton.base} ${THEME.linkButton.primary} text-xs sm:text-sm`}
         >
           View all courses
         </button>
       }
     >
-      <div className={`h-fit h-[420px] overflow-y-auto p-4 ${SCROLLBAR}`}>
+      <div className="p-3 sm:p-5">
         <DataTable
           columns={currentCoursesColumns}
           data={courses}
           renderCell={renderCell}
+          pagination={false}
         />
       </div>
     </Card>
