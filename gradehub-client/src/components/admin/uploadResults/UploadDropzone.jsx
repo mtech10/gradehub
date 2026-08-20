@@ -20,8 +20,8 @@ function UploadDropzone({ formData, updateField }) {
         label="Excel Result Sheet"
         title="Upload Result Sheet"
         description="Drag and drop an Excel file or browse your computer."
-        accept=".xlsx,.xls"
-        helperText="Supported formats: .xlsx, .xls • Maximum size: 10MB"
+        accept=".csv, text/csv"
+        helperText="Supported formats: .csv, • Maximum size: 10MB"
         value={formData.file}
         onChange={(file) => updateField("file", file)}
       />
