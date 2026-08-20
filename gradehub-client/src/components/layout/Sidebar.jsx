@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Logo from "../ui/Logo";
 import NavItem from "../navigation/NavItem";
 import { logoutItem } from "../../constants/navigation";
@@ -8,6 +8,8 @@ import { useLayout } from "../../context/LayoutContext";
 
 import ConfirmModal from "../ui/ConfirmModal";
 import { useToast } from "../../context/ToastContext";
+// ADDED: Import the notification service
+import { notificationService } from "../../services/notificationService";
 
 function Sidebar({ navigation, user, variant = "light" }) {
   const LogoutIcon = logoutItem.icon;
@@ -15,11 +17,39 @@ function Sidebar({ navigation, user, variant = "light" }) {
 
   const { logout } = useAuth();
   const navigate = useNavigate();
-  // We bring in toggleSidebar to allow clicking the mobile backdrop to close the drawer
   const { sidebarOpen, toggleSidebar } = useLayout();
   const { addToast } = useToast();
 
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  // Fetch notifications on mount to calculate the unread count
+  useEffect(() => {
+    const fetchSidebarNotifications = async () => {
+      try {
+        const data = await notificationService.getNotifications();
+        const unread = data.filter((n) => !n.isRead).length;
+        setUnreadCount(unread);
+      } catch (error) {
+        console.error("Failed to fetch sidebar notifications:", error);
+      }
+    };
+
+    // Initial fetch on page load
+    fetchSidebarNotifications();
+
+    // ADDED: Listen for updates from anywhere in the app
+    window.addEventListener("notificationsUpdated", fetchSidebarNotifications);
+
+    // Cleanup listener when sidebar unmounts
+    return () => {
+      window.removeEventListener(
+        "notificationsUpdated",
+        fetchSidebarNotifications,
+      );
+    };
+  }, []);
 
   const executeLogout = () => {
     setShowLogoutModal(false);
@@ -60,9 +90,22 @@ function Sidebar({ navigation, user, variant = "light" }) {
         </div>
 
         <nav className="flex-1 space-y-2 px-4 overflow-y-auto">
-          {navigation.map((item) => (
-            <NavItem key={item.title} {...item} variant={variant} />
-          ))}
+          {navigation.map((item) => {
+            // ADDED: Inject the badge count dynamically for the Notifications tab
+            const badgeCount =
+              item.title === "Notifications" && unreadCount > 0
+                ? unreadCount
+                : item.badge;
+
+            return (
+              <NavItem
+                key={item.title}
+                {...item}
+                variant={variant}
+                badge={badgeCount}
+              />
+            );
+          })}
         </nav>
 
         <div

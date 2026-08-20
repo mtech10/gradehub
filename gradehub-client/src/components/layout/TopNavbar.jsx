@@ -35,7 +35,7 @@ function TopNavbar({ user, routes }) {
 
   const [notifications, setNotifications] = useState([]);
 
-  // Fetch notifications on component mount
+  // Fetch notifications on component mount and listen for updates
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
@@ -45,7 +45,17 @@ function TopNavbar({ user, routes }) {
         console.error("Failed to fetch notifications:", error);
       }
     };
+
+    // Initial fetch on page load
     fetchNotifications();
+
+    // ADDED: Listen for updates from anywhere in the app
+    window.addEventListener("notificationsUpdated", fetchNotifications);
+
+    // Cleanup listener
+    return () => {
+      window.removeEventListener("notificationsUpdated", fetchNotifications);
+    };
   }, []);
 
   const handleMarkAllRead = async () => {

@@ -56,19 +56,23 @@ function Dashboard() {
           },
         ];
 
+        // FIX: Added department and level to the mapped students
         const mappedStudents = (data.recentStudents || []).map((student) => ({
           id: student.id,
           matricNumber: student.matricNumber,
           fullName: `${student.firstName} ${student.lastName}`,
+          department: student.department || "-",
+          level: student.level || "-",
           status: "Active",
         }));
 
+        // FIX: Adjusted the path to match how the backend sends department and level
         const mappedResults = (data.recentResults || []).map((result) => ({
           id: result.id,
-          courseCode: result.course?.code || "-",
-          courseTitle: result.course?.title || "-",
-          department: result.student?.department?.name || "-",
-          level: result.student?.level?.name || "-",
+          courseCode: result.courseCode || result.course?.code || "-",
+          courseTitle: result.courseTitle || result.course?.title || "-",
+          department: result.department || "-",
+          level: result.level || "-",
           status: "Awaiting Approval",
         }));
 
@@ -84,8 +88,8 @@ function Dashboard() {
                 Math.round((dep.students / data.overview.students) * 100) || 0,
               ),
             ),
-            courses: "-",
-            lecturers: "-",
+            courses: dep.courses || "-",
+            lecturers: dep.lecturers || "-",
           }),
         );
 
