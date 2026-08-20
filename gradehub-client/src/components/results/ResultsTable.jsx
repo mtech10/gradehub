@@ -25,18 +25,23 @@ function ResultsTable({
       case "course":
         return (
           <div className="min-w-0 max-w-[200px] sm:max-w-none">
-            <p className="font-semibold text-slate-900">{row.code}</p>
+            <p className="font-semibold text-slate-900">
+              {row.code || row.courseCode}
+            </p>
             <p className="text-xs sm:text-sm text-slate-500 truncate">
-              {row.course}
+              {row.course || row.title || row.courseTitle || row.name}
             </p>
           </div>
         );
 
       case "unit":
-        return row.unit ?? "-";
+        // FIX: Check multiple possible backend keys for course units
+        return (
+          row.unit ?? row.creditUnit ?? row.credit_unit ?? row.creditunit ?? "-"
+        );
 
       case "score":
-        return `${row.score ?? 0}%`;
+        return `${row.score ?? row.totalScore ?? 0}%`;
 
       case "grade":
         return <Badge variant="success">{row.grade ?? "-"}</Badge>;
