@@ -162,7 +162,7 @@ function Settings() {
           </div>
         </div>
 
-        {/* Tabs (Horizontal scroll on mobile) */}
+        {}
         <div className="flex gap-4 sm:gap-8 overflow-x-auto border-b border-slate-200 no-scrollbar">
           {tabs.map((tab) => (
             <button

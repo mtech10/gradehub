@@ -1,4 +1,4 @@
-import api from "../api"; // Adjust the relative path to your api.js file if needed
+import api from "../api"; 
 
 export const studentService = {
   async getStudents(params) {
@@ -50,7 +50,7 @@ export const studentService = {
     const formData = new FormData();
     formData.append("file", file);
 
-    // Explicitly append the context fields
+    
     if (contextData.departmentId) {
       formData.append(
         "departmentId",

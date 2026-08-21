@@ -5,16 +5,16 @@ import StatCardSkeleton from "./StatCardSskeleton";
 function GPACalculatorSkeleton() {
   return (
     <div className="space-y-8 animate-pulse">
-      {/* Page Header Skeleton */}
+      {}
       <PageHeader
         title="GPA Calculator"
         description="Calculate your GPA for a semester or estimate your CGPA based on your courses."
       />
 
       <div className="grid gap-8 xl:grid-cols-3">
-        {/* Left Column: Input Table & Summary Skeletons */}
+        {}
         <div className="space-y-8 xl:col-span-2">
-          {/* Course Input Table Card Skeleton */}
+          {}
           <Card title="Add your courses" padding="lg">
             <div className="space-y-4">
               <div className="h-10 w-full rounded bg-slate-100"></div>
@@ -31,7 +31,7 @@ function GPACalculatorSkeleton() {
             </div>
           </Card>
 
-          {/* Results Summary Cards Skeletons */}
+          {}
           <Card
             title="Your Results"
             subtitle="Based on the courses you entered above."
@@ -44,11 +44,11 @@ function GPACalculatorSkeleton() {
             </div>
           </Card>
 
-          {/* Note Banner Skeleton */}
+          {}
           <div className="h-20 w-full rounded-2xl bg-blue-50/50 border border-blue-100"></div>
         </div>
 
-        {/* Right Column: Tips & Grading Scale Cards Skeletons */}
+        {}
         <div className="space-y-8">
           <Card padding="lg">
             <div className="h-6 w-24 rounded bg-slate-200 mb-4"></div>

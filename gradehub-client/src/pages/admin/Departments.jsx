@@ -159,7 +159,7 @@ function Departments() {
         subtitle="Manage academic departments and configuration."
       />
 
-      {/* --- TAB NAVIGATION (Horizontal scroll on mobile) --- */}
+      {}
       <div className="flex gap-4 sm:gap-6 border-b border-slate-200 overflow-x-auto no-scrollbar">
         <button
           onClick={() => setActiveTab("departments")}
@@ -185,7 +185,7 @@ function Departments() {
         </button>
       </div>
 
-      {/* --- TAB CONTENT --- */}
+      {}
       {activeTab === "departments" ? (
         <div className="space-y-6 sm:space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
           <div className="grid gap-4 sm:gap-6 sm:grid-cols-2 xl:grid-cols-4">

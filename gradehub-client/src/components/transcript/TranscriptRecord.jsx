@@ -9,7 +9,7 @@ function TranscriptRecord({ transcript }) {
     <div className="space-y-6 sm:space-y-8">
       {sessions.map((session) => (
         <div key={session.session} className="space-y-4 sm:space-y-6">
-          {/* Session Document Header */}
+          {}
           <div className="border-b border-slate-200 pb-3">
             <h2 className="text-lg sm:text-xl font-bold text-slate-900">
               {session.session} Academic Session
@@ -26,7 +26,7 @@ function TranscriptRecord({ transcript }) {
             </p>
           </div>
 
-          {/* Semesters inside this session */}
+          {}
           <div className="space-y-4 sm:space-y-6 pl-0 sm:pl-4">
             {session.semesters?.map((semester) => (
               <Card
@@ -48,10 +48,10 @@ function TranscriptRecord({ transcript }) {
                   </div>
                 </div>
 
-                {/* Semester Summary Cards */}
+                {}
                 <SemesterSummary semester={semester} />
 
-                {/* Course List Table */}
+                {}
                 <div className="mt-4 sm:mt-6 overflow-x-auto">
                   <TranscriptTable results={semester.courses} />
                 </div>

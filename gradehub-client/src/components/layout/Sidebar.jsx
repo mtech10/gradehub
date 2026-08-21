@@ -8,7 +8,7 @@ import { useLayout } from "../../context/LayoutContext";
 
 import ConfirmModal from "../ui/ConfirmModal";
 import { useToast } from "../../context/ToastContext";
-// ADDED: Import the notification service
+
 import { notificationService } from "../../services/notificationService";
 
 function Sidebar({ navigation, user, variant = "light" }) {
@@ -24,7 +24,7 @@ function Sidebar({ navigation, user, variant = "light" }) {
 
   const [unreadCount, setUnreadCount] = useState(0);
 
-  // Fetch notifications on mount to calculate the unread count
+  
   useEffect(() => {
     const fetchSidebarNotifications = async () => {
       try {
@@ -36,13 +36,13 @@ function Sidebar({ navigation, user, variant = "light" }) {
       }
     };
 
-    // Initial fetch on page load
+    
     fetchSidebarNotifications();
 
-    // ADDED: Listen for updates from anywhere in the app
+    
     window.addEventListener("notificationsUpdated", fetchSidebarNotifications);
 
-    // Cleanup listener when sidebar unmounts
+    
     return () => {
       window.removeEventListener(
         "notificationsUpdated",
@@ -65,7 +65,7 @@ function Sidebar({ navigation, user, variant = "light" }) {
 
   return (
     <>
-      {/* Mobile Overlay Backdrop */}
+      {}
       {sidebarOpen && (
         <div
           className="fixed inset-0 z-40 bg-slate-900/50 backdrop-blur-sm lg:hidden transition-opacity"
@@ -91,7 +91,7 @@ function Sidebar({ navigation, user, variant = "light" }) {
 
         <nav className="flex-1 space-y-2 px-4 overflow-y-auto">
           {navigation.map((item) => {
-            // ADDED: Inject the badge count dynamically for the Notifications tab
+            
             const badgeCount =
               item.title === "Notifications" && unreadCount > 0
                 ? unreadCount
@@ -164,7 +164,7 @@ function Sidebar({ navigation, user, variant = "light" }) {
         </div>
       </aside>
 
-      {/* Logout Confirmation Modal */}
+      {}
       <ConfirmModal
         isOpen={showLogoutModal}
         onClose={() => setShowLogoutModal(false)}

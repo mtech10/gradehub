@@ -32,7 +32,7 @@ async function request(endpoint, options = {}) {
           : undefined,
   });
 
-  // Handle empty or non-JSON responses safely
+  
   const text = await response.text();
   const data = text ? JSON.parse(text) : {};
 
@@ -76,7 +76,7 @@ const api = {
     });
   },
 
-  // Fixed delete method using the unified request helper and passing options.data as body
+  
   delete(endpoint, options = {}) {
     return request(endpoint, {
       method: "DELETE",

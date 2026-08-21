@@ -28,7 +28,7 @@ function AppearanceSettings({ data, onChange }) {
       </div>
 
       <div className="space-y-6">
-        {/* Theme */}
+        {}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <span className="text-xs sm:text-sm font-semibold text-slate-900">
             Theme
@@ -49,7 +49,7 @@ function AppearanceSettings({ data, onChange }) {
           </div>
         </div>
 
-        {/* Primary Color */}
+        {}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <span className="text-xs sm:text-sm font-semibold text-slate-900">
             Primary Color
@@ -69,7 +69,7 @@ function AppearanceSettings({ data, onChange }) {
           </div>
         </div>
 
-        {/* Font Size */}
+        {}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <span className="text-xs sm:text-sm font-semibold text-slate-900">
             Font Size
@@ -89,7 +89,7 @@ function AppearanceSettings({ data, onChange }) {
           </div>
         </div>
 
-        {/* Compact Mode */}
+        {}
         <div className="flex items-center justify-between gap-4">
           <div className="min-w-0">
             <h4 className="text-xs sm:text-sm font-semibold text-slate-900">

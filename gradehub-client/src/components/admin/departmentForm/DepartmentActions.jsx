@@ -65,7 +65,7 @@ function DepartmentActions({ mode = "add", onSave, isSubmitting }) {
         </Button>
       </div>
 
-      {/* Cancel Confirmation Modal */}
+      {}
       <ConfirmModal
         isOpen={showCancelModal}
         onClose={() => setShowCancelModal(false)}
@@ -77,7 +77,7 @@ function DepartmentActions({ mode = "add", onSave, isSubmitting }) {
         isDestructive={true}
       />
 
-      {/* Save Confirmation Modal */}
+      {}
       <ConfirmModal
         isOpen={showSaveModal}
         onClose={() => setShowSaveModal(false)}

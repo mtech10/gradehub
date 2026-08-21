@@ -9,14 +9,11 @@ import {
   BookOpenCheck,
 } from "lucide-react";
 
-/**
- * Merge result records with student and course information from the database payload.
- * (Now relies purely on the backend's populated relations instead of static constants)
- */
+
 export function enrichResults(results) {
   return results.map((result) => ({
     ...result,
-    // Flatten nested objects from the database for easy table rendering
+    
     studentName: result.student
       ? `${result.student.firstName} ${result.student.lastName}`
       : "",
@@ -31,9 +28,7 @@ export function enrichResults(results) {
   }));
 }
 
-/**
- * Filter results.
- */
+
 export function filterResults(results, { search, session, semester, level }) {
   return results.filter((result) => {
     const keyword = search?.toLowerCase() || "";
@@ -45,7 +40,7 @@ export function filterResults(results, { search, session, semester, level }) {
       (result.courseCode || "").toLowerCase().includes(keyword) ||
       (result.courseTitle || "").toLowerCase().includes(keyword);
 
-    // Ensure we are matching against the flattened keys from enrichResults
+    
     const matchesSession = !session || result.sessionName === session;
     const matchesSemester = !semester || result.semesterName === semester;
     const matchesLevel = !level || result.level === level;
@@ -54,14 +49,12 @@ export function filterResults(results, { search, session, semester, level }) {
   });
 }
 
-/**
- * Sort results.
- */
+
 export function sortResults(results, sortKey, sortDirection) {
   if (!sortKey) return results;
 
   return [...results].sort((a, b) => {
-    // Safely handle null/undefined values during sort
+    
     const first = String(a[sortKey] || "").toLowerCase();
     const second = String(b[sortKey] || "").toLowerCase();
 
@@ -71,9 +64,7 @@ export function sortResults(results, sortKey, sortDirection) {
   });
 }
 
-/**
- * Map nested transcript data to the UI format required by the Student Results page.
- */
+
 export const mapTranscriptToResultsUI = (transcriptData) => {
   const { summary, sessions } = transcriptData;
 
@@ -86,19 +77,19 @@ export const mapTranscriptToResultsUI = (transcriptData) => {
   let bestSemesterName = "N/A";
   let totalSemesters = 0;
 
-  // Flatten the nested courses and calculate dynamic stats
+  
   sessions?.forEach((session) => {
     session.semesters?.forEach((semester) => {
       totalSemesters++;
 
-      // Track Best Semester
+      
       if (semester.gpa > bestSemesterGpa) {
         bestSemesterGpa = semester.gpa;
         bestSemesterName = `${session.name} ${semester.name}`;
       }
 
       semester.courses?.forEach((course) => {
-        // Push flat course object for the ResultsTable
+        
         allCourses.push({
           id: course.id,
           code: course.code,
@@ -111,13 +102,13 @@ export const mapTranscriptToResultsUI = (transcriptData) => {
           semester: semester.name,
         });
 
-        // Track Highest Score
+        
         if (course.totalScore > highestScore) {
           highestScore = course.totalScore;
           highestCourse = course.code;
         }
 
-        // Track Lowest Score
+        
         if (course.totalScore < lowestScore) {
           lowestScore = course.totalScore;
           lowestCourse = course.code;
@@ -126,10 +117,10 @@ export const mapTranscriptToResultsUI = (transcriptData) => {
     });
   });
 
-  // Edge case fallback
+  
   if (lowestScore === 100 && allCourses.length === 0) lowestScore = 0;
 
-  // Determine Academic Standing based on standard CGPA scales
+  
   let academicStanding = "Good Standing";
   if (summary.cgpa >= 4.5) academicStanding = "First Class";
   else if (summary.cgpa >= 3.5) academicStanding = "Second Class Upper";

@@ -60,10 +60,10 @@ export const restoreCourse = async (id) => {
 export const uploadCourses = async (file, contextData = {}) => {
   const formData = new FormData();
 
-  // Append context fields FIRST so multer reads them before parsing the file
+  
   formData.append("departmentId", contextData.departmentId || "");
   formData.append("levelId", contextData.levelId || "");
-  formData.append("file", file); // File LAST
+  formData.append("file", file); 
 
   const response = await api.post("/courses/upload", formData, {
     headers: {

@@ -4,7 +4,7 @@ import Card from "../Card";
 function TranscriptSkeleton() {
   return (
     <div className="space-y-8 animate-pulse">
-      {/* 1. Header Skeleton */}
+      {}
       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div className="space-y-2">
           <div className="h-8 w-56 rounded bg-slate-200"></div>
@@ -13,7 +13,7 @@ function TranscriptSkeleton() {
         <div className="h-11 w-52 rounded-xl bg-slate-200"></div>
       </div>
 
-      {/* 2. Student Bio Information Grid Skeletons */}
+      {}
       <Card padding="lg">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {Array.from({ length: 4 }).map((_, i) => (
@@ -31,7 +31,7 @@ function TranscriptSkeleton() {
         </div>
       </Card>
 
-      {/* 3. Overall Summary Cards Skeletons */}
+      {}
       <div className="space-y-4">
         <div className="space-y-2">
           <div className="h-6 w-56 rounded bg-slate-200"></div>
@@ -44,7 +44,7 @@ function TranscriptSkeleton() {
         </div>
       </div>
 
-      {/* 4. Transcript Chronological Records Skeleton */}
+      {}
       <div className="space-y-6">
         {Array.from({ length: 2 }).map((_, i) => (
           <div

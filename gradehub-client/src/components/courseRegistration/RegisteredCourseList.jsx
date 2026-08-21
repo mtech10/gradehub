@@ -9,7 +9,7 @@ function RegisteredCourseList({ courses, onRemove }) {
 
   return (
     <Card padding="none" className="overflow-hidden">
-      {/* Header */}
+      {}
       <div className="flex items-center justify-between border-b border-slate-200 bg-white p-5">
         <div>
           <h3 className="text-lg font-semibold text-slate-900">
@@ -24,7 +24,7 @@ function RegisteredCourseList({ courses, onRemove }) {
         </Badge>
       </div>
 
-      {/* Compact List */}
+      {}
       <div className="flex flex-col">
         {courses.length > 0 ? (
           courses.map((course) => {

@@ -16,7 +16,7 @@ export const getSessions = async (params = {}) => {
   const response = await api.get(endpoint);
 
   return {
-    data: response.data || response.sessions, // Fallback to match mapping
+    data: response.data || response.sessions, 
     pagination: response.pagination,
   };
 };
@@ -46,7 +46,7 @@ export const deleteSession = async (id) => {
   return response.data;
 };
 
-// --- NEW BATCH PROMOTION API CALL ---
+
 export const promoteStudents = async (id) => {
   const response = await api.post(`/sessions/${id}/promote`);
   return response;
@@ -59,7 +59,7 @@ const sessionService = {
   makeSessionCurrent,
   updateSession,
   deleteSession,
-  promoteStudents, // <-- Added here
+  promoteStudents, 
 };
 
 export default sessionService;

@@ -36,7 +36,7 @@ function ResetPassword() {
 
     setSubmitting(true);
 
-    // Simulate API Call
+    
     setTimeout(() => {
       setSubmitting(false);
       addToast({

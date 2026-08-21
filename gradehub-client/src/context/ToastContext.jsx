@@ -27,7 +27,7 @@ export function ToastProvider({ children }) {
   return (
     <ToastContext.Provider value={{ addToast, removeToast }}>
       {children}
-      {/* Toast Container rendered globally */}
+      {}
       <div className="fixed bottom-4 right-4 z-[100] flex flex-col gap-3">
         {toasts.map((toast) => (
           <ToastItem

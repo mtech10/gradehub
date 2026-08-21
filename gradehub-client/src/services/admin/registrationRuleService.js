@@ -1,7 +1,7 @@
 import api from "../api";
 
 export const getRules = async () => {
-  // Added /departments to the path
+  
   const response = await api.get("/departments/registration-rules");
   return response.data;
 };

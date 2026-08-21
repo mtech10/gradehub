@@ -17,7 +17,7 @@ function ProtectedRoute({ allowedRoles = [] }) {
     return <Navigate to="/login" replace state={{ from: location }} />;
   }
 
-  // BULLETPROOF SAFEGUARD: Check if user exists and safely ignore case sensitivity
+  
   if (allowedRoles.length > 0) {
     const userRole = user?.role?.toLowerCase().trim() || "";
     const normalizedAllowedRoles = allowedRoles.map((role) =>

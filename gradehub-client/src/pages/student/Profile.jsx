@@ -78,7 +78,7 @@ function Profile() {
 
   return (
     <div className="space-y-6 sm:space-y-8">
-      {/* Header */}
+      {}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-200 pb-6">
         <PageHeader
           title="My Profile"
@@ -95,7 +95,7 @@ function Profile() {
         </Button>
       </div>
 
-      {/* Profile */}
+      {}
       <ProfileMainCard data={profileData} />
 
       <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">

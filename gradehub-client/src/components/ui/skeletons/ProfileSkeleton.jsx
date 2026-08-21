@@ -4,7 +4,7 @@ import PageHeader from "../PageHeader";
 function ProfileSkeleton() {
   return (
     <div className="space-y-8 animate-pulse">
-      {/* 1. Header Skeleton */}
+      {}
       <div className="flex flex-col gap-4 border-b border-slate-200 pb-6 sm:flex-row sm:items-end sm:justify-between">
         <PageHeader
           title="My Profile"
@@ -13,7 +13,7 @@ function ProfileSkeleton() {
         <div className="h-10 w-32 rounded-xl bg-slate-200"></div>
       </div>
 
-      {/* 2. Profile Main Card Skeleton */}
+      {}
       <Card padding="none" className="overflow-hidden">
         <div className="flex flex-col lg:flex-row">
           <div className="flex w-full flex-col items-center border-b border-slate-100 p-8 lg:w-1/3 lg:border-b-0 lg:border-r space-y-4">
@@ -48,7 +48,7 @@ function ProfileSkeleton() {
         </div>
       </Card>
 
-      {/* 3. Three Info Cards Grid Skeletons */}
+      {}
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {Array.from({ length: 3 }).map((_, i) => (
           <div

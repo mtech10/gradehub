@@ -1,9 +1,7 @@
 import { transcript } from "../constants/transcript";
 import { getCurrentStudent, getStudentById } from "./studentHelpers";
 
-/**
- * Returns the transcript for a student.
- */
+
 export function getTranscriptByStudentId(studentId) {
   return (
     transcript.find((record) => record.studentId === studentId) ?? {
@@ -16,9 +14,7 @@ export function getTranscriptByStudentId(studentId) {
   );
 }
 
-/**
- * Returns the current student's transcript.
- */
+
 export function getCurrentStudentTranscript() {
   const student = getCurrentStudent();
 
@@ -27,9 +23,7 @@ export function getCurrentStudentTranscript() {
   return getTranscriptByStudentId(student.id);
 }
 
-/**
- * Returns the current student's complete profile.
- */
+
 export function getCurrentStudentProfile() {
   const student = getCurrentStudent();
 
@@ -41,9 +35,7 @@ export function getCurrentStudentProfile() {
   };
 }
 
-/**
- * Returns any student's complete profile.
- */
+
 export function getStudentProfileById(studentId) {
   const student = getStudentById(studentId);
 

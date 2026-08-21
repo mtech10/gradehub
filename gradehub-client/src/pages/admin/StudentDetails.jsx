@@ -141,7 +141,7 @@ function StudentDetails() {
 
       <StudentQuickStats student={student} />
 
-      {/* Tabs (Horizontal scroll on mobile) */}
+      {}
       <div className="flex gap-2 border-b border-slate-200 overflow-x-auto no-scrollbar">
         {["overview", "academic-records", "transcript", "attendance"].map(
           (tab) => (

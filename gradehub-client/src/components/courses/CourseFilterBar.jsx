@@ -20,7 +20,7 @@ function CourseFilterBar({
 
   return (
     <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
-      {/* Tabs (Horizontal scroll on mobile) */}
+      {}
       <div className="flex gap-4 border-b border-slate-200 overflow-x-auto no-scrollbar">
         {tabs.map((tab) => (
           <button
@@ -37,7 +37,7 @@ function CourseFilterBar({
         ))}
       </div>
 
-      {/* Search & Filter Actions */}
+      {}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
         <div className="relative w-full sm:w-auto">
           <Search

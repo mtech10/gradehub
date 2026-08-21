@@ -11,7 +11,7 @@ function PageHeader({ title, description, actions, className = "" }) {
         ${className}
       `}
     >
-      {/* Left */}
+      {}
       <div>
         <h1 className={THEME.typography.h2}>{title}</h1>
 
@@ -20,7 +20,7 @@ function PageHeader({ title, description, actions, className = "" }) {
         )}
       </div>
 
-      {/* Right */}
+      {}
       {actions && (
         <div className="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-3 w-full sm:w-auto">
           {actions}

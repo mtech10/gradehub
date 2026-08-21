@@ -15,7 +15,7 @@ export const getDepartments = async (params = {}) => {
 
   const response = await api.get(endpoint);
 
-  // Safely extract data and pagination regardless of how Axios wraps it
+  
   const payload = response.data?.pagination ? response.data : response;
 
   return {
@@ -29,7 +29,7 @@ export const getDepartmentById = async (id) => {
   return response.data;
 };
 
-// New integration methods
+
 export const createDepartment = async (data) => {
   const response = await api.post("/departments", data);
   return response.data;

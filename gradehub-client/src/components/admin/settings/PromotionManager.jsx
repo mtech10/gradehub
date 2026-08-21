@@ -97,7 +97,7 @@ function PromotionManager() {
 
   return (
     <div className="space-y-6 sm:space-y-8">
-      {/* Rule Configuration Form */}
+      {}
       <form
         onSubmit={handleSaveRule}
         className="space-y-4 p-4 sm:p-6 bg-white rounded-2xl border border-slate-200 shadow-sm"
@@ -185,7 +185,7 @@ function PromotionManager() {
         </div>
       </form>
 
-      {/* Existing Rules Table */}
+      {}
       <div className="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <h3 className="font-semibold text-base sm:text-lg text-slate-800">

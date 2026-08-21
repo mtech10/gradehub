@@ -12,13 +12,13 @@ function Accordion({
   const [open, setOpen] = useState(defaultOpen);
 
   const handleToggle = (e) => {
-    // Prevent accordion from toggling if the user clicked an inner button/link
+    
     if (e.target.closest("button, a")) return;
     setOpen(!open);
   };
 
   const handleKeyDown = (e) => {
-    // Enable keyboard accessibility (Enter or Space to toggle)
+    
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
       setOpen(!open);
@@ -27,7 +27,7 @@ function Accordion({
 
   return (
     <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-      {/* Header (Changed from <button> to <div role="button"> to fix nesting errors) */}
+      {}
       <div
         role="button"
         tabIndex={0}
@@ -67,7 +67,7 @@ function Accordion({
         </div>
       </div>
 
-      {/* Body */}
+      {}
       <div
         className={clsx(
           "grid transition-all duration-300 ease-in-out",

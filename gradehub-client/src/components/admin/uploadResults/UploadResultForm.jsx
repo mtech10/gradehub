@@ -19,7 +19,7 @@ function UploadResultForm({
   const [error, setError] = useState("");
   const [isValidated, setIsValidated] = useState(false);
 
-  // Use this for your inputs in UploadDetailsCard/Dropzone to auto-reset validation
+  
   const handleFieldChange = (field, value) => {
     setIsValidated(false);
     updateField(field, value);
@@ -55,7 +55,7 @@ function UploadResultForm({
       return;
     }
 
-    // Validation Flow
+    
     if (
       !formData.file ||
       !formData.sessionId ||
@@ -73,7 +73,7 @@ function UploadResultForm({
       const result = await resultUploadService.validateUpload(formData);
 
       onValidationComplete(result.data);
-      setIsValidated(true); // <--- Crucial step
+      setIsValidated(true); 
     } catch (err) {
       setError(err.message || "Failed to validate result file.");
     } finally {
@@ -85,7 +85,7 @@ function UploadResultForm({
     <form onSubmit={handleSubmit} className="space-y-6">
       <UploadDetailsCard
         formData={formData}
-        updateField={handleFieldChange} // Pass the reset-aware handler
+        updateField={handleFieldChange} 
         sessions={sessions}
         semesters={semesters}
         departments={departments}

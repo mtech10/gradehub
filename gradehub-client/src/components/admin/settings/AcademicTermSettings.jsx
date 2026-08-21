@@ -15,7 +15,7 @@ function AcademicTermSettings() {
   const [selectedSession, setSelectedSession] = useState(null);
   const [semesters, setSemesters] = useState([]);
 
-  // Modal States
+  
   const [deleteSessionModal, setDeleteSessionModal] = useState({
     isOpen: false,
     id: null,
@@ -29,14 +29,14 @@ function AcademicTermSettings() {
     session: null,
   });
 
-  // Session Form State
+  
   const [editingSessionId, setEditingSessionId] = useState(null);
   const [sessionName, setSessionName] = useState("");
   const [sessionStart, setSessionStart] = useState("");
   const [sessionEnd, setSessionEnd] = useState("");
   const [isPromoting, setIsPromoting] = useState(false);
 
-  // Semester Form State
+  
   const [editingSemesterId, setEditingSemesterId] = useState(null);
   const [semesterName, setSemesterName] = useState("");
   const [semesterStart, setSemesterStart] = useState("");
@@ -72,7 +72,7 @@ function AcademicTermSettings() {
     return new Date(dateString).toISOString().split("T")[0];
   };
 
-  // --- Session Handlers ---
+  
   const handleSessionSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -170,7 +170,7 @@ function AcademicTermSettings() {
     }
   };
 
-  // --- Promotion Handler ---
+  
   const executePromoteStudents = async () => {
     const session = promoteModal.session;
     setPromoteModal({ isOpen: false, session: null });
@@ -199,7 +199,7 @@ function AcademicTermSettings() {
     }
   };
 
-  // --- Semester Handlers ---
+  
   const handleSemesterSubmit = async (e) => {
     e.preventDefault();
     if (!selectedSession) return;
@@ -308,13 +308,13 @@ function AcademicTermSettings() {
       </div>
 
       <div className="grid grid-cols-1 gap-6 sm:gap-8 lg:grid-cols-3">
-        {/* --- COLUMN 1: SESSIONS SECTION --- */}
+        {}
         <div className="space-y-4 sm:space-y-6 rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-6">
           <h3 className="text-base sm:text-lg font-semibold text-slate-800">
             Sessions
           </h3>
 
-          {/* SESSION FORM */}
+          {}
           <form
             onSubmit={handleSessionSubmit}
             className="space-y-3 rounded-xl bg-white p-3.5 sm:p-4 shadow-sm border border-slate-100"
@@ -366,7 +366,7 @@ function AcademicTermSettings() {
             </Button>
           </form>
 
-          {/* SESSIONS LIST */}
+          {}
           <div className="space-y-3 max-h-[400px] overflow-y-auto pr-1">
             {sessions.map((session) => {
               const sessionStartVal = session.startDate || session.startdate;
@@ -446,7 +446,7 @@ function AcademicTermSettings() {
           </div>
         </div>
 
-        {/* --- COLUMN 2: SEMESTERS SECTION --- */}
+        {}
         <div className="space-y-4 sm:space-y-6 rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-6 h-fit">
           <h3 className="text-base sm:text-lg font-semibold text-slate-800 break-words">
             Semesters {selectedSession && `for ${selectedSession.name}`}
@@ -460,7 +460,7 @@ function AcademicTermSettings() {
             </div>
           ) : (
             <>
-              {/* SEMESTER FORM */}
+              {}
               <form
                 onSubmit={handleSemesterSubmit}
                 className="space-y-3 rounded-xl bg-white p-3.5 sm:p-4 shadow-sm border border-slate-100"
@@ -512,7 +512,7 @@ function AcademicTermSettings() {
                 </Button>
               </form>
 
-              {/* SEMESTERS LIST */}
+              {}
               <div className="space-y-3 max-h-[400px] overflow-y-auto pr-1">
                 {semesters.map((semester) => {
                   const semesterStartVal =
@@ -589,7 +589,7 @@ function AcademicTermSettings() {
           )}
         </div>
 
-        {/* --- COLUMN 3: BATCH PROMOTION SECTION --- */}
+        {}
         <div className="rounded-2xl border border-indigo-100 bg-indigo-50/50 p-4 sm:p-6 shadow-sm h-fit">
           <div className="mb-4">
             <h3 className="text-base sm:text-lg font-bold text-indigo-900">
@@ -633,7 +633,7 @@ function AcademicTermSettings() {
         </div>
       </div>
 
-      {/* --- MODALS --- */}
+      {}
       <ConfirmModal
         isOpen={deleteSessionModal.isOpen}
         onClose={() => setDeleteSessionModal({ isOpen: false, id: null })}

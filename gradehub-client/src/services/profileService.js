@@ -12,7 +12,7 @@ export const mapStudentProfile = (data) => ({
   phone: data.phone,
   photo: data.photo,
   admissionYear: data.admissionYear,
-  // Added optional chaining (?) to prevent crashes if relational data isn't joined properly yet
+  
   department: data.department?.name || data.department,
   faculty: data.faculty?.name || data.faculty,
   level: data.level?.name || data.level,
@@ -27,7 +27,7 @@ export const mapStudentProfileForUI = (student) => ({
   phone: student.phone,
   avatar: student.photo,
   gender: student.gender,
-  dob: "", // To be wired
+  dob: "", 
   maritalStatus: "",
   nationality: "Nigerian",
   homeAddress: "",

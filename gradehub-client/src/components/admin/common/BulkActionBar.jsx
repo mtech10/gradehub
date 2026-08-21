@@ -31,7 +31,7 @@ function BulkActionBar({
         </div>
       </div>
 
-      {/* Responsive button group: wraps on tablets, stacks or stays inline depending on count */}
+      {}
       <div className="flex flex-wrap items-center gap-2 sm:gap-3">
         {onExport && (
           <Button

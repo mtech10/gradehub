@@ -4,7 +4,7 @@ import PageHeader from "../PageHeader";
 function NotificationsSkeleton() {
   return (
     <div className="space-y-8 animate-pulse">
-      {/* Header and Button Skeleton */}
+      {}
       <div className="flex flex-col gap-4 border-b border-slate-200 pb-6 sm:flex-row sm:items-end sm:justify-between">
         <PageHeader
           title="Notifications"
@@ -14,10 +14,10 @@ function NotificationsSkeleton() {
       </div>
 
       <div className="grid gap-8 xl:grid-cols-12">
-        {/* Left Column: Notification List Skeleton */}
+        {}
         <div className="xl:col-span-8">
           <Card padding="none" className="overflow-hidden">
-            {/* Tabs Skeletons */}
+            {}
             <div className="flex items-center gap-4 border-b border-slate-200 px-6 pt-4 pb-2">
               {Array.from({ length: 5 }).map((_, i) => (
                 <div
@@ -27,7 +27,7 @@ function NotificationsSkeleton() {
               ))}
             </div>
 
-            {/* Notification Rows Skeletons */}
+            {}
             <div className="p-4 space-y-4">
               {Array.from({ length: 4 }).map((_, i) => (
                 <div
@@ -45,7 +45,7 @@ function NotificationsSkeleton() {
           </Card>
         </div>
 
-        {/* Right Column: Summary & Help Card Skeletons */}
+        {}
         <div className="space-y-6 xl:col-span-4">
           <Card title="Notification Summary">
             <div className="space-y-4">

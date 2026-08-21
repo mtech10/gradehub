@@ -4,17 +4,17 @@ import Card from "../Card";
 function CourseRegistrationSkeleton() {
   return (
     <div className="space-y-8 animate-pulse">
-      {/* Header Skeleton */}
+      {}
       <PageHeader
         title="Course Registration"
         subtitle="Register and manage your courses for the current academic session."
       />
 
       <div className="grid gap-8 xl:grid-cols-12">
-        {/* Left Column: Table & Toolbar Skeleton */}
+        {}
         <div className="xl:col-span-8">
           <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
-            {/* Toolbar Area Skeleton */}
+            {}
             <div className="border-b border-slate-200 bg-slate-50 p-5 space-y-4">
               <div className="h-11 w-full rounded-xl bg-slate-200"></div>
               <div className="h-20 w-full rounded-xl bg-slate-200"></div>
@@ -28,7 +28,7 @@ function CourseRegistrationSkeleton() {
               </div>
             </div>
 
-            {/* Table Rows Placeholder */}
+            {}
             <div className="p-4 space-y-4">
               {Array.from({ length: 6 }).map((_, i) => (
                 <div
@@ -40,7 +40,7 @@ function CourseRegistrationSkeleton() {
           </div>
         </div>
 
-        {/* Right Column: Summary Card Skeleton */}
+        {}
         <div className="xl:col-span-4">
           <div className="sticky top-24">
             <Card padding="lg" className="border-slate-200">

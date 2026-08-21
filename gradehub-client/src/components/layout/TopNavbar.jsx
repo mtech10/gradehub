@@ -35,7 +35,7 @@ function TopNavbar({ user, routes }) {
 
   const [notifications, setNotifications] = useState([]);
 
-  // Fetch notifications on component mount and listen for updates
+  
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
@@ -46,13 +46,13 @@ function TopNavbar({ user, routes }) {
       }
     };
 
-    // Initial fetch on page load
+    
     fetchNotifications();
 
-    // ADDED: Listen for updates from anywhere in the app
+    
     window.addEventListener("notificationsUpdated", fetchNotifications);
 
-    // Cleanup listener
+    
     return () => {
       window.removeEventListener("notificationsUpdated", fetchNotifications);
     };
@@ -79,7 +79,7 @@ function TopNavbar({ user, routes }) {
     });
   };
 
-  // Close dropdowns when clicking outside
+  
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -107,7 +107,7 @@ function TopNavbar({ user, routes }) {
       left-0 ${sidebarOpen ? "lg:left-80" : "lg:left-24"}
     `}
       >
-        {/* Left Side */}
+        {}
         <div className="flex items-center gap-4">
           <button
             onClick={toggleSidebar}
@@ -118,9 +118,9 @@ function TopNavbar({ user, routes }) {
           </button>
         </div>
 
-        {/* Right Side */}
+        {}
         <div className="flex items-center gap-2 sm:gap-4">
-          {/* Notification Dropdown */}
+          {}
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}

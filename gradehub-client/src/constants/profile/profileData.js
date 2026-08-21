@@ -19,41 +19,6 @@ import {
   Clock3,
 } from "lucide-react";
 
-// 1. The raw database-style object (Ready for API integration)
-export const initialStudentData = {
-  firstName: "Ademola",
-  lastName: "Oyelusi",
-  email: "adeyelusi20@stu.gradehub.edu.ng",
-  phone: "+234 801 234 5678",
-  avatar: "https://i.pravatar.cc/150?u=ade",
-  dob: "12 January 2002",
-  gender: "Male",
-  maritalStatus: "Single",
-  nationality: "Nigerian",
-  homeAddress: "23, Ajayi Street, Bodija Estate, Ibadan, Oyo State.",
-  permanentAddress: "23, Ajayi Street, Bodija Estate, Ibadan, Oyo State.",
-  emergency: {
-    name: "Mr. John Oyelusi (Father)",
-    phone: "+234 803 456 7890",
-    relationship: "Father",
-    address: "23, Ajayi Street, Bodija Estate, Ibadan, Oyo State.",
-  },
-  academic: {
-    matricNumber: "20/ENG/0400",
-    department: "Agricultural Engineering",
-    programme: "B.Eng (Agricultural Engineering)",
-    faculty: "Technology",
-    admissionYear: "2020/2021",
-    currentLevel: "400 Level",
-    status: "Active",
-    unitsRegistered: "17",
-    unitsEarned: "98",
-    cgpa: "4.58 / 5.00",
-    classOfDegree: "Second Class Upper",
-  },
-};
-
-// 2. Mapper function that feeds your UI components dynamically
 export const generateProfileUI = (data) => ({
   personal: {
     name: `${data.firstName} ${data.lastName}`,
@@ -114,23 +79,7 @@ export const generateProfileUI = (data) => ({
   ],
 });
 
-export const initialAdminData = {
-  fullName: "Dr. John Adewale",
-  role: "System Administrator",
-  employeeId: "ADM001",
-  department: "ICT Directorate",
-
-  email: "john.adewale@gradehub.edu",
-  phone: "+2348012345678",
-
-  office: "Administrative Building",
-  address: "University of Ibadan",
-
-  avatar: "",
-};
-
 export function generateAdminProfile(admin) {
-  // 1. Safely construct the full name from the DB columns
   const fullName =
     admin.fullName ||
     `${admin.firstName || admin.firstname || ""} ${
@@ -138,7 +87,6 @@ export function generateAdminProfile(admin) {
     }`.trim() ||
     "Unknown Admin";
 
-  // 2. Provide safe fallbacks for missing DB columns
   const role = admin.role || "System Administrator";
   const employeeId = admin.employeeId || admin.employeeid || "N/A";
   const department = admin.department || "ICT Directorate";
@@ -196,7 +144,7 @@ export function generateAdminProfile(admin) {
       {
         icon: Clock3,
         label: "Last Login",
-        value: "Today • 08:42 AM", // You can wire this up to a real DB timestamp later!
+        value: "Today • 08:42 AM",
       },
     ],
 

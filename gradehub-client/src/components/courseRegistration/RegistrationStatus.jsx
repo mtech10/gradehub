@@ -9,7 +9,7 @@ function RegistrationStatus({ rules, currentUnits }) {
   return (
     <Card padding="md" className="border-blue-200 bg-blue-50/50 p-4 sm:p-5">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        {/* Status & Deadline */}
+        {}
         <div className="flex items-center gap-3 sm:gap-4">
           <div className="flex h-11 w-11 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-xl bg-blue-100 text-blue-600">
             <CalendarDays size={22} className="sm:w-6 sm:h-6" />
@@ -29,7 +29,7 @@ function RegistrationStatus({ rules, currentUnits }) {
           </div>
         </div>
 
-        {/* Unit Counters */}
+        {}
         <div className="flex items-center justify-around sm:justify-center w-full lg:w-fit gap-3 sm:gap-4 rounded-xl border border-slate-200 bg-white px-4 sm:px-6 py-3 shadow-sm">
           <div className="text-center">
             <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">

@@ -45,14 +45,14 @@ function Dashboard() {
     <div className="space-y-6 sm:space-y-8">
       <DashboardHeader />
 
-      {/* Top Metrics Grid */}
+      {}
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
         {dashboard?.stats?.map((stat) => (
           <StatCard key={stat.title} {...stat} />
         ))}
       </section>
 
-      {/* CGPA Chart & Current Courses */}
+      {}
       <section className="space-y-6 sm:space-y-8">
         {dashboard?.cgpaTrend && dashboard.cgpaTrend.length > 0 && (
           <CGPAChart
@@ -64,7 +64,7 @@ function Dashboard() {
         <CurrentCourses courses={dashboard?.currentCourses || []} />
       </section>
 
-      {/* Recent Results & Activities */}
+      {}
       <section className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2">
           <ResultsTable

@@ -13,10 +13,10 @@ function Pagination({
   itemLabel = "items",
   onPageChange,
 }) {
-  // Ensure the page is always within a valid range
+  
   const safePage = Math.min(Math.max(currentPage, 1), totalPages || 1);
 
-  // Calculate the displayed item range
+  
   const firstItem = totalItems === 0 ? 0 : (safePage - 1) * pageSize + 1;
 
   const lastItem = Math.min(safePage * pageSize, totalItems);
@@ -24,7 +24,7 @@ function Pagination({
   const canGoPrevious = safePage > 1;
   const canGoNext = safePage < totalPages;
 
-  // Generate page numbers
+  
   const pages = [];
 
   if (totalPages <= 7) {
@@ -54,7 +54,7 @@ function Pagination({
 
   return (
     <div className="flex flex-col gap-4 border-t border-slate-200 bg-white px-6 py-4 md:flex-row md:items-center md:justify-between">
-      {/* Left */}
+      {}
       <p className="text-sm text-slate-500">
         Showing{" "}
         <span className="font-semibold text-slate-900">{firstItem}</span> to{" "}
@@ -63,9 +63,9 @@ function Pagination({
         {itemLabel}
       </p>
 
-      {/* Right */}
+      {}
       <div className="flex items-center gap-2">
-        {/* First */}
+        {}
         <button
           onClick={() => onPageChange?.(1)}
           disabled={!canGoPrevious}
@@ -74,7 +74,7 @@ function Pagination({
           <ChevronsLeft size={18} />
         </button>
 
-        {/* Previous */}
+        {}
         <button
           onClick={() => onPageChange?.(safePage - 1)}
           disabled={!canGoPrevious}
@@ -83,7 +83,7 @@ function Pagination({
           <ChevronLeft size={18} />
         </button>
 
-        {/* Page Numbers */}
+        {}
         {pages.map((page, index) =>
           page === "..." ? (
             <span key={`ellipsis-${index}`} className="px-2 text-slate-400">
@@ -104,7 +104,7 @@ function Pagination({
           ),
         )}
 
-        {/* Next */}
+        {}
         <button
           onClick={() => onPageChange?.(safePage + 1)}
           disabled={!canGoNext}
@@ -113,7 +113,7 @@ function Pagination({
           <ChevronRight size={18} />
         </button>
 
-        {/* Last */}
+        {}
         <button
           onClick={() => onPageChange?.(totalPages)}
           disabled={!canGoNext}

@@ -19,13 +19,13 @@ function PromotionSettings() {
       const [deptRes, levelRes, ruleRes] = await Promise.all([
         api.get("/departments"),
         api.get("/levels"),
-        api.get("/promotion-rules").catch(() => ({ data: [] })), // safe fallback if endpoint fails
+        api.get("/promotion-rules").catch(() => ({ data: [] })), 
       ]);
 
       console.log("Departments Response:", deptRes.data);
       console.log("Levels Response:", levelRes.data);
 
-      // Handles both array responses and nested object responses (e.g. res.data.data)
+      
       setDepartments(deptRes.data.data || deptRes.data || []);
       setLevels(levelRes.data.data || levelRes.data || []);
       setRules(ruleRes.data.data || ruleRes.data || []);
@@ -43,7 +43,7 @@ function PromotionSettings() {
     try {
       await api.post("/promotion-rules", rule);
       alert("Promotion rule saved successfully!");
-      fetchData(); // Refresh list
+      fetchData(); 
     } catch (e) {
       alert("Failed to save rule.");
     }
@@ -51,7 +51,7 @@ function PromotionSettings() {
 
   return (
     <div className="space-y-8">
-      {/* Rule Configuration Form */}
+      {}
       <form
         onSubmit={handleSaveRule}
         className="space-y-4 p-6 bg-white rounded-xl border border-slate-200 shadow-sm"
@@ -124,7 +124,7 @@ function PromotionSettings() {
         <Button type="submit">Save Promotion Rule</Button>
       </form>
 
-      {/* Existing Rules Table */}
+      {}
       <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
         <h3 className="font-semibold text-lg text-slate-800">
           Existing Promotion Rules

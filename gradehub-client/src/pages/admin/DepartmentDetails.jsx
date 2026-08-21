@@ -28,7 +28,7 @@ function DepartmentDetails() {
         const response = await departmentService.getDepartmentById(id);
         const data = response.data || response;
 
-        // Inside DepartmentDetails.jsx
+        
         setDepartment({
           id: data.id,
           name: data.name,
@@ -42,7 +42,7 @@ function DepartmentDetails() {
           students: data.student_count ?? data.students ?? 0,
           courses: data.course_count ?? data.courses ?? 0,
           lecturers: data.lecturer_count ?? data.lecturers ?? 0,
-          lecturersList: data.lecturersList || [], // Store the real lecturers array here
+          lecturersList: data.lecturersList || [], 
         });
       } catch (error) {
         console.error("Failed to fetch department details:", error);
@@ -110,7 +110,7 @@ function DepartmentDetails() {
     );
   }
 
-  // Replace `const lecturers = [];` with:
+  
   const lecturers = (department.lecturersList || []).map((l) => ({
     id: l.id,
     staffId: l.staffid || l.staffId || "N/A",

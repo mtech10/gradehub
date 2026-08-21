@@ -21,13 +21,13 @@ function PromotionRulesForm({ onSubmit }) {
       <h3 className="font-semibold text-lg">Define Promotion Rule</h3>
 
       <div className="grid grid-cols-2 gap-4">
-        {/* You should fetch your departments/levels list to populate these selects */}
+        {}
         <select
           className="p-2 border rounded"
           onChange={(e) => setRule({ ...rule, departmentid: e.target.value })}
         >
           <option>Select Department</option>
-          {/* Map your departments here */}
+          {}
         </select>
 
         <input

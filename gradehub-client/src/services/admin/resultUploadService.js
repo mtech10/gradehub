@@ -41,7 +41,7 @@ const resultUploadService = {
   },
 
   deleteResult: async (id) => {
-    // Using your existing deactivate endpoint, or change to delete if you add a DELETE route
+    
     const response = await api.patch(`/results/${id}/deactivate`);
     return response.data;
   },
@@ -68,12 +68,12 @@ const resultUploadService = {
     return response.data;
   },
 
-  // Moved updateResult INSIDE the main object
+  
   updateResult: async (id, data) => {
     const response = await api.put(`/results/${id}`, data);
     return response.data;
   },
 };
 
-// Export the object directly
+
 export default resultUploadService;

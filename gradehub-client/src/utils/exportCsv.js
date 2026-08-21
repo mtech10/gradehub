@@ -4,27 +4,27 @@ export const exportToCSV = (data, filename) => {
     return;
   }
 
-  // Extract headers from the first object's keys
+  
   const headers = Object.keys(data[0]);
 
-  // Map the data rows
+  
   const csvRows = [
-    headers.join(","), // Add the header row
+    headers.join(","), 
     ...data.map((row) =>
       headers
         .map((header) => {
           let value = row[header];
 
-          // Handle nulls and undefined
+          
           if (value === null || value === undefined) {
             value = "";
           }
-          // Handle nested objects (like row.department)
+          
           else if (typeof value === "object") {
             value = value.name || value.code || JSON.stringify(value);
           }
 
-          // Escape double quotes and wrap in quotes to handle commas within values safely
+          
           return `"${String(value).replace(/"/g, '""')}"`;
         })
         .join(","),

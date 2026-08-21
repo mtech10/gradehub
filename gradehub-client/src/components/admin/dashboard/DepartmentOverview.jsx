@@ -7,7 +7,7 @@ function DepartmentOverview({ departments }) {
   return (
     <div className="pt-0 lg:pt-5">
       <Card padding="md" className="p-4 sm:p-6">
-        {/* Responsive Header */}
+        {}
         <div className="mb-6 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h3 className="text-lg font-semibold text-slate-900">
@@ -26,7 +26,7 @@ function DepartmentOverview({ departments }) {
 
         <div className="space-y-5">
           {departments.map((department) => {
-            // FIX: Ensure completion drops to 0 if there are no students/courses
+            
             const studentCount = Number(department.students) || 0;
             const courseCount = Number(department.courses) || 0;
             const safeCompletion =

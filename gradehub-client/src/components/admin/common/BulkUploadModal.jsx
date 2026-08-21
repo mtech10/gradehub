@@ -71,7 +71,7 @@ function BulkUploadModal({
       departmentId,
       "Level:",
       levelId,
-    ); // <-- Check browser console
+    ); 
     if (!file) return;
     try {
       setIsUploading(true);
@@ -92,7 +92,7 @@ function BulkUploadModal({
     onClose();
   };
 
-  // Validates that file is chosen AND if context is required, both dropdowns are selected
+  
   const isFormValid = file && (!requireContext || (departmentId && levelId));
 
   return (
@@ -115,7 +115,7 @@ function BulkUploadModal({
             to bulk import {entityName}.
           </p>
 
-          {/* --- DEPARTMENT & LEVEL DROPDOWNS --- */}
+          {}
           {requireContext && (
             <div className="mb-6 grid grid-cols-2 gap-4">
               <div>
@@ -155,7 +155,7 @@ function BulkUploadModal({
             </div>
           )}
 
-          {/* File Upload Area */}
+          {}
           {!file ? (
             <div
               className={`flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed p-8 transition-colors ${

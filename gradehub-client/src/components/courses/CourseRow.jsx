@@ -20,7 +20,7 @@ function CourseRow({ course }) {
 
   return (
     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 border-b border-slate-100 px-4 py-4 last:border-b-0">
-      {/* Left Section */}
+      {}
       <div className="flex min-w-0 items-center gap-3 sm:gap-4">
         <div className="flex h-10 w-14 sm:w-16 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-xs sm:text-sm font-bold text-blue-600">
           {course.code}
@@ -40,7 +40,7 @@ function CourseRow({ course }) {
         </div>
       </div>
 
-      {/* Right Section */}
+      {}
       <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-6 border-t sm:border-t-0 pt-2 sm:pt-0 border-slate-100">
         <div className="text-xs sm:text-sm font-medium text-slate-700">
           {course.units} {course.units === 1 ? "Unit" : "Units"}

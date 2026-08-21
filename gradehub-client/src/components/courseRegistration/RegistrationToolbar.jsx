@@ -89,7 +89,7 @@ function RegistrationToolbar({
           </div>
         </div>
 
-        {/* Filter Tabs (Horizontal scroll on mobile) */}
+        {}
         <div className="flex gap-2 overflow-x-auto no-scrollbar">
           {tabs.map((tab) => (
             <button

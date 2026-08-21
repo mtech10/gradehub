@@ -39,16 +39,16 @@ export const courseService = {
     let currentCount = 0;
     let failedCount = 0;
 
-    // Current-session-specific statistics
+    
     let currentSessionCourseCount = 0;
     let currentSessionCompletedCount = 0;
     let currentSessionFailedCount = 0;
 
     const sessions = data.sessions ?? [];
 
-    // ---------------------------------------------------------
-    // Transform backend transcript structure to GROUP BY SESSION
-    // ---------------------------------------------------------
+    
+    
+    
     const groupedSessions = sessions.map((session) => {
       const sessionIsCurrent =
         session.isCurrent === true || session.isCurrent === "true";
@@ -56,7 +56,7 @@ export const courseService = {
       let sessionCourses = [];
       let sessionUnits = 0;
 
-      // Loop through all semesters in this session and pool the courses together
+      
       (session.semesters ?? []).forEach((semester) => {
         (semester.courses ?? []).forEach((course) => {
           const creditUnit = Number(course.creditUnit ?? 0);
@@ -79,7 +79,7 @@ export const courseService = {
             currentCount++;
           }
 
-          // Current-session statistics
+          
           if (sessionIsCurrent) {
             currentSessionCourseCount++;
 
@@ -105,7 +105,7 @@ export const courseService = {
             units: creditUnit,
             creditUnit,
 
-            semester: semester.name, // Keep semester name for UI reference
+            semester: semester.name, 
             semesterId: semester.id,
 
             session: session.name,
@@ -127,7 +127,7 @@ export const courseService = {
         });
       });
 
-      // Return a single unified object for the entire session
+      
       return {
         id: session.id,
         sessionId: session.id,
@@ -143,9 +143,9 @@ export const courseService = {
       };
     });
 
-    // ---------------------------------------------------------
-    // Current session course count (Fallback verification)
-    // ---------------------------------------------------------
+    
+    
+    
     const currentSession = sessions.find(
       (session) => session.isCurrent === true || session.isCurrent === "true",
     );
@@ -159,18 +159,18 @@ export const courseService = {
       );
     }
 
-    // ---------------------------------------------------------
-    // Summary values
-    // ---------------------------------------------------------
+    
+    
+    
     const passedCourses = data.summary?.passedCourses ?? completedCount;
     const failedCourses = data.summary?.failedCourses ?? failedCount;
 
     return {
       student: data.student,
 
-      // -------------------------------------------------------
-      // Statistics cards
-      // -------------------------------------------------------
+      
+      
+      
       stats: [
         {
           title: "Total Courses",
@@ -209,13 +209,13 @@ export const courseService = {
         },
       ],
 
-      // We still pass this as "semesters" so we don't break the main Courses.jsx file,
-      // but it now contains grouped Sessions instead!
+      
+      
       semesters: groupedSessions,
 
-      // -------------------------------------------------------
-      // Course statistics
-      // -------------------------------------------------------
+      
+      
+      
       statistics: {
         "this-session": {
           total: currentSessionCourseCount,
@@ -289,9 +289,9 @@ export const courseService = {
         },
       },
 
-      // -------------------------------------------------------
-      // Quick links
-      // -------------------------------------------------------
+      
+      
+      
       quickLinks: [
         {
           title: "Course Registration",

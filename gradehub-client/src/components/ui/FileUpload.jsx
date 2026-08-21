@@ -37,7 +37,7 @@ function FileUpload({
         </label>
       )}
 
-      {/* Hidden native file input */}
+      {}
       <input
         ref={fileInputRef}
         type="file"

@@ -27,7 +27,7 @@ function AddStudent() {
           studentService.getLevels(),
         ]);
 
-        // Extract the correct array depending on how your backend structures the response
+        
         const deptList = deptRes.data ?? deptRes.departments ?? deptRes ?? [];
         const levelList = levelRes.data ?? levelRes.levels ?? levelRes ?? [];
 

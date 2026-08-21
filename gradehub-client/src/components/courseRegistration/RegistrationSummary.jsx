@@ -61,7 +61,7 @@ function RegistrationSummary({
             </span>
           </div>
 
-          {/* Unit Progress */}
+          {}
           <div className="pt-2">
             <div className="mb-2 flex items-center justify-between">
               <span className="font-medium text-slate-600">
@@ -155,7 +155,7 @@ function RegistrationSummary({
         )}
       </Card>
 
-      {/* Confirmation Modal */}
+      {}
       <ConfirmModal
         isOpen={showConfirm}
         onClose={() => setShowConfirm(false)}

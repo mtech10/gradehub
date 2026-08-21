@@ -13,12 +13,12 @@ function StudentProfileCard({ student }) {
   return (
     <Card className="p-4 sm:p-6 lg:p-8">
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
-        {/* Avatar */}
+        {}
         <div className="flex h-20 w-20 sm:h-24 sm:w-24 shrink-0 items-center justify-center rounded-full bg-blue-100 text-2xl sm:text-3xl font-bold text-blue-700">
           {initials}
         </div>
 
-        {/* Details */}
+        {}
         <div className="flex-1 min-w-0 w-full">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4">
             <div className="min-w-0">

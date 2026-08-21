@@ -14,7 +14,7 @@ function RegistrationRulesSettings() {
   const [departments, setDepartments] = useState([]);
   const [levels, setLevels] = useState([]);
 
-  // Modal States
+  
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: null });
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
 
@@ -43,7 +43,7 @@ function RegistrationRulesSettings() {
     }
   };
 
-  // Intercept the form submission to validate and open the modal
+  
   const handleFormSubmit = (e) => {
     e.preventDefault();
     if (!departmentId || !levelId) {
@@ -55,11 +55,11 @@ function RegistrationRulesSettings() {
       return;
     }
 
-    // If valid, open the confirmation modal
+    
     setIsSaveModalOpen(true);
   };
 
-  // Actually save the rule when confirmed
+  
   const executeSaveRule = async () => {
     try {
       await registrationRuleService.saveRule({
@@ -75,13 +75,13 @@ function RegistrationRulesSettings() {
         type: "success",
       });
 
-      // Reset form to defaults
+      
       setDepartmentId("");
       setLevelId("");
       setMinUnits(12);
       setMaxUnits(48);
 
-      fetchInitialData(); // Refresh list
+      fetchInitialData(); 
     } catch (error) {
       addToast({
         title: "Error",
@@ -89,7 +89,7 @@ function RegistrationRulesSettings() {
         type: "error",
       });
     } finally {
-      setIsSaveModalOpen(false); // Close the modal
+      setIsSaveModalOpen(false); 
     }
   };
 
@@ -127,7 +127,7 @@ function RegistrationRulesSettings() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // Helper to get selected department and level names for the modal message
+  
   const selectedDeptName =
     departments.find((d) => d.id === departmentId)?.name ||
     "the selected department";
@@ -147,7 +147,7 @@ function RegistrationRulesSettings() {
       </div>
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-        {/* FORM SECTION */}
+        {}
         <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6 h-fit">
           <h3 className="text-lg font-semibold text-slate-800 mb-4">
             Set Limit

@@ -35,7 +35,7 @@ function ResultsTable({
         );
 
       case "unit":
-        // FIX: Check multiple possible backend keys for course units
+        
         return (
           row.unit ?? row.creditUnit ?? row.credit_unit ?? row.creditunit ?? "-"
         );
@@ -142,7 +142,7 @@ function ResultsTable({
         </div>
       </Card>
 
-      {/* --- RESULT DETAILS MODAL --- */}
+      {}
       <Modal
         isOpen={!!selectedResult}
         onClose={() => setSelectedResult(null)}

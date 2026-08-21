@@ -37,18 +37,18 @@ img {
   display: block;
 }
 
-/* DPR-aware scaling — reversible tweak for HiDPI displays */
+
 @media (max-resolution: 192dpi),
   (max-resolution: 1dppx),
   (-webkit-max-device-pixel-ratio: 1) {
   html {
-    /* Reduce root font-size slightly to compensate for DPR=2 */
-    font-size: 12px; /* try 14px; change to 15px if 14 feels too small */
+    
+    font-size: 12px; 
   }
 }
 
 @media print {
-  /* --- PREVIOUS PRINT RULES --- */
+  
   aside,
   nav,
   header:not(.print-header),
@@ -70,9 +70,9 @@ img {
     font-size: 10pt !important;
   }
 
-  /* --- NEW FIXES FOR THE SIDEBAR GAP --- */
+  
 
-  /* 1. Force any parent layout wrapper (flex/grid) to collapse to full width */
+  
   #root,
   div[class*="flex"],
   div[class*="grid"],
@@ -83,7 +83,7 @@ img {
     padding: 0 !important;
   }
 
-  /* 2. Remove any fixed left margins or padding typically reserved for sidebars */
+  
   main,
   div[class*="ml-"],
   div[class*="pl-"] {
@@ -92,7 +92,7 @@ img {
     width: 100% !important;
   }
 
-  /* 3. Document formatting cleanup */
+  
   .card,
   div[class*="rounded-"],
   div[class*="border"] {

@@ -15,15 +15,15 @@ function AddDepartment() {
   const handleCreateDepartment = async (payload) => {
     setIsSubmitting(true);
     try {
-      // Fire the payload to the backend API
+      
       await departmentService.createDepartment(payload);
 
-      // Redirect back to the departments table upon success
+      
       navigate("/admin/departments");
     } catch (error) {
       console.error("Failed to create department:", error);
 
-      // Extract validation messages from your Express error handler
+      
       const errorMessage =
         error.response?.data?.message ||
         error.response?.data?.errors ||
@@ -51,7 +51,7 @@ function AddDepartment() {
         </Button>
       </div>
 
-      {/* Pass the submit handler and loading state down to the form */}
+      {}
       <DepartmentForm
         mode="add"
         onSubmit={handleCreateDepartment}

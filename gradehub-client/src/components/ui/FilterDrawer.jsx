@@ -18,17 +18,17 @@ function FilterDrawer({ open, onClose, title = "Filter Results" }) {
 
   return (
     <>
-      {/* Overlay */}
+      {}
 
       <div
         onClick={onClose}
         className="fixed inset-0 z-40 bg-black/30 backdrop-blur-sm"
       />
 
-      {/* Drawer */}
+      {}
 
       <aside className="fixed right-0 top-0 z-50 flex h-screen w-full max-w-md flex-col bg-white shadow-2xl">
-        {/* Header */}
+        {}
 
         <div className="flex items-center justify-between border-b border-slate-200 p-4">
           <h2 className="text-xl font-semibold">{title}</h2>
@@ -41,10 +41,10 @@ function FilterDrawer({ open, onClose, title = "Filter Results" }) {
           </button>
         </div>
 
-        {/* Body */}
+        {}
 
         <div className="flex-1 space-y-8 overflow-y-auto p-4">
-          {/* Semester */}
+          {}
 
           <div>
             <label className="mb-2 block font-medium">Semester</label>
@@ -60,7 +60,7 @@ function FilterDrawer({ open, onClose, title = "Filter Results" }) {
             </select>
           </div>
 
-          {/* Level */}
+          {}
 
           <div>
             <label className="mb-2 block font-medium">Level</label>
@@ -76,7 +76,7 @@ function FilterDrawer({ open, onClose, title = "Filter Results" }) {
             </select>
           </div>
 
-          {/* Course Type */}
+          {}
 
           <div>
             <h3 className="mb-3 font-medium">Course Type</h3>
@@ -92,7 +92,7 @@ function FilterDrawer({ open, onClose, title = "Filter Results" }) {
             </div>
           </div>
 
-          {/* Status */}
+          {}
 
           <div>
             <h3 className="mb-3 font-medium">Result Status</h3>
@@ -109,7 +109,7 @@ function FilterDrawer({ open, onClose, title = "Filter Results" }) {
           </div>
         </div>
 
-        {/* Footer */}
+        {}
 
         <div className="border-t border-slate-200 p-4">
           <div className="flex gap-3">

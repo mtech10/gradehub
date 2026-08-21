@@ -7,7 +7,7 @@ function DepartmentProfileCard({ department }) {
   return (
     <Card className="p-5 sm:p-8">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-        {/* Left */}
+        {}
         <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
           <div className="flex h-20 w-20 sm:h-24 sm:w-24 shrink-0 items-center justify-center rounded-2xl bg-blue-100">
             <Building2 size={36} className="text-blue-600 sm:w-10 sm:h-10" />
@@ -32,7 +32,7 @@ function DepartmentProfileCard({ department }) {
           </div>
         </div>
 
-        {/* Right */}
+        {}
         <div className="grid gap-3 sm:gap-5 grid-cols-1 sm:grid-cols-2 border-t lg:border-t-0 pt-4 lg:pt-0 border-slate-100">
           <InfoItem
             icon={UserRound}

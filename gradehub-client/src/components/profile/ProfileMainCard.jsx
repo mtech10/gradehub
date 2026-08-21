@@ -5,7 +5,7 @@ function ProfileMainCard({ data }) {
   return (
     <Card padding="none" className="overflow-hidden">
       <div className="flex flex-col lg:flex-row">
-        {/* Left Pane - Identity */}
+        {}
         <div className="flex w-full flex-col items-center border-b border-slate-100 p-8 lg:w-1/3 lg:border-b-0 lg:border-r">
           <img
             src={data.personal.avatar}
@@ -35,7 +35,7 @@ function ProfileMainCard({ data }) {
           </div>
         </div>
 
-        {/* Right Pane - Details Grid */}
+        {}
         <div className="w-full p-8 lg:w-2/3">
           <div className="grid gap-x-8 gap-y-8 sm:grid-cols-2">
             {data.details.map((detail) => {

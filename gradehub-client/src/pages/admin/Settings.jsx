@@ -98,7 +98,7 @@ function Settings() {
 
   return (
     <div className="space-y-6 sm:space-y-8">
-      {/* Header */}
+      {}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-200 pb-6">
         <PageHeader
           title="Settings"
@@ -124,7 +124,7 @@ function Settings() {
         </div>
       </div>
 
-      {/* Tabs (Horizontal scroll on mobile) */}
+      {}
       <div className="flex gap-4 sm:gap-8 overflow-x-auto border-b border-slate-200 no-scrollbar">
         {settingTabs.map((tab) => (
           <button
@@ -141,7 +141,7 @@ function Settings() {
         ))}
       </div>
 
-      {/* Active Content */}
+      {}
       <div className="max-w-full">
         <ActiveComponent
           data={settings[activeSetting.section] || {}}
@@ -149,7 +149,7 @@ function Settings() {
         />
       </div>
 
-      {/* Information Banner */}
+      {}
       <div className="flex max-w-4xl items-start sm:items-center gap-3 rounded-xl border border-blue-100 bg-blue-50 p-4">
         <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-blue-600 text-white">
           <Info size={15} />

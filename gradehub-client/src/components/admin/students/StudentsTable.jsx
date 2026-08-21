@@ -26,7 +26,7 @@ function StudentsTable({
 }) {
   const navigate = useNavigate();
 
-  // Modal State for row-level delete action
+  
   const [deleteConfig, setDeleteConfig] = useState({
     isOpen: false,
     studentId: null,
@@ -169,7 +169,7 @@ function StudentsTable({
         onSelectAll={onSelectAll}
       />
 
-      {/* Row-Level Delete Confirmation Modal */}
+      {}
       <ConfirmModal
         isOpen={deleteConfig.isOpen}
         onClose={() => setDeleteConfig({ isOpen: false, studentId: null })}

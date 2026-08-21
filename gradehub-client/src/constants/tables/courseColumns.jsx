@@ -10,8 +10,6 @@ export const courseColumns = [
     sortable: true,
   },
   {
-    // Note: Ensure this key matches your mapper.
-    // Your mapper outputs 'creditUnit', so if Units are ever blank, change key to "creditUnit"
     key: "unit",
     title: "Units",
     align: "center",

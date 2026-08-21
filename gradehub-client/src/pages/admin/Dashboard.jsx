@@ -56,7 +56,7 @@ function Dashboard() {
           },
         ];
 
-        // FIX: Added department and level to the mapped students
+        
         const mappedStudents = (data.recentStudents || []).map((student) => ({
           id: student.id,
           matricNumber: student.matricNumber,
@@ -66,7 +66,7 @@ function Dashboard() {
           status: "Active",
         }));
 
-        // FIX: Adjusted the path to match how the backend sends department and level
+        
         const mappedResults = (data.recentResults || []).map((result) => ({
           id: result.id,
           courseCode: result.courseCode || result.course?.code || "-",
@@ -134,7 +134,7 @@ function Dashboard() {
           </div>
         </section>
 
-        {/* Responsive Skeleton Grid */}
+        {}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-8">
             <div className="h-64 w-full animate-pulse rounded-2xl bg-slate-200"></div>
@@ -162,15 +162,15 @@ function Dashboard() {
       <DashboardStats stats={dashboardData.stats} />
       <DashboardQuickActions actions={dashboardData.quickActions} />
 
-      {/* Main Responsive Grid Layout */}
+      {}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Left Column (Takes up 2/3 of space on desktop) */}
+        {}
         <div className="lg:col-span-2 space-y-8">
           <RecentStudentsTable students={dashboardData.recentStudents} />
           <PendingResultsTable results={dashboardData.pendingResults} />
         </div>
 
-        {/* Right Column (Takes up 1/3 of space on desktop) */}
+        {}
         <div className="space-y-8">
           <DepartmentOverview departments={dashboardData.departments} />
           {dashboardData.activities.length > 0 && (

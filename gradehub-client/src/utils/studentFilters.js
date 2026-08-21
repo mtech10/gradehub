@@ -1,15 +1,11 @@
-// utils/studentHelpers.js
 
-/**
- * Returns a student by ID.
- */
+
+
 export function getStudentById(students, id) {
   return students.find((student) => student.id === id) || null;
 }
 
-/**
- * Filters students.
- */
+
 export function filterStudents(
   students,
   { search = "", department = "", level = "", status = "" } = {},
@@ -33,9 +29,7 @@ export function filterStudents(
   });
 }
 
-/**
- * Sorts students.
- */
+
 export function sortStudents(students, sortKey, sortDirection = "asc") {
   if (!sortKey) return [...students];
 
@@ -50,18 +44,14 @@ export function sortStudents(students, sortKey, sortDirection = "asc") {
   });
 }
 
-/**
- * Returns paginated students.
- */
+
 export function paginateStudents(students, currentPage, pageSize) {
   const start = (currentPage - 1) * pageSize;
 
   return students.slice(start, start + pageSize);
 }
 
-/**
- * Returns statistics for the dashboard.
- */
+
 export function getStudentStatistics(students) {
   return {
     total: students.length,
@@ -76,23 +66,17 @@ export function getStudentStatistics(students) {
   };
 }
 
-/**
- * Returns unique departments.
- */
+
 export function getDepartments(students) {
   return [...new Set(students.map((student) => student.department))].sort();
 }
 
-/**
- * Returns unique levels.
- */
+
 export function getLevels(students) {
   return [...new Set(students.map((student) => student.level))].sort();
 }
 
-/**
- * Returns unique statuses.
- */
+
 export function getStatuses(students) {
   return [...new Set(students.map((student) => student.status))].sort();
 }

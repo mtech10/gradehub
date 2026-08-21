@@ -27,21 +27,7 @@ export function getRegistrationSummary({
   droppedCodes,
   rules,
 }) {
-  /*
-   * Determine the semester number safely.
-   *
-   * Courses can have:
-   * semester: 1
-   *
-   * or:
-   * semester: "1"
-   *
-   * or:
-   * semester: {
-   *   id: "...",
-   *   name: "First Semester"
-   * }
-   */
+  
   const getSemesterNumber = (semester) => {
     if (!semester) return null;
 
@@ -66,9 +52,7 @@ export function getRegistrationSummary({
     return null;
   };
 
-  /*
-   * Courses currently counting toward registration.
-   */
+  
   const activeCourses = courses.filter((course) => {
     if (course.status === "Registered") {
       return !droppedCodes.includes(course.code);
@@ -77,24 +61,18 @@ export function getRegistrationSummary({
     return selectedCodes.includes(course.code);
   });
 
-  /*
-   * Total units.
-   */
+  
   const totalUnits = activeCourses.reduce(
     (sum, course) => sum + Number(course.units || 0),
     0,
   );
 
-  /*
-   * First semester units.
-   */
+  
   const firstSemesterUnits = activeCourses
     .filter((course) => getSemesterNumber(course.semester) === 1)
     .reduce((sum, course) => sum + Number(course.units || 0), 0);
 
-  /*
-   * Second semester units.
-   */
+  
   const secondSemesterUnits = activeCourses
     .filter((course) => getSemesterNumber(course.semester) === 2)
     .reduce((sum, course) => sum + Number(course.units || 0), 0);

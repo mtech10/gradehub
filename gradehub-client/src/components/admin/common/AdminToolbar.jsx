@@ -28,7 +28,7 @@ function AdminToolbar({
         xl:justify-between
       "
     >
-      {/* Left (Search & Filters) */}
+      {}
       <div className="flex flex-1 flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-3 sm:gap-4">
         <SearchInput
           value={search}
@@ -40,7 +40,7 @@ function AdminToolbar({
         {filters.map((filter) => (
           <Select
             key={filter.name}
-            // Overrides fixed widths on mobile to be full-width
+            
             className={`w-full sm:${filter.width || "w-48"}`}
             value={filter.value}
             onChange={(e) => filter.onChange(e.target.value)}
@@ -51,7 +51,7 @@ function AdminToolbar({
         {leftActions}
       </div>
 
-      {/* Right (Action Buttons) */}
+      {}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
         {rightActions}
       </div>

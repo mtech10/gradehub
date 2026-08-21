@@ -43,7 +43,7 @@ function Transcript() {
 
   return (
     <div className="space-y-6 sm:space-y-8 print:space-y-4 print:bg-white print:text-black">
-      {/* 1. Official Print-Only Letterhead */}
+      {}
       <div className="hidden print:block text-center space-y-1 mb-6 border-b-2 border-black pb-4">
         <h1 className="text-2xl font-bold uppercase tracking-wider">
           GradeHub University
@@ -56,27 +56,27 @@ function Transcript() {
         </h2>
       </div>
 
-      {/* 2. Web Control Header */}
+      {}
       <TranscriptHeader />
 
-      {/* 3. Student Bio Information */}
+      {}
       <StudentInformation profile={data.profile} />
 
-      {/* 4. Overall Summary */}
+      {}
       <OverallSummary summary={data.summary} />
 
-      {/* 5. Continuous Chronological Record */}
+      {}
       <TranscriptRecord transcript={data.transcript} />
 
-      {/* 6. CGPA Progress Chart */}
+      {}
       <div className="print:hidden">
         <CgpaProgress progress={data.progress} />
       </div>
 
-      {/* 7. Notice / Sign-off Footer */}
+      {}
       <TranscriptNotice />
 
-      {/* Official Print Sign-off Block */}
+      {}
       <div className="mt-12 hidden print:flex justify-between items-end pt-12">
         <div className="space-y-1">
           <p className="text-[10px] text-slate-500">

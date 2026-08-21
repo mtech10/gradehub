@@ -78,7 +78,7 @@ function NotificationList({ notifications, onMarkAsRead }) {
   return (
     <>
       <Card padding="none" className="overflow-hidden">
-        {/* Tabs (Horizontal scroll on mobile) */}
+        {}
         <div className="flex items-center gap-3 sm:gap-4 overflow-x-auto border-b border-slate-200 px-4 sm:px-6 pt-4 no-scrollbar">
           {tabs.map((tab) => (
             <button
@@ -107,7 +107,7 @@ function NotificationList({ notifications, onMarkAsRead }) {
           ))}
         </div>
 
-        {/* List */}
+        {}
         <div className="flex flex-col">
           {visibleNotifications.length > 0 ? (
             visibleNotifications.map((notification) => {
@@ -178,7 +178,7 @@ function NotificationList({ notifications, onMarkAsRead }) {
           )}
         </div>
 
-        {/* Load More Footer */}
+        {}
         {filteredNotifications.length > visibleCount && (
           <div className="flex justify-center border-t border-slate-100 bg-slate-50/50 p-4">
             <button
@@ -192,7 +192,7 @@ function NotificationList({ notifications, onMarkAsRead }) {
         )}
       </Card>
 
-      {/* Notification Modal */}
+      {}
       <Modal
         isOpen={!!selectedNotification}
         onClose={() => setSelectedNotification(null)}
