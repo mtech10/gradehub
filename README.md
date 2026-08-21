@@ -372,6 +372,30 @@ git commit -m "Add your feature"
 git push origin feature/your-feature
 ```
 
+## Demo Access
+
+The deployed GradeHub portal includes demo accounts for evaluation.
+
+### Student Account
+
+| Field | Details |
+|---|---|
+| Email | `ademola@student.ghu.edu.ng` |
+| Password | `password` |
+| Role | Student |
+
+### Admin Account
+
+| Field | Details |
+|---|---|
+| Email | `admin2@gradehub.com` |
+| Password | `Password123!` |
+| Role | Administrator |
+
+
+> These credentials are provided specifically for demonstration and grading purposes. Please do not use them for real or sensitive information.
+>
+
 7. Open a Pull Request.
 
 ## 📄 License
